@@ -1,1 +1,1 @@
-"”jouhoujikken2"  
+"”jouhoujikken"  
