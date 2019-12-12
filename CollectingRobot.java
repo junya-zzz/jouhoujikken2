@@ -25,8 +25,8 @@ public class CollectingRobot extends Robot {
 
 	public void sendLug() {
 		signal = new EV3Signal();
-		String connectionStat = signal.openSig(relaySystem, 10000);
-		if (connectionStat.equals("failed")) {
+		boolean connectionStat = signal.openSig(relaySystem, 10000);
+		if (!connectionStat) {
 			changeIsDelivery(false);
 			return;
 		}
@@ -48,7 +48,7 @@ public class CollectingRobot extends Robot {
 	public void sendIsDelivery() {
 		signal = new EV3Signal();
 		try {
-			String connectionStat = signal.openSig(reception, 0);
+			signal.openSig(reception, 0);
 			signal.sendSig(reception);
 			if (!isDelivery) {
 				signal.sendSig(getLuggage());
