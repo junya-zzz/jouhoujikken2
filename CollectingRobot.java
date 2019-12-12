@@ -15,7 +15,7 @@ public class CollectingRobot extends Robot {
 	
 	public static void main(String[] args) {
 		initSensors();
-		stopOnGray();
+		lineTrace(2000, Robot.RIGHT);
 		closeSensors();
 	}
 

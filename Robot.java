@@ -26,6 +26,9 @@ public class Robot {
 	private static EV3LargeRegulatedMotor leftMotor;
 	private static EV3ColorSensor colorSensor;
 	
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
+	
 	/**
 	 * センサーを初期化する
 	 */
@@ -56,10 +59,10 @@ public class Robot {
 
 	/**
 	 * その場で回転する
-	 * @param direction 回転方向 right または left
+	 * @param direction 回転方向 Robot.RIGHT または Robot.LEFT
 	 * @param degree 回転する角度
 	 */
-	protected static void turn(String direction, Integer degree) {
+	protected static void turn(int direction, Integer degree) {
 		SampleProvider angleSampleProvider = gyroSensor.getAngleMode();
 		float[] angleSample = new float[gyroSensor.sampleSize()];
 		int speed = 100;
@@ -67,10 +70,10 @@ public class Robot {
 		leftMotor.setSpeed(speed);
 		gyroSensor.reset();
 		angleSample[0] = 0;
-		if (direction.equals("right")) {
+		if (direction == RIGHT) {
 			rightMotor.backward();
 			leftMotor.forward();
-		} else if (direction.contentEquals("left")){
+		} else if (direction == LEFT){
 			rightMotor.forward();
 			leftMotor.backward();
 		} else {
@@ -83,31 +86,12 @@ public class Robot {
 		leftMotor.stop(true);
 	}
 
-	protected void changePos(String position) {
-
-	}
-
-	protected void goStraight() {
-
-	}
-
-	protected void desideColor() {
-
-	}
-
-	protected void setPower() {
-
-	}
-
-	protected void desideRefLight() {
-
-	}
-
 	/**
 	 * 左のモーターの回転数が指定した回転数を超えるまでライントレースする
 	 * @param roll 回転数
+	 * @param side ラインの右側と左側どちらを走るか指定する Robot.RIGHT または Robot.LEFT
 	 */
-	protected static void lineTrace(Integer roll) {
+	protected static void lineTrace(Integer roll, int side) {
 		SensorMode redLightSampleProvider = colorSensor.getRedMode();
 		float sample[] = new float[redLightSampleProvider.sampleSize()];
 		float target = 0.3f;
@@ -115,8 +99,17 @@ public class Robot {
 		float white = 0.80f;
 		float barance;
 		int maxSpeed = 300;
+		int power;
 		float diff;
 		leftMotor.resetTachoCount();
+		
+		// 左側を走りたい場合は右のモーターと左のモーターを入れ替える
+		if (side == LEFT) {
+			EV3LargeRegulatedMotor swapMotor = leftMotor;
+			leftMotor = rightMotor;
+			rightMotor = swapMotor;
+		}
+		
 		while(leftMotor.getTachoCount() < roll){
 			redLightSampleProvider.fetchSample(sample, 0);
 			LCD.clear();
@@ -127,27 +120,34 @@ public class Robot {
 			if(diff < 0){
 				barance = diff / (black - target);
 				leftMotor.setSpeed(maxSpeed);
-				int bPower = (int)((1-barance) * maxSpeed);
-				rightMotor.setSpeed(bPower);
+				power = (int)((1-barance) * maxSpeed);
+				rightMotor.setSpeed(power);
 			}else{
 				barance = diff / (white - target);
 				rightMotor.setSpeed(maxSpeed);
-				int aPower = (int)((1-barance) * maxSpeed);
-				leftMotor.setSpeed(aPower);
+				power = (int)((1-barance) * maxSpeed);
+				leftMotor.setSpeed(power);
 			}
 			rightMotor.forward();
 			leftMotor.forward();
 		}
 		rightMotor.stop(true);
 		leftMotor.stop(true);
+		
+		// 入れ替えたモーターをもとに戻す
+		if (side == LEFT) {
+			EV3LargeRegulatedMotor swapMotor = leftMotor;
+			leftMotor = rightMotor;
+			rightMotor = swapMotor;
+		}
 	}
-	
+
 	public static void stopOnGray() {
 		SensorMode redLightSampleProvider = colorSensor.getRedMode();
 		float sample[] = new float[redLightSampleProvider.sampleSize()];
 		float threshold = 0.4f;
 		float gray = 0.14f;
-		int speed = 360;
+		int speed = 160;
 		rightMotor.setSpeed(speed);
 		leftMotor.setSpeed(speed);
 		int count = 0;
@@ -169,12 +169,12 @@ public class Robot {
 	
 	/**
 	 * その場で回転し、超音波センサーを使ってロボットがその範囲にいるか調べる
-	 * @param direction 回転する方向
+	 * @param direction 回転する方向 Robot.RIGHT または Robot.LEFT
 	 * @param degree 回転する角度
 	 * @param distance 調べる距離
 	 * @return ロボットがいる場合:true いない場合:false
 	 */
-	public static boolean robotExists(String direction, int degree, float distance) {
+	public static boolean robotExists(int direction, int degree, float distance) {
 		SampleProvider distanceProvider = sonicSensor.getDistanceMode();
 		SampleProvider angleProvider = gyroSensor.getAngleMode();
 		float[] distanceSample = new float[distanceProvider.sampleSize()];
@@ -187,10 +187,10 @@ public class Robot {
 		sonicSensor.enable();
 		gyroSensor.reset();
 		
-		if (direction.equals("right")) {
+		if (direction == RIGHT) {
 			rightMotor.backward();
 			leftMotor.forward();
-		} else if (direction.equals("left")){
+		} else if (direction == LEFT){
 			rightMotor.forward();
 			leftMotor.backward();
 		} else {
@@ -214,6 +214,27 @@ public class Robot {
 		sonicSensor.disable();
 		return isRobotExisting;
 	}
+	protected void changePos(String position) {
+
+	}
+
+	protected void goStraight() {
+
+	}
+
+	protected void desideColor() {
+
+	}
+
+	protected void setPower() {
+
+	}
+
+	protected void desideRefLight() {
+
+	}
+
+	
 	
 	protected static Luggage getLuggage() {
 		return luggage;
