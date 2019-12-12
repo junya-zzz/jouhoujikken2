@@ -31,36 +31,36 @@ public class PCSignal {
 	 * pc‚©‚çev3‚ÉÚ‘±‚·‚é
 	 * @param command
 	 * @param device Ú‘±‚·‚éev3‚ÌMACƒAƒhƒŒƒX
-	 * @return ¬Œ÷:"OK" ¸”s:"failed"
+	 * @return ¬Œ÷:true ¸”s:false
 	 * @throws IOException
 	 */
-	public String openSig(String device) throws IOException{
+	public boolean openSig(String device) throws IOException{
 		isServerMode = false;
 		con = Connector.open("btspp://" + device + ":1");
 		if (con == null)
-			return "failed";
+			return false;
 		dos = new DataOutputStream(((OutputConnection)con).openOutputStream());
 		dis = new DataInputStream(((InputConnection)con).openInputStream());
-		return "OK";
+		return true;
 	}
 
 	/**
 	 * pc‚ğÚ‘±‘Ò‚¿ó‘Ô‚É‚·‚é
-	 * @return ¬Œ÷:"OK" ¸”s:"failed"
+	 * @return ¬Œ÷:true ¸”s:false
 	 * @throws IOException
 	 */
 	public String waitSig() throws IOException {
 		isServerMode = true;
 		scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
 		if (scn == null) {
-			return "failed";
+			return false;
 		}
 		connection = scn.acceptAndOpen();
 		
 		dis = connection.openDataInputStream();
 		dos = connection.openDataOutputStream();
 		
-		return "OK";
+		return true;
 	}
 
 	/**

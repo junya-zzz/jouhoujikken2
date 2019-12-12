@@ -28,9 +28,9 @@ public class EV3Signal {
 	 * ev3からdeviceに接続する
 	 * @param device 接続するBluetoothデバイスのMACアドレス
 	 * @param timeout タイムアウトまでの時間 タイムアウトしたくない時は0にする
-	 * @return 成功時:"OK" タイムアウトしたとき:"failed"
+	 * @return 成功時:true タイムアウトしたとき:false
 	 */
-	public String openSig(String device, int timeout) {
+	public boolean openSig(String device, int timeout) {
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.reset();
 		isServerMode = false;
@@ -43,29 +43,29 @@ public class EV3Signal {
 		}
 		
 		if (btConnection == null) {
-			return "failed";
+			return false;
 		}
 		
 		dis = btConnection.openDataInputStream();
 		dos = btConnection.openDataOutputStream();
 		
-		return "OK";
+		return true;
 	}
 
 	/**
 	 * ev3を接続待ち状態にする
-	 * @return 成功時:"OK" 失敗時:"failed"
+	 * @return 成功時:true 失敗時:false
 	 */
-	public String waitSig() {
+	public boolean waitSig() {
 		isServerMode = true;
 		btConnector = new BTConnector();
 		btConnection = btConnector.waitForConnection(0, BTConnection.RAW);
 		if (btConnection == null) {
-			return "failed";
+			return false;
 		}
 		dis = btConnection.openDataInputStream();
 		dos = btConnection.openDataOutputStream();
-		return "OK";
+		return true;
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class EV3Signal {
 		try {
 			object = deserialize(b);
 		} catch (ClassNotFoundException e) {
-
+			System.exit(1);
 		}
 		return object;
 	}
@@ -103,7 +103,7 @@ public class EV3Signal {
 	 * @return
 	 * @throws IOException
 	 */
-	public String closeSig() throws IOException{
+	public void closeSig() throws IOException{
 		dis.close();
 		dos.close();
 		
@@ -112,7 +112,7 @@ public class EV3Signal {
 		}
 		btConnection.close();
 		
-		return "OK";
+		return;
 	}
 
     // オブジェクトをバイト配列に変換する
