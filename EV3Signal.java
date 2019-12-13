@@ -26,7 +26,7 @@ public class EV3Signal {
 	/**
 	 * ev3からdeviceに接続する
 	 * @param device 接続するBluetoothデバイスのMACアドレス
-	 * @return 成功時:true タイムアウトしたとき:false
+	 * @return 成功時:true 失敗時:false
 	 */
 	public boolean openSig(String device) {
 		isServerMode = false;
