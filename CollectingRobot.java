@@ -3,7 +3,7 @@ package robotSystem;
 import java.io.IOException;
 
 import lejos.utility.Delay;
-
+import lejos.utility.Stopwatch;
 import signal.EV3Signal;
 
 public class CollectingRobot extends Robot {
@@ -32,10 +32,13 @@ public class CollectingRobot extends Robot {
 	 */
 	public void sendLug() {
 		signal = new EV3Signal();
-		boolean connectionStat = signal.openSig(relaySystem, 10000);
-		if (!connectionStat) {
-			changeIsDelivery(false);
-			return;
+		Stopwatch stopwatch = new Stopwatch();
+		stopwatch.reset();
+		while (signal.openSig(relaySystem)) {
+			if (10000 < stopwatch.elapsed()) {
+				changeIsDelivery(false);
+				return;
+			}
 		}
 		try {
 			signal.sendSig(getLuggage());
@@ -61,7 +64,7 @@ public class CollectingRobot extends Robot {
 	public void sendIsDelivery() {
 		signal = new EV3Signal();
 		try {
-			signal.openSig(reception, 0);
+			signal.openSig(reception);
 			signal.sendSig(reception);
 			if (!isDelivery) {
 				signal.sendSig(getLuggage());
@@ -85,7 +88,9 @@ public class CollectingRobot extends Robot {
 	public void getLugfrom() {
 		signal = new EV3Signal();
 		try {
-			signal.openSig(reception, 0);
+			while (signal.openSig(reception)) {
+				Delay.msDelay(3000);
+			}
 			boolean existsLug = (boolean) signal.getSig();
 			if (existsLug) {
 				setLuggage((signal.Luggage) signal.getSig());
