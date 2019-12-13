@@ -90,15 +90,15 @@ public class Robot {
 	 * 左のモーターの回転数が指定した回転数を超えるまでライントレースする
 	 * @param roll 回転数
 	 * @param side ラインの右側と左側どちらを走るか指定する Robot.RIGHT または Robot.LEFT
+	 * @param speed 300くらいがちょうどいい
 	 */
-	protected static void lineTrace(Integer roll, int side) {
+	protected static void lineTrace(Integer roll, int side, int speed) {
 		SensorMode redLightSampleProvider = colorSensor.getRedMode();
 		float sample[] = new float[redLightSampleProvider.sampleSize()];
 		float target = 0.3f;
 		float black = 0.03f;
 		float white = 0.80f;
 		float barance;
-		int maxSpeed = 300;
 		int power;
 		float diff;
 		leftMotor.resetTachoCount();
@@ -119,13 +119,13 @@ public class Robot {
 			diff = sample[0] - target;
 			if(diff < 0){
 				barance = diff / (black - target);
-				leftMotor.setSpeed(maxSpeed);
-				power = (int)((1-barance) * maxSpeed);
+				leftMotor.setSpeed(speed);
+				power = (int)((1-barance) * speed);
 				rightMotor.setSpeed(power);
 			}else{
 				barance = diff / (white - target);
-				rightMotor.setSpeed(maxSpeed);
-				power = (int)((1-barance) * maxSpeed);
+				rightMotor.setSpeed(speed);
+				power = (int)((1-barance) * speed);
 				leftMotor.setSpeed(power);
 			}
 			rightMotor.forward();
