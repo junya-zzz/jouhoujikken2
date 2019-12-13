@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 
 import lejos.remote.nxt.BTConnector;
 import lejos.remote.nxt.BTConnection;
-import lejos.utility.Stopwatch;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,20 +26,12 @@ public class EV3Signal {
 	/**
 	 * ev3からdeviceに接続する
 	 * @param device 接続するBluetoothデバイスのMACアドレス
-	 * @param timeout タイムアウトまでの時間 タイムアウトしたくない時は0にする
 	 * @return 成功時:true タイムアウトしたとき:false
 	 */
-	public boolean openSig(String device, int timeout) {
-		Stopwatch stopwatch = new Stopwatch();
-		stopwatch.reset();
+	public boolean openSig(String device) {
 		isServerMode = false;
 		btConnector = new BTConnector();
-		btConnection = null;
-		while (btConnection == null) {
-			btConnection = btConnector.connect(device, BTConnection.RAW);
-			if (timeout > 0 && stopwatch.elapsed() > timeout)
-				break;
-		}
+		btConnection = btConnector.connect(device, BTConnection.RAW);
 		
 		if (btConnection == null) {
 			return false;
