@@ -1,10 +1,11 @@
 package receptionSystem;
 
-import recordSystem.LuggageList;
+import recordSystem.*;
+import java.util.ArrayList;
 
 public class Reception {
 
-    private LuggageList lugList;
+    private ArrayList<Luggage> lugList;
 
     private Boundary boundary;
 
@@ -12,7 +13,7 @@ public class Reception {
 
 
     public Reception(){
-	this.ligList = new LuggageList();
+	this.lugList = new ArrayList<Luggage>();
 	this.boundary = new Boundary();
 	this.signal = new Signal();
     }
@@ -35,6 +36,8 @@ public class Reception {
     }
     /*荷物を依頼人から受け取る*/
     public void getLug() {
+    	Luggage lug = this.boundary.inputReqInfo();
+    	lugList.add(lug);
 
     }
 
