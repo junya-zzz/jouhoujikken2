@@ -7,17 +7,17 @@ import sun.misc.Signal;
 public class RelayStation {
 
 	/**
-	 * •ÛŠÇ‰×•¨
+	 * ä¿ç®¡è·ç‰©
 	 */
 	private ArrayList<Luggage> luggageList;
 
 	/**
-	 * ˆ¶æŠÔˆá‚¢•ÛŠÇ‰×•¨
+	 * å®›å…ˆé–“é•ã„ä¿ç®¡è·ç‰©
 	 */
 	private ArrayList<Luggage> wrongLugList;
 
 	/**
-	 * ’ÊM—pƒIƒuƒWƒFƒNƒg
+	 * é€šä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 */
 	private Signal signal;
 
@@ -28,10 +28,10 @@ public class RelayStation {
 	}
 	
 	/**
-	 * ûW’S“–ƒƒ{ƒbƒg‚©‚ç‰×•¨‚ğó‚¯æ‚é
+	 * åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã‹ã‚‰è·ç‰©ã‚’å—ã‘å–ã‚‹
 	 * 
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void receiveLugfromGatheringRobot() {
 		signal.openSig("START","GatheringRobot");
@@ -43,10 +43,10 @@ public class RelayStation {
 	}
 
 	/**
-	 * ûW’S“–ƒƒ{ƒbƒg‚©‚ç‚Ì‰×•¨‚Ìó‚¯æ‚è‚ğ–{•”‚É•ñ‚·‚é
+	 * åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã‹ã‚‰ã®è·ç‰©ã®å—ã‘å–ã‚Šã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 * 
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void reportReceivingToHeadquarters() {
 		signal.openSig("START","Headquarters");
@@ -56,10 +56,10 @@ public class RelayStation {
 	}
 
 	/**
-	 * ‰×•¨‚Ì”z’BŒ‹‰Ê‚Ì•ñ‚ğó‚¯‚é
+	 * è·ç‰©ã®é…é”çµæœã®å ±å‘Šã‚’å—ã‘ã‚‹
 	 * 
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */ 
 	public void receiveDeliveryResult() {
 		signal.openSig("START","DeliveryRobot")
@@ -77,18 +77,20 @@ public class RelayStation {
 			Luggage luggage = (Luggage)signal.getData();
 			wrongLugList.add(luggage);
 		}
+		signal.closeSig("FINISH","DeliveryRobot");
+		this.reportDeliveryResult(result, id, time);
 	}
 
 	/**
-	 * ”z’B’S“–ƒƒ{ƒbƒg‚É‰×•¨‚ğ“n‚·
+	 * é…é”æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«è·ç‰©ã‚’æ¸¡ã™
 	 * 
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void sendLugtoDeliveryRobot() {
 		signal.openSig("START","DeliveryRobot");
 		signal.waitSig();
-		signal.getData((String)"‰×•¨‚ª‚ ‚é‚©‚Ç‚¤‚©","DeliveryRobot");
+		signal.getData((String)"è·ç‰©ãŒã‚ã‚‹ã‹ã©ã†ã‹","DeliveryRobot");
 		if(luggagelist.isEmpty()){
 			signal.sendData(luggagelist.isEmpty(),"DeliveryRobot");
 		}
@@ -101,31 +103,29 @@ public class RelayStation {
 	}
 
 	/**
-	 * ‰×•¨‚Ì”z’BŒ‹‰Ê‚ğ–{•”‚É•ñ‚·‚é
+	 * è·ç‰©ã®é…é”çµæœã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 * 
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
-	public void reportDeliveryResult() {
+	private void reportDeliveryResult(String result, int lug_id, String fin_time) {
 		signal.openSig("START","Headquarters")
 		signal.waitSig();
-		/* if(”z’BŠ®—¹){
-		 * 	sendData(‰×•¨ID,"Headquarters");
-		 * 	sendData(”z’BŠ®—¹ŠÔ,"Headquarters");
-		 * 	sendData(Œo‰ßŠÔ,"Headquarters");
-		 * }
-		 * else{
-		 * 	sendData(‰×•¨ID,"Headquarters");
-		 * }
-		 */
+		if(result.equals("finished")){
+		  sendData(lug_id,"Headquarters");
+		  sendData(fin_time,"Headquarters");
+		}
+		else{
+	  	  sendData(lug_id,"Headquarters");
+		} 
 		signal.closeSig("FINISH","Headquarters");
 	}
 
 	/**
-	 * ”z’B’S“–ƒƒ{ƒbƒg‚É‰×•¨‚ğ“n‚µ‚½‚±‚Æ‚ğ–{•”‚É•ñ‚·‚é
+	 * é…é”æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«è·ç‰©ã‚’æ¸¡ã—ãŸã“ã¨ã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 * 
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 * 
 	 * 
 	 * 
@@ -133,8 +133,8 @@ public class RelayStation {
 	public void reportDeliveryStart() {
 		signal.openSig("START","Headquarters");
 		signal.waitSig();
-		/* sendData(‰×•¨ID,"Headquarters");
-		 * sendData(”z’BŠJnŠÔ,"Headquarters");
+		/* sendData(è·ç‰©ID,"Headquarters");
+		 * sendData(é…é”é–‹å§‹æ™‚é–“,"Headquarters");
 		 */
 		signal.closeSig("FINISH","Headquarters");
 	}
