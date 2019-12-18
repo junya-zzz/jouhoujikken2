@@ -1,8 +1,5 @@
 package robotSystem;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 
@@ -15,7 +12,6 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Stopwatch;
-import signal.EV3Signal;
 import signal.Luggage;
 
 public class Robot {
@@ -23,8 +19,6 @@ public class Robot {
 	private static Luggage luggage;
 
 	private String position;
-
-	private String color;
 
 	private static EV3UltrasonicSensor sonicSensor;
 	private static EV3GyroSensor gyroSensor;
@@ -43,11 +37,11 @@ public class Robot {
 		LCD.drawString("init sensors...", 0, 0);
 		LCD.refresh();
 		colorSensor = new EV3ColorSensor(SensorPort.S1);
-		//sonicSensor = new EV3UltrasonicSensor(SensorPort.S2);
-		//gyroSensor = new EV3GyroSensor(SensorPort.S4);
+		sonicSensor = new EV3UltrasonicSensor(SensorPort.S2);
+		gyroSensor = new EV3GyroSensor(SensorPort.S4);
 		rightMotor = new EV3LargeRegulatedMotor(MotorPort.B);
 		leftMotor = new EV3LargeRegulatedMotor(MotorPort.A);
-		//sonicSensor.disable();
+		sonicSensor.disable();
 		LCD.drawString("init completed", 0, 1);
 		LCD.refresh();
 	}
@@ -57,8 +51,8 @@ public class Robot {
 	 */
 	protected static void closeSensors() {
 		colorSensor.close();
-		//sonicSensor.close();
-		//gyroSensor.close();
+		sonicSensor.close();
+		gyroSensor.close();
 		rightMotor.close();
 		leftMotor.close();
 	}
@@ -109,8 +103,6 @@ public class Robot {
 		float diff;
 		leftMotor.resetTachoCount();
 		
-		// 左側を走りたい場合は右のモーターと左のモーターを入れ替える
-		
 		if (side == RIGHT) {
 			while(leftMotor.getTachoCount() < roll){
 				redLightSampleProvider.fetchSample(sample, 0);
@@ -156,11 +148,12 @@ public class Robot {
 		}
 		rightMotor.stop(true);
 		leftMotor.stop(true);
-		
-		// 入れ替えたモーターをもとに戻す
-		
 	}
 
+	/**
+	 * 灰色を検知するまでライントレースする
+	 * @param side Robot.LEFT または Robot.RIGHT
+	 */
 	public static void stopOnGray(int side) {
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.reset();
@@ -280,28 +273,31 @@ public class Robot {
 		sonicSensor.disable();
 		return isRobotExisting;
 	}
+	
+	/**
+	 * positionを変更する
+	 * @param position
+	 */
 	protected void changePos(String position) {
-
+		this.position = position;
 	}
 
-	protected void goStraight() {
-
+	/**
+	 * 直進する
+	 * @param speed 速度
+	 * @param roll モーターの目標回転数
+	 */
+	protected void goStraight(int speed, int roll) {
+		leftMotor.setSpeed(speed);
+		rightMotor.setSpeed(speed);
+		leftMotor.forward();
+		rightMotor.forward();
+		leftMotor.resetTachoCount();
+		while (leftMotor.getTachoCount() < roll);
+		leftMotor.stop(true);
+		rightMotor.stop(true);
 	}
 
-	protected void desideColor() {
-
-	}
-
-	protected void setPower() {
-
-	}
-
-	protected void desideRefLight() {
-
-	}
-
-	
-	
 	protected static Luggage getLuggage() {
 		return luggage;
 	}
@@ -310,5 +306,4 @@ public class Robot {
 		luggage = lug;
 		return;
 	}
-
 }
