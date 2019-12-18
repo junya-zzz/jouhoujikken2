@@ -1,5 +1,9 @@
 package robotSystem;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -10,6 +14,8 @@ import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
+import lejos.utility.Stopwatch;
+import signal.EV3Signal;
 import signal.Luggage;
 
 public class Robot {
@@ -104,63 +110,123 @@ public class Robot {
 		leftMotor.resetTachoCount();
 		
 		// 左側を走りたい場合は右のモーターと左のモーターを入れ替える
-		if (side == LEFT) {
-			EV3LargeRegulatedMotor swapMotor = leftMotor;
-			leftMotor = rightMotor;
-			rightMotor = swapMotor;
-		}
 		
-		while(leftMotor.getTachoCount() < roll){
-			redLightSampleProvider.fetchSample(sample, 0);
-			LCD.clear();
-			LCD.drawString("tacho " + leftMotor.getTachoCount(), 0, 0);
-			LCD.drawString(sample[0]+"", 0, 1);
-			LCD.refresh();
-			diff = sample[0] - target;
-			if(diff < 0){
-				barance = diff / (black - target);
-				leftMotor.setSpeed(speed);
-				power = (int)((1-barance) * speed);
-				rightMotor.setSpeed(power);
-			}else{
-				barance = diff / (white - target);
-				rightMotor.setSpeed(speed);
-				power = (int)((1-barance) * speed);
-				leftMotor.setSpeed(power);
+		if (side == RIGHT) {
+			while(leftMotor.getTachoCount() < roll){
+				redLightSampleProvider.fetchSample(sample, 0);
+				diff = sample[0] - target;
+					if(diff < 0){
+						barance = diff / (black - target);
+						leftMotor.setSpeed(speed);
+						power = (int)((1-barance) * speed);
+						rightMotor.setSpeed(power);
+					}else{
+						barance = diff / (white - target);
+						rightMotor.setSpeed(speed);
+						power = (int)((1-barance) * speed);
+						leftMotor.setSpeed(power);
+					}
+					rightMotor.forward();
+					leftMotor.forward();
+					LCD.clear();
+					LCD.drawInt(leftMotor.getTachoCount(), 0, 0);
+					LCD.refresh();
 			}
-			rightMotor.forward();
-			leftMotor.forward();
+		}else {
+			while(leftMotor.getTachoCount() < roll){
+				redLightSampleProvider.fetchSample(sample, 0);
+				diff = sample[0] - target;
+				if(diff < 0){
+					barance = diff / (black - target);
+					rightMotor.setSpeed(speed);
+					power = (int)((1-barance) * speed);
+					leftMotor.setSpeed(power);
+				}else{
+					barance = diff / (white - target);
+					leftMotor.setSpeed(speed);
+					power = (int)((1-barance) * speed);
+					rightMotor.setSpeed(power);
+				}
+				leftMotor.forward();
+				rightMotor.forward();
+				LCD.clear();
+				LCD.drawInt(leftMotor.getTachoCount(), 0, 0);
+				LCD.refresh();
+			}
 		}
 		rightMotor.stop(true);
 		leftMotor.stop(true);
 		
 		// 入れ替えたモーターをもとに戻す
-		if (side == LEFT) {
-			EV3LargeRegulatedMotor swapMotor = leftMotor;
-			leftMotor = rightMotor;
-			rightMotor = swapMotor;
-		}
+		
 	}
 
-	public static void stopOnGray() {
+	public static void stopOnGray(int side) {
+		Stopwatch stopwatch = new Stopwatch();
+		stopwatch.reset();
 		SensorMode redLightSampleProvider = colorSensor.getRedMode();
 		float sample[] = new float[redLightSampleProvider.sampleSize()];
 		float threshold = 0.4f;
-		float gray = 0.14f;
-		int speed = 160;
+		float gray = 0.08f;
+		int speed = 250;
 		rightMotor.setSpeed(speed);
 		leftMotor.setSpeed(speed);
 		int count = 0;
-		while(count < 40){
-			redLightSampleProvider.fetchSample(sample, 0);
-			if (sample[0] < threshold) {
-				if (sample[0] > gray) {count ++;}
-				else {count = 0;}
-				leftMotor.forward();
-				rightMotor.stop(true);
-			} else {
-				leftMotor.stop(true);
-				rightMotor.forward();
+		boolean isOnLine=false;
+		float lowestValue = 1.0f;
+		if (side == RIGHT) {
+			while(Button.ENTER.isUp() && count < 1){
+				redLightSampleProvider.fetchSample(sample, 0);
+				if (sample[0] < threshold) {
+					if (sample[0] < lowestValue) {
+						lowestValue = sample[0];
+					}
+					leftMotor.forward();
+					rightMotor.stop(true);
+					isOnLine = true;
+				} else {
+					leftMotor.stop(true);
+					rightMotor.forward();
+					if (isOnLine) {
+						if (lowestValue > gray && stopwatch.elapsed() > 1000){
+							count++;
+						} else {
+							count = 0;
+						}
+						lowestValue = 1.0f;
+						isOnLine = false;
+					}
+				}
+				LCD.clear();
+				LCD.drawString(count+"", 0, 0);
+				LCD.refresh();
+			}
+		} else if (side == LEFT){
+			while(Button.ENTER.isUp() && count < 1){
+				redLightSampleProvider.fetchSample(sample, 0);
+				if (sample[0] < threshold) {
+					if (sample[0] < lowestValue) {
+						lowestValue = sample[0];
+					}
+					rightMotor.forward();
+					leftMotor.stop(true);
+					isOnLine = true;
+				} else {
+					rightMotor.stop(true);
+					leftMotor.forward();
+					if (isOnLine) {
+						if (lowestValue > gray && stopwatch.elapsed() > 1000){
+							count++;
+						} else {
+							count = 0;
+						}
+						lowestValue = 1.0f;
+						isOnLine = false;
+					}
+				}
+				LCD.clear();
+				LCD.drawString(count+"", 0, 0);
+				LCD.refresh();
 			}
 		}
 		rightMotor.stop(true);
