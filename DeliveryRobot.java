@@ -1,59 +1,115 @@
 package robotSystem;
 
 import java.util.Date;
+
+import lejos.hardware.lcd.LCD;
+
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3GyroSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorMode;
+import lejos.robotics.SampleProvider;
+import Signal.Luggage;
+
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.SensorMode;
 public class DeliveryRobot extends Robot {
 
-	private String deliveryResult;
+	private static String deliveryResult;
 
 	/**
-	 * å—ã‘å–ã‚Šæ™‚é–“ã‚’å¾—ã‚‹ãŸã‚ã«ä¸­ç¶™æ‰€ã‹ã‚‰å—å–äººå®…ã¾ã§ã®æ™‚é–“ã‚’è¨ˆã‚Šã€é…é”é–‹å§‹æ™‚é–“ã«è¶³ã—ã¦ã€å—ã‘å–ã‚Šæ™‚é–“ã‚’ä½œã‚‹
+	 * Žó‚¯Žæ‚èŽžŠÔ‚ð“¾‚é‚½‚ß‚É’†ŒpŠ‚©‚çŽóŽæl‘î‚Ü‚Å‚ÌŽžŠÔ‚ðŒv‚èA”z’BŠJŽnŽžŠÔ‚É‘«‚µ‚ÄAŽó‚¯Žæ‚èŽžŠÔ‚ðì‚é
 	 */
-	private Date elapsedTime;
-    //è·ç‰©ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‚’minamiã¨ä»®å®š
-	private Signal signal;
+	private static long elapsedTime;   //Œ³XDateŒ^‚¾‚Á‚½‚¯‚ÇlongŒ^‚¾‚Á‚½
+    
+	/*private Signal signal;
 
 	private Signal signal;
 
-	private Signal signal;
+	private Signal signal;*/
 
-	private void changeDeliveryResult(String result) {
+	public static void main(String[] args) {
+	    while(true){
+		Thread.sleep(10000);
+		waitingToRelayStation();
+		if(getLug()){
+		    relayStationToReceiver();
+		    sendLug();
+		    receiverToRelayStation();
+		    sendDeliveryRecord();
+		}//if
+		relayStationToWaiting();
+	    }//while(1)
+	}//main
+
+
+	private static void changeDeliveryResult(String result) {
 	    deliveryResult=result;
 	}
 
-	private void relayStationToWaiting() {
+	private static void relayStationToWaiting() {
+		Robot rob=new Robot();
+	}//relayStationToWaiting
 
-	}
+	private static void receiverToRelayStation() {
+		Robot rob=new Robot();
+	}//receiverToRelayStation
 
-	private void receiverToRelayStation() {
-
-	}
-
-	private void waitingToRelayStation() {
-
-	}
+	private static void waitingToRelayStation() {
+		Robot rob=new Robot();
+	}//waitingToRelayStation
 
 	/**
-	 * ä¸­ç¶™æ‰€ã‹ã‚‰å—å–äººå®…ã¾ã§è¡Œã
+	 * ’†ŒpŠ‚©‚çŽóŽæl‘î‚Ü‚Ås‚­
 	 */
-	private void relayStationToReceiver() {
-
+	private static void relayStationToReceiver() {
+		Robot rob=new Robot();
+		long start=0;
+	    long end=0;
+	    start=System.currentTimeMillis();
+	    
+	    
+	    
+	    end=System.currentTimeMillis();
+	    elapsedTime=end-start;
+	    
 	}
 
-	public void getLug() {
+	public static boolean getLug() {
+		Robot rob=new Robot();
+	    Signal sig=new Signal();
+	    if(sig.openSig("START",RelayStation)=="OK"){
+		sig.sendSig("workExist",RelayStation);
+		String flag=sig.getSig().toString();
+		if(flag.equals("true")){
+		    Luggage lug=sig.getSig();//‰×•¨‘½•ª‘åä•v
+		    rob.setLuggage(lug);
+		    sig.closeSig("FINISH",RelayStation);
+		    return true;
+		}//iftrue
+		else{
+		    sig.closeSig("FINISH",RelayStation);
+		    return false;
+		}//else
+	    }//ifOK
+	    return false;
+	}//getLug
+
+	public static void sendLug() {
 	    long start=0;
 	    long end=0;
 	    Signal sig=new Signal();
-
+        Robot rob=new Robot();
 	    if(sig.openSig("START",Receiver)=="OK"){
 		sig.sendSig("isExist",Receiver);
 		
 		start=System.currentTimeMillis();
-		while(end-start>10 || (sig.getSig().toString).equals("Exist")){
+		while(end-start>10 || (sig.getSig().toString()).equals("Exist")){
 		    end=System.currentTimeMillis();
 		    try{
 			Thread.sleep(1000);
@@ -63,35 +119,44 @@ public class DeliveryRobot extends Robot {
 		}//while
 
 		if(end-start>10){
-		    sendSig(true,Receiver);
+		    sig.sendSig(true,Receiver);
 		String receiverName=sig.getSig().toString();
 		String receiverAddress=sig.getSig().toString();
-
-		if(receiverName.equals(minami.receiverName) && receiverAddress.equals(minami.receiverAddress)){
+        Luggage lug=rob.getLuggage();
+		if(receiverName.equals(lug.receiverName) && receiverAddress.equals(lug.receiverAddress)){
 		    changeDeliveryResult("FINISHED");
-		    sendSig(true,Receiver);
-		    sendSig(minami,Receiver);
+		    sig.sendSig(true,Receiver);
+		    sig.sendSig(lug,Receiver);
 		}//ifreceiver
 
 		else{
 		    changeDeliveryResult("WRONG");
-		    sendSig(false,Receiver);
+		    sig.sendSig(false,Receiver);
 		}//else
 
 		}//ifendstart
-		else  sendSig(false,Receiver);
+		else  sig.sendSig(false,Receiver);
 		sig.closeSig("FINISH",Receiver);
 	    }//ifopensig
 	   
-	}//getLug
+	}//sendLug
 
-	public void sendLug() {
-
-	}
-
-	public void sendDeliveryRecord() {
-
-	}
+	public static void sendDeliveryRecord() {
+		Robot rob=new Robot();
+	    Signal sig=new Signal();
+	    Luggage lug=rob.getLuggage();
+	    if(sig.openSig("START",RelayStation)=="OK"){
+		sig.sendSig(deliveryResult,RelayStation);
+		if(deliveryResult.equals("FINISHED")){
+		    sig.sendSig(elapsedTime,RelayStation);
+		    sig.sendSig(lug.luggageID,RelayStation);
+		}//ifFINISHED
+		else{
+		    sig.sendSig(lug,RelayStation);
+		}
+		sig.closeSig("FINISH",RelayStation);
+	    }//ifopen	
+	}//sendDeliveryRecord
 
 	public void startTimer() {
 
