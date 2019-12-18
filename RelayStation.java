@@ -1,7 +1,7 @@
 package relaySystem;
 
 import java.util.ArrayList;
-import recordSystem.LuggageList;
+
 import sun.misc.Signal;
 
 public class RelayStation {
@@ -22,24 +22,29 @@ public class RelayStation {
 	private Signal signal;
 
 	public RelayStation(){
-		luglist = new ArrayList<Luggage>;
-		wrongLugList = new ArrayList<Luggage>;
+		luglist = new ArrayList<Luggage>();
+		wrongLugList = new ArrayList<Luggage>();
 		signal = new Signal();
 	}
 
 	/**
-	 * 収集担当ロボットから荷物を受け取る
+	 * 収集担当ロボットから荷物を受け取り、本部に報告する
 	 *
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
 	public void receiveLugfromGatheringRobot() {
-		signal.openSig("START","GatheringRobot");
-		signal.waitSig();
-		Luggage luggage = (Luggage)signal.getData();
-		luggagelist.add(luggage);
-		signal.sendData("Receiving completed.","GatheringRobot");
-		signal.closeSig("FINISH","GatheringRobot");
+		try {
+			signal.openSig("START","GatheringRobot");
+			signal.waitSig();
+			Luggage luggage = (Luggage)signal.getData();
+			luggagelist.add(luggage);
+			signal.sendData("Receiving completed.","GatheringRobot");
+			signal.closeSig("FINISH","GatheringRobot");
+			this.reportReceivingToHeadquarters(luggage.getLuggageID());
+		}catch(Exception e) {
+			System.out.println("Sorry. Don't receive luggage.");
+		}
 	}
 
 	/**
@@ -48,10 +53,10 @@ public class RelayStation {
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
-	public void reportReceivingToHeadquarters() {
+	private void reportReceivingToHeadquarters(int id) {
 		signal.openSig("START","Headquarters");
 		signal.waitSig();
-		signal.sendData(luglist.getLug().luggageID,"Headquarters");
+		signal.sendData(id,"Headquarters");
 		signal.closeSig("FINISH","Headquarters");
 	}
 
@@ -62,23 +67,27 @@ public class RelayStation {
 	 * メソッドに対応する操作を行う
 	 */
 	public void receiveDeliveryResult() {
-		signal.openSig("START","DeliveryRobot")
-		signal.waitSig();
-		String result = (String)signal.getData();
-		if(result.equals("finished")){
-			String time = (String)getData();
-			int id = (int)getData();
+		try {
+			signal.openSig("START","DeliveryRobot");
+			signal.waitSig();
+			String result = (String)signal.getData();
+			if(result.equals("finished")){
+				String time = (String)getData();
+				int id = (int)getData();
+			}
+			else if(result.equals("absence")){
+				Luggage luggage = (Luggage)signal.getData();
+				luggagelist.add(luggage);
+			}
+			else if(result.equals("wrongAddress")){
+				Luggage luggage = (Luggage)signal.getData();
+				wrongLugList.add(luggage);
+			}
+			signal.closeSig("FINISH","DeliveryRobot");
+			this.reportDeliveryResult(result, id, time);
+		}catch(Exception e) {
+			System.out.println("Sorry. Don't receive report.");
 		}
-		else if(result.equals("absence")){
-			Luggage luggage = (Luggage)signal.getData();
-			luggagelist.add(luggage);
-		}
-		else if(result.equals("wrongAddress")){
-			Luggage luggage = (Luggage)signal.getData();
-			wrongLugList.add(luggage);
-		}
-		signal.closeSig("FINISH","DeliveryRobot");
-		this.reportDeliveryResult(result, id, time);
 	}
 
 	/**
@@ -88,22 +97,26 @@ public class RelayStation {
 	 * メソッドに対応する操作を行う
 	 */
 	public void sendLugtoDeliveryRobot() {
-		signal.openSig("START","DeliveryRobot");
-		signal.waitSig();
-		signal.getData((String)"荷物があるかどうか","DeliveryRobot");
-		if(luggagelist.isEmpty()){
-			signal.sendData(luggagelist.isEmpty(),"DeliveryRobot");
-			signal.closeSig("FINISH","DeliveryRobot");
-		}
-		else{
-			Luggage luggage = luggagelist.get(0);
-			int id = luggage.getLuggageID();
-			DeliveryRecord dr = new DeliveryRecord(id, luggagelist);
-			Date start = dr.getStartTime();
-			signal.sendData(luggagelist.isLuggage(),"DeliveryRobot");
-			signal.sendData(luggage,"DeliveryRobot");
-			signal.closeSig("FINISH","DeliveryRobot");
-			this.reportDeliveryStart(id, start);
+		try {
+			signal.openSig("START","DeliveryRobot");
+			signal.waitSig();
+			signal.getData((String)"荷物があるかどうか","DeliveryRobot");
+			if(luggagelist.isEmpty()){
+				signal.sendData(luggagelist.isEmpty(),"DeliveryRobot");
+				signal.closeSig("FINISH","DeliveryRobot");
+			}
+			else{
+				Luggage luggage = luggagelist.get(0);
+				int id = luggage.getLuggageID();
+				DeliveryRecord dr = new DeliveryRecord(id, luggagelist);
+				Date start = dr.getStartTime();
+				signal.sendData(luggagelist.isLuggage(),"DeliveryRobot");
+				signal.sendData(luggage,"DeliveryRobot");
+				signal.closeSig("FINISH","DeliveryRobot");
+				this.reportDeliveryStart(id, start);
+			}
+		}catch(Exception e) {
+			System.out.println("Sorry. Error happened.");
 		}
 	}
 
@@ -113,15 +126,15 @@ public class RelayStation {
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
-	private void reportDeliveryResult(String result, int lug_id, String fin_time) {
-		signal.openSig("START","Headquarters")
+	private void reportDeliveryResult(String result, int id, String fin_time) {
+		signal.openSig("START","Headquarters");
 		signal.waitSig();
 		if(result.equals("finished")){
-		  sendData(lug_id,"Headquarters");
+		  sendData(id,"Headquarters");
 		  sendData(fin_time,"Headquarters");
 		}
 		else{
-	  	  sendData(lug_id,"Headquarters");
+	  	  sendData(id,"Headquarters");
 		}
 		signal.closeSig("FINISH","Headquarters");
 	}
