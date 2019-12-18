@@ -41,6 +41,7 @@ public class DeliveryRecordList {
         	 deliveryRecordMap.get(deliverID).setStartTime(time);
              break;
          case delivered:
+        	 //差分を受け取ってるので修正しないと
         	 deliveryRecordMap.get(deliverID).setReceiveTime(time);
              break;
          case finished:

@@ -2,13 +2,14 @@ package recordSystem;
 
 //import java.util.Calendar;
 import java.util.Date;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class DeliveryRecord {
 	
 	private Integer deliveryID;
 	
-	private  ArrayList<Luggage> luggageList = new ArrayList<Luggage>();
+	//private  ArrayList<Luggage> luggageList = new ArrayList<Luggage>();
+	private Luggage luggage;
 	
 	private Date receiptTime;
 	
@@ -28,10 +29,11 @@ public class DeliveryRecord {
 
 	
 
-	public DeliveryRecord(Integer deliveryID, ArrayList<Luggage> luggageList) {
+	public DeliveryRecord(Integer deliveryID, Luggage luggage/*ArrayList<Luggage> luggageList*/) {
 		super();
 		this.deliveryID = deliveryID;
-		this.luggageList = luggageList;
+		//this.luggageList = luggageList;
+		this.luggage = luggage;
 		this.luggageCondition = LuggageCondition.unshipped;
 	}
 
@@ -102,26 +104,37 @@ public class DeliveryRecord {
 		return luggageCondition;
 	}
 	
+	public Luggage getLuggage() {
+		return luggage;
+	}
+
+	public void setLuggage(Luggage luggage) {
+		this.luggage = luggage;
+	}
+	
 	/*public void luggageAdd(Luggage luggage){
 		
 		luggageList.add(luggage);
 		
 	}*/
 	
-	public ArrayList<Luggage> getLuggageList(){
+	/*public ArrayList<Luggage> getLuggageList(){
 		
 		return luggageList;
 		
-	}
+	}*/
+	
 
 	@Override
 	public String toString() {
 		return "\n【配達記録ID " + deliveryID + "】\n荷物内容\n"
-				+ luggageList + "\n荷物状態　" + luggageCondition +"\n--時間情報--\n受取時間　" + receiptTime + "\n発送時間　"
+				+ luggage + "\n荷物状態　" + luggageCondition +"\n--時間情報--\n受取時間　" + receiptTime + "\n発送時間　"
 				+ shipTime + "\n中継所到着時間　" + arrivalTime + "\n配達開始時間　"
 				+ startTime + "\n受け取り完了時間　" + receiveTime + "\n配達完了時間　"
 				+ finishTime +  "\n";
 	}
+
+	
 	
 	
 }

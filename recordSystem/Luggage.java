@@ -7,15 +7,15 @@ public class Luggage {
 	 */
 	private Integer luggageID;
 	
-	private Integer luggageAmount;
+	private String luggageName;
 
 	private RequestInformation requestInformation;
 	
-	public Luggage(Integer luggageID, Integer luggageAmount,
+	public Luggage(Integer luggageID, String luggageName,
 			RequestInformation requestInformation) {
 		super();
 		this.luggageID = luggageID;
-		this.luggageAmount = luggageAmount;
+		this.luggageName = luggageName;
 		this.requestInformation = requestInformation;
 	}
 
@@ -27,12 +27,14 @@ public class Luggage {
 		this.luggageID = luggageID;
 	}
 
-	public Integer getAmount() {
-		return luggageAmount;
+	
+	
+	public String getLuggageName() {
+		return luggageName;
 	}
 
-	public void setAmount(Integer amount) {
-		luggageAmount = amount;
+	public void setLuggageName(String luggageName) {
+		this.luggageName = luggageName;
 	}
 
 	public RequestInformation getRequestInformation() {
@@ -45,8 +47,8 @@ public class Luggage {
 
 	@Override
 	public String toString() {
-		return "荷物ID　" + luggageID + ",　数量 "
-				+ luggageAmount + "個\n顧客情報\n" + requestInformation;
+		return "荷物ID　" + luggageID + ",　荷物名 "
+				+ luggageName + "\n顧客情報\n" + requestInformation;
 	}
 	
 	
