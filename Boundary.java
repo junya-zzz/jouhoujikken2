@@ -3,8 +3,8 @@ package receptionSystem;
 import java.io.*;
 
 public class Boundary {
-    
-   
+
+
 
     public RequestInformation inputReqInfo() {
 	String str1 = null;
@@ -20,7 +20,7 @@ public class Boundary {
 	    System.out.print("clentPhoneNum => ");
 	    str2 = br.readLine();
 	    System.out.print("receiverName => ");
-	    str3 = br.readLine();	    
+	    str3 = br.readLine();
 	    System.out.print("receiverAddress => ");
 	    str4 = br.readLine();
 
@@ -32,7 +32,7 @@ public class Boundary {
 	    e.printStackTree();
 	}
     }
-        
+
 }
 
 

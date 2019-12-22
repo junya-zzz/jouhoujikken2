@@ -10,7 +10,7 @@ public static final String EXIST_LUGGAGE = "existLuggage";
 public class Reception {
 
     private ArrayList<Luggage> lugList;
-    private ArrayList<DeliveryRecord> deliList
+    private DeliveryRecordList deliList;
     private Boundary boundary;
 
     private Signal signal;
@@ -18,14 +18,17 @@ public class Reception {
 
     public Reception(){
 	this.lugList = new ArrayList<Luggage>();
-	this.deliList = new ArrayList<DeliveryRecord>();
+	this.deliList = new DeliveryRecordList();
 	this.boundary = new Boundary();
 	this.signal = new Signal();
     }
-    /*配達記録を本部に送る*/
+    /*配達記録を本部に送る
     public void sendDeliveryRecord() {
 
     }
+
+	*/
+
 
     /*発送時間を本部に報告する*/
     public void sendShipTime() {
@@ -34,7 +37,7 @@ public class Reception {
     		/**配達記録リストからサーチ**/
 
 
-    		//新規か追記かのシグナルも送信したほうが良き?
+
 
     		/**************/
     		signal.sendSig(deliveryRecord);
@@ -63,34 +66,37 @@ public class Reception {
     		if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ロボットからのメッセージが正しかったら
     			if(!this.lugList.isEmpty()) { //荷物リストに荷物があったら
     				signal.sendSig(true);
-    				signal.sendSig(this.lugList.remove(0));//荷物リストから先頭の要素を取り出して送る
-
-    				/******渡した荷物に対応する配達記録に発送時間を追記（サーチ機能がいる？）**/
-
-
-
+    				Luggage sendLug = this.LugList.remove(0);  //荷物リストから先頭の要素を取り出して送る
+    				signal.sendSig(sendLug);
+    				/******渡した荷物に対応する配達記録に発送時間を追記**/
+    				deliList.updateDeliveryRecord(sendLug.getLuggageID, LuggageCondition.delivering, new Date());
 
 
-    				/************************************************************/
     			}
     		}
     		signal.closeSig("FINISH","CollectingRobot");
+
+
 
     	}catch(Exception e) {
     		//例外処理
     	}
     }
 
-
+    public int idNum=0;
     /*荷物を依頼人から受け取る*/
     public void getLug() {
     	RequestInfomation info = this.boundary.inputReqInfo(); //バウンダリから配達情報を入力
-    	Luggage lug = new Luggage(info);
+    	Luggage lug = new Luggage(setLuggageIDNum(),info);                      /****ID,Amount追加****/
     	lugList.add(lug);   //荷物リストに追加
     	DeliveryRecord deliveryRecord = new DeliveryRecord(lug); //荷物の配達記録生成
     	deliveryRecord.setReceiptTime(new Date()); //配達記録に受付時間を追加
-    	deliList.add(deliveryRecord); //配達記録リストに追加
+    	deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
 
+    	private int setLuggageIDNum() { //荷物IDを設定
+    		idNum++;
+    		return idNum;
+    	}
     }
 
 }
