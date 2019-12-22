@@ -46,6 +46,7 @@ public class Controller {
     	String readClientPhoneNum = clientPhoneNum.getText();
         String readAddress = (String) receiverAddress.getValue() ;
         String readLuggageName = luggageName.getText();
+        resultLabel.setText(readLuggageName);
 
     }
 
