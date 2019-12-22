@@ -41,13 +41,14 @@ public class Controller {
     @FXML
     void handleRegister(ActionEvent event) {
     	// OKボタンがクリックされた時の動作
+    	String result = clientName.getText() ;
+    	resultLabel.setText(result);
     	String readClientName = clientName.getText();
     	String readReceiverName = receiverName.getText();
     	String readClientPhoneNum = clientPhoneNum.getText();
         String readAddress = (String) receiverAddress.getValue() ;
         String readLuggageName = luggageName.getText();
         resultLabel.setText(readLuggageName);
-
     }
 
 
