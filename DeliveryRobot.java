@@ -54,14 +54,47 @@ public class DeliveryRobot extends Robot {
 
 	private static void relayStationToWaiting() {
 		Robot rob=new Robot();
+		rob.robotExists(RIGHT,45,50);
+		rob.stopOnGray(LEFT);
+		//lineTrace(300,RIGHT,300);   灰色ゾーンを通り過ぎるための調整用
+		rob.stopOnGray(RIGHT);
+		rob.changePos("Waiting");
+		rob.turn(LEFT,180);
 	}//relayStationToWaiting
 
 	private static void receiverToRelayStation() {
 		Robot rob=new Robot();
+		 Luggage lug=rob.getLuggage();
+		    Integer ID=lug.receiverAddress;
+		    Integer re;//余り
+		    Integer quo;//商
+		    re=ID/4;
+		    quo=ID%4;
+		    for(int i=0;i<re;i++){
+				rob.stopOnGray(RIGHT);
+				//調整用
+			}
+	    rob.turn(RIGHT,90);
+	    for(int i=0;i<quo;i++){
+			rob.stopOnGray(LEFT);
+			//調整用
+		}
+	    rob.stopOnGray(RIGHT);
+	    rob.robotExists(RIGHT,45,50);
+	    rob.turn(RIGHT,90);
+	    rob.stopOnGray(RIGHT);
+		rob.changePos("RelayStation");
+		rob.turn(LEFT,180);
 	}//receiverToRelayStation
 
 	private static void waitingToRelayStation() {
 		Robot rob=new Robot();
+		rob.stopOnGray(LEFT);
+		//lineTrace(300,RIGHT,300);   灰色ゾーンを通り過ぎるための調整用
+		  rob.robotExists(RIGHT,45,50);
+		rob.stopOnGray(RIGHT);
+		rob.changePos("RelayStation");
+		rob.turn(LEFT,180);
 	}//waitingToRelayStation
 
 	/**
@@ -71,13 +104,30 @@ public class DeliveryRobot extends Robot {
 		Robot rob=new Robot();
 		long start=0;
 	    long end=0;
+	    Luggage lug=rob.getLuggage();
+	    Integer ID=lug.receiverAddress;
+	    Integer re;//余り
+	    Integer quo;//商
+	    re=ID/4;
+	    quo=ID%4;
+	    rob.robotExists(RIGHT,45,50);
 	    start=System.currentTimeMillis();
-	    
-	    
-	    
+		rob.stopOnGray(LEFT);
+		rob.stopOnGray(LEFT);
+		
+	    for(int i=0;i<re;i++){
+				rob.stopOnGray(RIGHT);
+				//goStraight(300,300);   灰色ゾーンを通り過ぎるための調整用
+			}
+	    rob.turn(LEFT,90);
+	    for(int i=0;i<quo;i++){
+			rob.stopOnGray(RIGHT);
+			//goStraight(300,300);   灰色ゾーンを通り過ぎるための調整用
+		}
 	    end=System.currentTimeMillis();
 	    elapsedTime=end-start;
-	    
+	    rob.changePos("Receiver");
+		rob.turn(LEFT,180);
 	}
 
 	public static boolean getLug() {
@@ -158,12 +208,5 @@ public class DeliveryRobot extends Robot {
 	    }//ifopen	
 	}//sendDeliveryRecord
 
-	public void startTimer() {
-
-	}
-
-	public void stopTimer() {
-
-	}
-
+	
 }
