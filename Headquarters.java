@@ -1,4 +1,4 @@
-package recordSystem.headquartersSystem;
+package headquartersSystem;
 
 import java.io.IOException;
 import java.util.Date;
@@ -10,12 +10,12 @@ import signal.PCSignal;
 
 public class Headquarters {
 	/**
-	 * 配達記録リスト
+	 * 驟埼＃險倬鹸繝ｪ繧ｹ繝�
 	 */
-	private DeliveryRecordList DeliveryRecordList;
+	private DeliveryRecordList DeliveryRecordList = new DeliveryRecordList();
 
 	/**
-	 * 通信受付状態に入る
+	 * 騾壻ｿ｡蜿嶺ｻ倡憾諷九↓蜈･繧�
 	 */
 	
 	public void systemExe(){
@@ -28,44 +28,54 @@ public class Headquarters {
 					DeliveryRecord deliveryrecord = (DeliveryRecord)sig.getSig();
 					addDeliveryRecord(deliveryrecord);
 				}else if(methodFlag==1){
-					String luggageID = (String)sig.getSig();
+					int luggageID = (int)sig.getSig();
 					LuggageCondition luggageCondition = (LuggageCondition)sig.getSig();
 					Date time = (Date)sig.getSig();
 					updateDeliveryRecord(luggageID,luggageCondition,time);	
 				}else if(methodFlag==2){
 					sig.sendSig(new Date());
 				}
+				System.out.println(getDeliveryRecordList());
 				sig.closeSig();
 			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
+				// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�け
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	/**
-	 * 配達記録を更新する
+	 * 驟埼＃險倬鹸繧呈峩譁ｰ縺吶ｋ
 	 * 
-	 * 手順
-	 * メソッドに対応する操作を行う
+	 * 謇矩�
+	 * 繝｡繧ｽ繝�ラ縺ｫ蟇ｾ蠢懊☆繧区桃菴懊ｒ陦後≧
 	 * 
 	 * 
 	 */
-	public void updateDeliveryRecord(String luggageID, LuggageCondition luggagecondition, Date time) {
+	public void updateDeliveryRecord(int luggageID, LuggageCondition luggagecondition, Date time) {
 		DeliveryRecordList.updateDeliveryRecord(luggageID, luggagecondition, time);
 	}
 
 	/**
-	 * 配達記録を追加する
+	 * 驟埼＃險倬鹸繧定ｿｽ蜉�☆繧�
 	 * 
-	 * 手順
-	 * メソッドに対応する操作を行う
+	 * 謇矩�
+	 * 繝｡繧ｽ繝�ラ縺ｫ蟇ｾ蠢懊☆繧区桃菴懊ｒ陦後≧
 	 * 
 	 */
 	public void addDeliveryRecord(DeliveryRecord deliveryrecord) {
 		DeliveryRecordList.addDeliveryRecord(deliveryrecord);
+		System.out.println("list added.");
+	}
 
+	public DeliveryRecordList getDeliveryRecordList() {
+		return DeliveryRecordList;
+	}
+
+	public void setDeliveryRecordList(DeliveryRecordList deliveryRecordList) {
+		DeliveryRecordList = deliveryRecordList;
 	}
 
 
+	
 }
