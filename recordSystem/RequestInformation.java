@@ -20,13 +20,13 @@ public class RequestInformation {
 	/**
 	 * 受取人住所
 	 */
-	private String receiverAddress;
+	private int receiverAddress;
 	
 	
 	
 
 	public RequestInformation(String clientName, String receiverName,
-			String clientPhoneNum, String receiverAddress) {
+			String clientPhoneNum, int receiverAddress) {
 		super();
 		this.clientName = clientName;
 		this.receiverName = receiverName;
@@ -58,11 +58,11 @@ public class RequestInformation {
 		this.clientPhoneNum = clientPhoneNum;
 	}
 
-	public String getReceiverAddress() {
+	public int getReceiverAddress() {
 		return receiverAddress;
 	}
 
-	public void setReceiverAddress(String receiverAddress) {
+	public void setReceiverAddress(int receiverAddress) {
 		this.receiverAddress = receiverAddress;
 	}
 
