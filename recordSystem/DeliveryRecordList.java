@@ -8,22 +8,22 @@ public class DeliveryRecordList {
 	//private ArrayList<DeliveryRecord> DeliveryRecordList= new ArrayList<>();
 	HashMap<Integer, DeliveryRecord> deliveryRecordMap = new HashMap<Integer, DeliveryRecord>();
 	/**
-	 * 驟埼＃險倬鹸繝ｪ繧ｹ繝医↓霑ｽ蜉�☆繧�
-	 * 
-	 * 謇矩�
-	 * 繝｡繧ｽ繝�ラ縺ｫ蟇ｾ蠢懊☆繧区桃菴懊ｒ陦後≧
+   * 配達記録リストに追加する
+   *
+   * 手順
+	 * メソッドに対応する操作を行う 
 	 */
 	public void addDeliveryRecord(DeliveryRecord deliveryRecord) {
 		deliveryRecordMap.put(deliveryRecord.getDeliveryID(),deliveryRecord);
 	}
 
 	/**
-	 * 蜿励￠蜿悶▲縺滓凾髢薙�遞ｮ鬘槭°繧画峩譁ｰ縺吶∋縺埼�驕碑ｨ倬鹸縺ｮ譎る俣鬆�岼繧剃ｸ�э縺ｫ豎ｺ螳壹〒縺阪ｋ縲ゆｾ九∴縺ｰ縲∝女縺大叙縺｣縺滓凾髢薙�遞ｮ鬘槭′縲碁�驕泌ｮ御ｺ�凾髢薙�縺ｪ繧峨�驟埼＃險倬鹸縺ｫ縺翫￠繧矩�驕泌ｮ御ｺ�凾髢薙ｒ譖ｴ譁ｰ縺吶ｋ縲�
-	 * 
-	 * 謇矩�
-	 * 闕ｷ迚ｩID繧剃ｽｿ縺��繝ｪ繧ｹ繝医°繧蛾�驕碑ｨ倬鹸繧呈爾縺�
-	 * 譎る俣縺ｮ遞ｮ鬘槭↓蠢懊§縺ｦ縲∵凾髢薙ｒ譖ｴ譁ｰ縺吶ｋ
-	 * 譎る俣縺ｮ遞ｮ鬘槭↓蠢懊§縺ｦ闕ｷ迚ｩ迥ｶ諷九ｂ螟画峩縺吶ｋ
+ 	 * 受け取った時間の種類から更新すべき配達記録の時間項目を一意に決定できる。例えば、受け取った時間の種類が「配達完了時間」なら、配達記録における配達完了時間を更新する。
+   *
+   * 手順
+   * 荷物IDを使い、リストから配達記録を探す
+	 * 時間の種類に応じて、時間を更新する
+	 * 時間の種類に応じて荷物状態も変更する
 	 */
 	public void updateDeliveryRecord(int luggageID, LuggageCondition luggagecondition, Date time) {
 		
@@ -41,7 +41,7 @@ public class DeliveryRecordList {
         	 deliveryRecordMap.get(luggageID).setStartTime(time);
              break;
          case delivered:
-        	 //蟾ｮ蛻�ｒ蜿励￠蜿悶▲縺ｦ繧九�縺ｧ菫ｮ豁｣縺励↑縺�→
+           //差分を受け取っているので修正しないと
         	 deliveryRecordMap.get(luggageID).setReceiveTime(time);
              break;
          case finished:
@@ -60,7 +60,7 @@ public class DeliveryRecordList {
 
 	@Override
 	public String toString() {
-		return "驟埼＃險倬鹸繝ｪ繧ｹ繝医�\n " + deliveryRecordMap;
+		return "配達記録リスト\n " + deliveryRecordMap;
 	}
 	
 	
