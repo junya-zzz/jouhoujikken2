@@ -51,7 +51,7 @@ public class DeliveryRecord {
 		startTime = time;
 	}
 
-	public void changeLC(LuggageCondition condition) {
+	public void setLuggageCondition(LuggageCondition condition) {
 		luggageCondition = condition;
 	}
 
