@@ -1,13 +1,14 @@
 package receiveSystem;
-
+import java.io.IOException;
+import signalSystem.PCSignal;
 public class Receiver {
 	
-	  private String receiverName;
+	  private static String receiverName;
 
-	    aruiprivate String receiverAddress;
+	    private static Integer receiverAddress;
 
 	 
-	    Receiver(String name,String ad){
+	    Receiver(String name,Integer ad){
 
 		receiverName = name;
 
@@ -15,24 +16,36 @@ public class Receiver {
 
 	    }
 
-	  
-	    public void getLug() {
+	    public static void main(String[] args) {
+	    	new Receiver("êƒì°",3);//Ç±Ç±Ç≈èÓïÒÇïœÇ¶ÇÈ
+	    	try{
+	    	while(true){
+	    	getLug();
+	    	}
+	    	}catch(IOException e){
+	    		e.printStackTrace();
+	    	}
+	    	}
+	    
+	    
+	    
+	    private static void getLug() throws IOException{
 
-	    Signal sig1 = new Signal();
-	    	
+	    PCSignal sig1 = new PCSignal();
+	    
 		sig1.waitSig();
 
 		sig1.getSig();
 
-		sig1.sendSig("Exist",DeliveryRobot);
+		sig1.sendSig("Exist");
 
-		if(sig1.getSig().equals("false")) sig1.closeSig("FINISH",DeliveryRobot);    //falseÅ®10ïbà»ì‡Ç…ï‘êMÇ≈Ç´Ç»Ç©Ç¡ÇΩ
+		if(sig1.getSig().equals("false")) sig1.closeSig();    //falseÅ®10ïbà»ì‡Ç…ï‘êMÇ≈Ç´Ç»Ç©Ç¡ÇΩ
 
 		else{
 
-		    sig1.sendSig(receiverName,DeliveryRobot);
+		    sig1.sendSig(receiverName);
 
-		    sig1.sendSig(receiverAddress,DerliveryRobot);
+		    sig1.sendSig(receiverAddress);
 
 		
 		    if(sig1.getSig().equals("false")) sig1.closeSig();
@@ -41,7 +54,7 @@ public class Receiver {
 
 			sig1.getSig();     //â◊ï®éÛÇØéÊÇË
 
-			sig1.closeSig("FINISH",DeliveryRobot);
+			sig1.closeSig();
 
 		    }
 
