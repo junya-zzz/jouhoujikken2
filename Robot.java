@@ -1,5 +1,6 @@
 package robotSystem;
 
+import recordSystem.Luggage;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 
@@ -12,13 +13,12 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Stopwatch;
-import signal.Luggage;
 
 public class Robot {
 
-	private static Luggage luggage;
+	protected static Luggage luggage;
 
-	private String position;
+	private static String position;
 
 	private static EV3UltrasonicSensor sonicSensor;
 	private static EV3GyroSensor gyroSensor;
@@ -278,8 +278,8 @@ public class Robot {
 	 * positionÇïœçXÇ∑ÇÈ
 	 * @param position
 	 */
-	protected void changePos(String position) {
-		this.position = position;
+	protected static void changePos(String pos) {
+		position = pos;
 	}
 
 	/**
