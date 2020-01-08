@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class Controller {
+	final private int PORTNUM=8080;
 
     @FXML
     private ResourceBundle resources;
@@ -41,15 +42,24 @@ public class Controller {
     @FXML
     void handleRegister(ActionEvent event) {
     	// OKボタンがクリックされた時の動作
-    	String result = clientName.getText() ;
-    	resultLabel.setText(result);
+    	//String result = clientName.getText() ;
+    	//resultLabel.setText(result);
     	String readClientName = clientName.getText();
     	String readReceiverName = receiverName.getText();
     	String readClientPhoneNum = clientPhoneNum.getText();
         String readAddress = (String) receiverAddress.getValue() ;
         String readLuggageName = luggageName.getText();
         resultLabel.setText(readLuggageName);
+        if(readClientName.isEmpty()||readReceiverName.isEmpty()||readClientPhoneNum.isEmpty()||readAddress.isEmpty()||readLuggageName.isEmpty()) {
+        	resultLabel.setText("正しく入力して下さい");
+        }
+        else {
+        	SocketClient socketClient = new SocketClient(PORTNUM);
+        	socketClient.send(readClientName,readReceiverName,readClientPhoneNum,readAddress,readLuggageName);
+        }
     }
+
+
 
 
     @FXML
