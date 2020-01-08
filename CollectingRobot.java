@@ -14,7 +14,8 @@ public class CollectingRobot extends Robot {
 	private final String reception = "";
 	
 	public static void main(String[] args) {
-
+		initSensors();
+		receptionToRelayStation();
 	}
 
 	/**
@@ -53,13 +54,8 @@ public class CollectingRobot extends Robot {
 	 * 中継所から宅配受付所に移動する
 	 */
 	private static void relayStationToReception() {
-		lineTrace(3500, RIGHT, 350);
+		lineTrace(5000, RIGHT, 350);
 		stopOnGray(RIGHT);
-		Delay.msDelay(1000);
-		robotExists(RIGHT, 90, 50);
-		lineTrace(200, RIGHT, 300);
-		lineTrace(1000, LEFT, 300);
-		stopOnGray(LEFT);
 		turn(LEFT, 180);
 	}
 
@@ -83,9 +79,16 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 宅配受付所から中継所に移動する
 	 */
-	private void receptionToRelayStation() {
-		lineTrace(5000, RIGHT, 350);
+	private static void receptionToRelayStation() {
+		lineTrace(3500, RIGHT, 350);
+		Delay.msDelay(1000);
 		stopOnGray(RIGHT);
+		Delay.msDelay(1000);
+		robotExists(RIGHT, 90, 50);
+		turn(LEFT, 90);
+		lineTrace(200, RIGHT, 300);
+		lineTrace(1000, LEFT, 300);
+		stopOnGray(LEFT);
 		turn(LEFT, 180);
 	}
 
@@ -100,7 +103,7 @@ public class CollectingRobot extends Robot {
 			}
 			boolean existsLug = (boolean) signal.getSig();
 			if (existsLug) {
-				setLuggage((signal.Luggage) signal.getSig());
+				setLuggage((Luggage) signal.getSig());
 			}
 			signal.closeSig();
 		} catch (IOException e) {
