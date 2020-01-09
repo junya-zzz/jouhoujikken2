@@ -5,39 +5,45 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
 public class SocketServer {
 	private int portNum;
-	private String readClientName;
-	private String readReceiverName;
-	private String readClientPhoneNum;
-	private String readAddress;
-	private String readLuggageName;
+	private String clientName;
+	private String receiverName;
+	private String clientPhoneNum;
+	private String receiverAddress;
+	private String luggageName;
 
 	public SocketServer(int portNum) {
 		this.portNum=portNum;
 	}
 
-	public  void read () {
+	public  String[] read () {
 		// サーバーソケットを生成＆待機
+
 		try {
 			ServerSocket serverSocket = new ServerSocket(portNum) ;
 		      Socket socket = serverSocket.accept();
 		      System.out.println("接続されました "
                       + socket.getRemoteSocketAddress() );
 		      BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		      this.readClientName=reader.readLine();
-		      this.readReceiverName=reader.readLine();
-		      this.readClientPhoneNum=reader.readLine();
-		      this.readAddress=reader.readLine();
-		      this.readLuggageName=reader.readLine();
+		      this.clientName=reader.readLine();
+		      this.receiverName=reader.readLine();
+		      this.clientPhoneNum=reader.readLine();
+		      this.receiverAddress=reader.readLine();
+		      this.luggageName=reader.readLine();
 
-		      System.out.println("clientName = "+this.readClientName);
-		      System.out.println("readLuggageName"+this.readLuggageName);
+		      System.out.println("clientName = "+this.clientName);
+		      System.out.println("readLuggageName"+this.luggageName);
 
 		      serverSocket.close();
+		      String[] result={clientName,receiverName,clientPhoneNum,receiverAddress,luggageName};
+		      return result;
 		    } catch (Exception e) {
 		      e.printStackTrace();
 		    }
+			return null;
+
 
 	}
 }
