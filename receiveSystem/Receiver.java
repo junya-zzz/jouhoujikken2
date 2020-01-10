@@ -1,6 +1,6 @@
 package receiveSystem;
 import java.io.IOException;
-import signalSystem.PCSignal;
+import signal.PCSignal;
 public class Receiver {
 	
 	  private static String receiverName;

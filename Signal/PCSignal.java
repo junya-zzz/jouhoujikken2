@@ -49,7 +49,7 @@ public class PCSignal {
 	 * @return ê¨å˜éû:true é∏îséû:false
 	 * @throws IOException
 	 */
-	public String waitSig() throws IOException {
+	public boolean waitSig() throws IOException {
 		isServerMode = true;
 		scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
 		if (scn == null) {

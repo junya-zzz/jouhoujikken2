@@ -3,22 +3,22 @@ package recordSystem;
 public class RequestInformation {
 
 	/**
-	 * ä¾é ¼äººå
+	 * ˆË—Šl–¼
 	 */
 	private String clientName;
 
 	/**
-	 * å—å–äººå
+	 * óæl–¼
 	 */
 	private String receiverName;
 
 	/**
-	 * ä¾é ¼äººé›»è©±ç•ªå·
+	 * ˆË—Šl“d˜b”Ô†
 	 */
 	private String clientPhoneNum;
 
 	/**
-	 * å—å–äººä½æ‰€
+	 * óælZŠ
 	 */
 	private int receiverAddress;
 	
@@ -68,9 +68,9 @@ public class RequestInformation {
 
 	@Override
 	public String toString() {
-		return "ä¾é ¼äººã€€" + clientName
-				+ "\nå—å–äººã€€" + receiverName + "\nä¾é ¼äººé›»è©±ç•ªå·ã€€"
-				+ clientPhoneNum + "\nå—å–äººå®…ä½æ‰€ã€€" + receiverAddress+"\n";
+		return "ˆË—Šl@" + clientName
+				+ "\nóæl@" + receiverName + "\nˆË—Šl“d˜b”Ô†@"
+				+ clientPhoneNum + "\nóæl‘îZŠ@" + receiverAddress+"\n";
 	}
 	
 	

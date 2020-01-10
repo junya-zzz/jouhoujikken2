@@ -1,6 +1,7 @@
 package receptionSystem;
 
 import java.io.*;
+import recordSystem.*;
 
 public class Boundary {
 

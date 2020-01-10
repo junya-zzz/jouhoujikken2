@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import lejos.utility.Delay;
 import lejos.utility.Stopwatch;
+import recordSystem.Luggage;
 import signal.EV3Signal;
 
 public class CollectingRobot extends Robot {

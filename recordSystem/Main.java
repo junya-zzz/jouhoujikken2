@@ -3,8 +3,8 @@ public class Main {
 	
 	
 	public static void main(String args[]){
-		RequestInformation info1 = new RequestInformation("é‡‘å­","æ–‰è—¤","080-3110-kaneko","ç¥å¥ˆå·çœŒ");
-		RequestInformation info2 = new RequestInformation("æ–‰è—¤","é‡‘å­","080-3110-saito","åŸ¼ç‰çœŒ");
+		RequestInformation info1 = new RequestInformation("‹àq","Ä“¡","080-3110-kaneko","_“ŞìŒ§");
+		RequestInformation info2 = new RequestInformation("Ä“¡","‹àq","080-3110-saito","é‹ÊŒ§");
 		Luggage lug1 = new Luggage(12345,"ddfdf",info1);
 		Luggage lug2 = new Luggage(543210,"aaaa",info2);
 		//Luggage lug3 = new Luggage(678910,"dfdf",info2);

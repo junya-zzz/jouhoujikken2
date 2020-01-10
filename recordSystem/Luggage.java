@@ -3,7 +3,7 @@ package recordSystem;
 public class Luggage {
 
 	/**
-	 * è·ç‰©ID
+	 * ‰×•¨ID
 	 */
 	private Integer luggageID;
 	
@@ -47,8 +47,8 @@ public class Luggage {
 
 	@Override
 	public String toString() {
-		return "è·ç‰©IDã€€" + luggageID + ",ã€€è·ç‰©å "
-				+ luggageName + "\né¡§å®¢æƒ…å ±\n" + requestInformation;
+		return "‰×•¨ID@" + luggageID + ",@‰×•¨–¼ "
+				+ luggageName + "\nŒÚ‹qî•ñ\n" + requestInformation;
 	}
 	
 	

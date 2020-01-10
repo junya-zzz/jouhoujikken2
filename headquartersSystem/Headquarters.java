@@ -10,12 +10,12 @@ import signal.PCSignal;
 
 public class Headquarters {
 	/**
-	 * 驟埼＃險倬鹸繝ｪ繧ｹ繝�
+	 * 配達記録ッFゃP�
 	 */
 	private DeliveryRecordList DeliveryRecordList = new DeliveryRecordList();
 
 	/**
-	 * 騾壻ｿ｡蜿嶺ｻ倡憾諷九↓蜈･繧�
+	 * 通�\�B受�T�状態に允E�
 	 */
 	
 	public void systemExe(){
@@ -38,17 +38,17 @@ public class Headquarters {
 				System.out.println(getDeliveryRecordList());
 				sig.closeSig();
 			} catch (IOException e) {
-				// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�け
+				// TODO 臃F動生成された catch ブロヂ�
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	/**
-	 * 驟埼＃險倬鹸繧呈峩譁ｰ縺吶ｋ
+	 * 配達記録を更斁[する
 	 * 
-	 * 謇矩�
-	 * 繝｡繧ｽ繝�ラ縺ｫ蟇ｾ蠢懊☆繧区桃菴懊ｒ陦後≧
+	 * 手�
+	 * チBゃXッ�ぃH寃Z応する操作を行う
 	 * 
 	 * 
 	 */
@@ -57,10 +57,10 @@ public class Headquarters {
 	}
 
 	/**
-	 * 驟埼＃險倬鹸繧定ｿｽ蜉�☆繧�
+	 * 配達記録を�\�X劁��
 	 * 
-	 * 謇矩�
-	 * 繝｡繧ｽ繝�ラ縺ｫ蟇ｾ蠢懊☆繧区桃菴懊ｒ陦後≧
+	 * 手�
+	 * チBゃXッ�ぃH寃Z応する操作を行う
 	 * 
 	 */
 	public void addDeliveryRecord(DeliveryRecord deliveryrecord) {

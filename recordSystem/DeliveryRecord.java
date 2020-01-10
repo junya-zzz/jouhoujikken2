@@ -127,10 +127,10 @@ public class DeliveryRecord {
 
 	@Override
 	public String toString() {
-		return "\nã€é…é”è¨˜éŒ²ID " + deliveryID + "ã€‘\nè·ç‰©å†…å®¹\n"
-				+ luggage + "\nè·ç‰©çŠ¶æ…‹ã€€" + luggageCondition +"\n--æ™‚é–“æƒ…å ±--\nå—å–æ™‚é–“ã€€" + receiptTime + "\nç™ºé€æ™‚é–“ã€€"
-				+ shipTime + "\nä¸­ç¶™æ‰€åˆ°ç€æ™‚é–“ã€€" + arrivalTime + "\né…é”é–‹å§‹æ™‚é–“ã€€"
-				+ startTime + "\nå—ã‘å–ã‚Šå®Œäº†æ™‚é–“ã€€" + receiveTime + "\né…é”å®Œäº†æ™‚é–“ã€€"
+		return "\ny”z’B‹L˜^ID " + deliveryID + "z\n‰×•¨“à—e\n"
+				+ luggage + "\n‰×•¨ó‘Ô@" + luggageCondition +"\n--ŠÔî•ñ--\nóæŠÔ@" + receiptTime + "\n”­‘—ŠÔ@"
+				+ shipTime + "\n’†ŒpŠ“’…ŠÔ@" + arrivalTime + "\n”z’BŠJnŠÔ@"
+				+ startTime + "\nó‚¯æ‚èŠ®—¹ŠÔ@" + receiveTime + "\n”z’BŠ®—¹ŠÔ@"
 				+ finishTime +  "\n";
 	}
 
