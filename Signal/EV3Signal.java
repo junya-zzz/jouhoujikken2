@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import lejos.hardware.lcd.LCD;
 import lejos.remote.nxt.BTConnector;
 import lejos.remote.nxt.BTConnection;
 
@@ -72,9 +73,14 @@ public class EV3Signal {
 		try {
 			object = deserialize(b);
 		} catch (ClassNotFoundException e) {
-			System.exit(1);
+			e.printStackTrace();
+			while(true); 
 		}
 		return object;
+	}
+	
+	public boolean getBoolSig() throws IOException {
+		return dis.readBoolean();
 	}
 
 	/**

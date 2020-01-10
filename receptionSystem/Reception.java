@@ -73,12 +73,14 @@ public class Reception {
 	/*荷物を収集担当ロボットに渡す*/
 	public void sendLug() {
 		try {
+			System.out.println("send lug.");
 			signal.waitSig();
 			String getMessage = (String)signal.getSig();
 			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ロボットからのメッセージが正しかったら
 				if(!this.lugList.isEmpty()) { //荷物リストに荷物があったら
-					signal.sendSig(true);
+					signal.sendBoolSig(true);
 					Luggage sendLug = this.lugList.remove(0);  //荷物リストから先頭の要素を取り出して送る
+					System.out.println("send lug:" + sendLug);
 					signal.sendSig(sendLug);
 					/******渡した荷物に対応する配達記録に発送時間を追記**/
 					deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());

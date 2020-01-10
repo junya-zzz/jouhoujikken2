@@ -1,6 +1,8 @@
 package recordSystem;
 
-public class RequestInformation {
+import java.io.Serializable;
+
+public class RequestInformation implements Serializable{
 
 	/**
 	 * ˆË—Šl–¼

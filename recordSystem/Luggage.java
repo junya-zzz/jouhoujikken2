@@ -1,6 +1,8 @@
 package recordSystem;
 
-public class Luggage {
+import java.io.Serializable;
+
+public class Luggage implements Serializable{
 
 	/**
 	 * ‰×•¨ID

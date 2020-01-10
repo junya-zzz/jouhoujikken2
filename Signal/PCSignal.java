@@ -93,6 +93,11 @@ public class PCSignal {
 		dos.write(bytes);
 		dos.flush();
 	}
+	
+	public void sendBoolSig(boolean b) throws IOException{
+		dos.writeBoolean(b);
+		dos.flush();
+	}
 
 	/**
 	 * Ú‘±‚ğ•Â‚¶‚é

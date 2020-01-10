@@ -2,6 +2,8 @@ package robotSystem;
 
 import java.io.IOException;
 
+import lejos.hardware.Button;
+import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
 import lejos.utility.Stopwatch;
 import recordSystem.Luggage;
@@ -12,14 +14,14 @@ public class CollectingRobot extends Robot {
 	private static Boolean isDelivery;
 	private static EV3Signal signal;
 	private final static String relaySystem = "";
-	private final static String reception = "";
+	private final static String reception = "00:1b:dc:f2:2c:2c";
 	
-	public static void main(String[] args) {
-		initSensors();
+	public static void main(String[] args) throws Exception{
 		getLugfrom();
-		receptionToRelayStation();
-		sendLug();
-		relayStationToReception();
+		LCD.clear();
+		LCD.drawString(getLuggage().toString(), 0, 0);
+		LCD.refresh();
+		Delay.msDelay(1000000000);
 	}
 
 	/**
@@ -99,24 +101,34 @@ public class CollectingRobot extends Robot {
 	/**
 	 * ëÓîzéÛïtèäÇ©ÇÁâ◊ï®ÇéÛÇØéÊÇÈ
 	 */
-	public static void getLugfrom() {
+	public static void getLugfrom() throws Exception{
+		LCD.clear();
+		LCD.drawString("wait luggage", 0, 0);
+		LCD.refresh();
 		boolean existsLug = false;
 		signal = new EV3Signal();
-		try {
+		//try {
 			while (!existsLug) {
-				while (signal.openSig(reception)) {
+				while (!signal.openSig(reception)) {
 					Delay.msDelay(3000);
 				}
+				LCD.drawString("connected.", 0, 1);
+				LCD.refresh();
 				signal.sendSig("existLuggage");
-				existsLug = (boolean) signal.getSig();
+				existsLug = signal.getBoolSig();
 				if (existsLug) {
-					setLuggage((Luggage) signal.getSig());
+					Luggage l = (Luggage) signal.getSig();
+					setLuggage(l);
 				}
 				signal.closeSig();
 			}
-		} catch (IOException e) {
-			System.exit(1);
-		}
+			LCD.drawString("luggage accepted.", 0, 3);
+		/*} catch (IOException e) {
+			LCD.clear();
+			LCD.refresh();
+			e.printStackTrace();
+			while(true);
+		}*/
 	}
 
 }
