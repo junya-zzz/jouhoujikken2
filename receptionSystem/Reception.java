@@ -21,6 +21,12 @@ public class Reception {
 
 	private PCSignal signal;
 
+	public static void main(String[] args) {
+		// テスト用
+		Reception reception = new Reception();
+		reception.getLug();
+		reception.sendLug();
+	}
 
 	public Reception(){
 		this.lugList = new ArrayList<Luggage>();
@@ -67,7 +73,7 @@ public class Reception {
 	/*荷物を収集担当ロボットに渡す*/
 	public void sendLug() {
 		try {
-			signal.openSig("CollectingRobot");
+			signal.waitSig();
 			String getMessage = (String)signal.getSig();
 			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ロボットからのメッセージが正しかったら
 				if(!this.lugList.isEmpty()) { //荷物リストに荷物があったら
@@ -76,14 +82,11 @@ public class Reception {
 					signal.sendSig(sendLug);
 					/******渡した荷物に対応する配達記録に発送時間を追記**/
 					deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
-
-
+				} else {
+					signal.sendSig(false);
 				}
 			}
 			signal.closeSig();
-
-
-
 		}catch(Exception e) {
 			//例外処理
 		}

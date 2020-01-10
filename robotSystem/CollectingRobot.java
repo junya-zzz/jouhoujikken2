@@ -9,28 +9,31 @@ import signal.EV3Signal;
 
 public class CollectingRobot extends Robot {
 
-	private Boolean isDelivery;
-	private EV3Signal signal;
-	private final String relaySystem = "";
-	private final String reception = "";
+	private static Boolean isDelivery;
+	private static EV3Signal signal;
+	private final static String relaySystem = "";
+	private final static String reception = "";
 	
 	public static void main(String[] args) {
 		initSensors();
+		getLugfrom();
 		receptionToRelayStation();
+		sendLug();
+		relayStationToReception();
 	}
 
 	/**
 	 * 配達の成功/失敗を切り替える
 	 * @param result 配達の成否
 	 */
-	private void changeIsDelivery(boolean result) {
+	private static void changeIsDelivery(boolean result) {
 		isDelivery = result;
 	}
 
 	/**
 	 * 荷物を中継所に引き渡す
 	 */
-	public void sendLug() {
+	public static void sendLug() {
 		signal = new EV3Signal();
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.reset();
@@ -63,7 +66,7 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 配達が成功したか失敗したかを宅配受付所に送信する
 	 */
-	public void sendIsDelivery() {
+	public static void sendIsDelivery() {
 		signal = new EV3Signal();
 		try {
 			signal.openSig(reception);
@@ -96,17 +99,21 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 宅配受付所から荷物を受け取る
 	 */
-	public void getLugfrom() {
+	public static void getLugfrom() {
+		boolean existsLug = false;
 		signal = new EV3Signal();
 		try {
-			while (signal.openSig(reception)) {
-				Delay.msDelay(3000);
+			while (!existsLug) {
+				while (signal.openSig(reception)) {
+					Delay.msDelay(3000);
+				}
+				signal.sendSig("existLuggage");
+				existsLug = (boolean) signal.getSig();
+				if (existsLug) {
+					setLuggage((Luggage) signal.getSig());
+				}
+				signal.closeSig();
 			}
-			boolean existsLug = (boolean) signal.getSig();
-			if (existsLug) {
-				setLuggage((Luggage) signal.getSig());
-			}
-			signal.closeSig();
 		} catch (IOException e) {
 			System.exit(1);
 		}
