@@ -63,9 +63,9 @@
          </font>
       </Label>
       <TextField fx:id="luggageName" layoutX="155.0" layoutY="265.0" prefHeight="26.0" prefWidth="308.0" style="-fx-background-color: FFF;" />
-      <Button fx:id="registerButton" defaultButton="true" layoutX="497.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="20.0" prefWidth="38.0" text="登録" underline="true">
+      <Button fx:id="registerButton" defaultButton="true" layoutX="497.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="51.0" prefWidth="73.0" text="登録" underline="true">
          <font>
-            <Font name="Yu Gothic Regular" size="18.0" />
+            <Font name="Arial" size="18.0" />
          </font>
       </Button>
       <Label fx:id="resultLabel" layoutX="234.0" layoutY="375.0" text="aaaa">

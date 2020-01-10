@@ -1,7 +1,6 @@
 package receptionSystem;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +17,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Pane root = (Pane)FXMLLoader.load(getClass().getResource("GUI.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GUI.fxml"));
+			Pane root = (Pane)fxmlLoader.load();
 			Scene scene = new Scene(root,700,500);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
@@ -51,15 +51,19 @@ public class Main extends Application {
     @FXML
     private Label resultLabel;
 
-    @FXML
-    public void handleRegister(ActionEvent event) {
-        // OKボタンがクリックされた時の動作
-        String result = clientName.getText() ;
-        resultLabel.setText(result);
 
-    }
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 }
+
+
+
+
+
+
+
+
+
+
