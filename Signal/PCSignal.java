@@ -68,17 +68,9 @@ public class PCSignal {
 	 * @return 受信したオブジェクト
 	 * @throws IOException
 	 */
-	public Object getSig() throws IOException{
-		Object object = null;
-		int byteSize = dis.readInt();
-		byte[] b = new byte[byteSize];
-		dis.read(b);
-		try {
-			object = deserialize(b);
-		} catch (ClassNotFoundException e) {
-
-		}
-		return object;
+	public Object getSig() throws IOException, ClassNotFoundException{
+		ObjectInputStream ois = new ObjectInputStream(dis);
+		return ois.readObject();
 	}
 
 	/**
@@ -88,10 +80,9 @@ public class PCSignal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException {
-		byte[] bytes = serialize(data);
-		dos.writeInt(bytes.length);
-		dos.write(bytes);
-		dos.flush();
+		ObjectOutputStream oos = new ObjectOutputStream(dos);
+		oos.writeObject(data);
+		oos.flush();
 	}
 	
 	public void sendBoolSig(boolean b) throws IOException{
