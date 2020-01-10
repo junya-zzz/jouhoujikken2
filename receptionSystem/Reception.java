@@ -1,102 +1,115 @@
 package receptionSystem;
 
 import recordSystem.*;
+import signal.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 
 
-public static final String EXIST_LUGGAGE = "existLuggage";
 
 
 public class Reception {
+	public static final String EXIST_LUGGAGE = "existLuggage";
 
-    private ArrayList<Luggage> lugList;
-    private DeliveryRecordList deliList;
-    private Boundary boundary;
+	private ArrayList<Luggage> lugList;
+	private DeliveryRecordList deliList;
+	private Boundary boundary;
 
-    private Signal signal;
+	private PCSignal signal;
 
 
-    public Reception(){
-	this.lugList = new ArrayList<Luggage>();
-	this.deliList = new DeliveryRecordList();
-	this.boundary = new Boundary();
-	this.signal = new Signal();
-    }
-    /*é…é”è¨˜éŒ²ã‚’æœ¬éƒ¨ã«é€ã‚‹
+	public Reception(){
+		this.lugList = new ArrayList<Luggage>();
+		this.deliList = new DeliveryRecordList();
+		this.boundary = new Boundary();
+		this.signal = new PCSignal();
+	}
+	/*”z’B‹L˜^‚ğ–{•”‚É‘—‚é
     public void sendDeliveryRecord() {
 
     }
 
-	*/
+	 */
 
 
-    /*ç™ºé€æ™‚é–“ã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹*/
-    public void sendShipTime() {
-    	try {
-    		signal.openSig("START","Headquarters");
-    		/**é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã‹ã‚‰ã‚µãƒ¼ãƒ**/
-
-
-
-
-    		/**************/
-    		signal.sendSig(deliveryRecord);
-    		signal.closeSig("FINISH","Headquarters");
-
-    	}catch(Exception e) {
-    		//ä¾‹å¤–å‡¦ç†
-    		//
-    		//
-
-    	}
-    }
-
-
-    /*ä¸­ç¶™æ‰€ã¨ã®å¼•æ¸¡ã—çµæœã‚’å¾—ã‚‹*/
-    public void getIsDelivery() {
-
-    }
-
-
-    /*è·ç‰©ã‚’åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«æ¸¡ã™*/
-    public void sendLug() {
-    	try {
-    		signal.openSig("START","CollectingRobot");
-    		String getMessage = signal.getSig();
-    		if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ãƒ­ãƒœãƒƒãƒˆã‹ã‚‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒæ­£ã—ã‹ã£ãŸã‚‰
-    			if(!this.lugList.isEmpty()) { //è·ç‰©ãƒªã‚¹ãƒˆã«è·ç‰©ãŒã‚ã£ãŸã‚‰
-    				signal.sendSig(true);
-    				Luggage sendLug = this.LugList.remove(0);  //è·ç‰©ãƒªã‚¹ãƒˆã‹ã‚‰å…ˆé ­ã®è¦ç´ ã‚’å–ã‚Šå‡ºã—ã¦é€ã‚‹
-    				signal.sendSig(sendLug);
-    				/******æ¸¡ã—ãŸè·ç‰©ã«å¯¾å¿œã™ã‚‹é…é”è¨˜éŒ²ã«ç™ºé€æ™‚é–“ã‚’è¿½è¨˜**/
-    				deliList.updateDeliveryRecord(sendLug.getLuggageID, LuggageCondition.delivering, new Date());
-
-
-    			}
-    		}
-    		signal.closeSig("FINISH","CollectingRobot");
+	/*”­‘—ŠÔ‚ğ–{•”‚É•ñ‚·‚é*/
+	public void sendShipTime() {
+		try {
+			signal.openSig("Headquarters");
+			/**”z’B‹L˜^ƒŠƒXƒg‚©‚çƒT[ƒ`**/
 
 
 
-    	}catch(Exception e) {
-    		//ä¾‹å¤–å‡¦ç†
-    	}
-    }
 
-    public int idNum=0;
-    /*è·ç‰©ã‚’ä¾é ¼äººã‹ã‚‰å—ã‘å–ã‚‹*/
-    public void getLug() {
-    	RequestInfomation info = this.boundary.inputReqInfo(); //ãƒã‚¦ãƒ³ãƒ€ãƒªã‹ã‚‰é…é”æƒ…å ±ã‚’å…¥åŠ›
-    	Luggage lug = new Luggage(setLuggageIDNum(),info);                      /****ID,Amountè¿½åŠ ****/
-    	lugList.add(lug);   //è·ç‰©ãƒªã‚¹ãƒˆã«è¿½åŠ 
-    	DeliveryRecord deliveryRecord = new DeliveryRecord(lug); //è·ç‰©ã®é…é”è¨˜éŒ²ç”Ÿæˆ
-    	deliveryRecord.setReceiptTime(new Date()); //é…é”è¨˜éŒ²ã«å—ä»˜æ™‚é–“ã‚’è¿½åŠ 
-    	deliList.addDeliveryRecord(deliveryRecord); //é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã«è¿½åŠ 
+			/**************/
+			signal.sendSig(deliveryRecord);
+			signal.closeSig();
 
-    	private int setLuggageIDNum() { //è·ç‰©IDã‚’è¨­å®š
-    		idNum++;
-    		return idNum;
-    	}
-    }
+		}catch(Exception e) {
+			//—áŠOˆ—
+			//
+			//
 
+		}
+	}
+
+
+	/*’†ŒpŠ‚Æ‚Ìˆø“n‚µŒ‹‰Ê‚ğ“¾‚é*/
+	public void getIsDelivery() {
+
+	}
+
+
+	/*‰×•¨‚ğûW’S“–ƒƒ{ƒbƒg‚É“n‚·*/
+	public void sendLug() {
+		try {
+			signal.openSig("CollectingRobot");
+			String getMessage = (String)signal.getSig();
+			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ƒƒ{ƒbƒg‚©‚ç‚ÌƒƒbƒZ[ƒW‚ª³‚µ‚©‚Á‚½‚ç
+				if(!this.lugList.isEmpty()) { //‰×•¨ƒŠƒXƒg‚É‰×•¨‚ª‚ ‚Á‚½‚ç
+					signal.sendSig(true);
+					Luggage sendLug = this.lugList.remove(0);  //‰×•¨ƒŠƒXƒg‚©‚çæ“ª‚Ì—v‘f‚ğæ‚èo‚µ‚Ä‘—‚é
+					signal.sendSig(sendLug);
+					/******“n‚µ‚½‰×•¨‚É‘Î‰‚·‚é”z’B‹L˜^‚É”­‘—ŠÔ‚ğ’Ç‹L**/
+					deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
+
+
+				}
+			}
+			signal.closeSig();
+
+
+
+		}catch(Exception e) {
+			//—áŠOˆ—
+		}
+	}
+
+	public int idNum=0;
+
+	/*‰×•¨‚ğˆË—Šl‚©‚çó‚¯æ‚é*/
+	public void getLug() {
+		try {
+			RequestInformation info = this.boundary.inputReqInfo(); //ƒoƒEƒ“ƒ_ƒŠ‚©‚ç”z’Bî•ñ‚ğ“ü—Í
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			String luggageName = br.readLine();
+			int id = setLuggageIDNum();
+			Luggage lug = new Luggage(id,luggageName, info);                      /****ID,Amount’Ç‰Á****/
+			lugList.add(lug);   //‰×•¨ƒŠƒXƒg‚É’Ç‰Á
+			DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //‰×•¨‚Ì”z’B‹L˜^¶¬
+			deliveryRecord.setReceiveTime(new Date()); //”z’B‹L˜^‚Éó•tŠÔ‚ğ’Ç‰Á
+			deliList.addDeliveryRecord(deliveryRecord); //”z’B‹L˜^ƒŠƒXƒg‚É’Ç‰Á
+		} catch (IOException e){
+			//—áŠO
+		}
+	}
+
+	private int setLuggageIDNum() { //‰×•¨ID‚ğİ’è
+		idNum++;
+		return idNum;
+	}
 }
