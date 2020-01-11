@@ -68,9 +68,16 @@ public class PCSignal {
 	 * @return 受信したオブジェクト
 	 * @throws IOException
 	 */
-	public Object getSig() throws ClassNotFoundException,IOException{
-		ObjectInputStream ois = new ObjectInputStream(dis);
-		return ois.readObject();
+	public Object getSig() throws IOException{
+		Object object = null;
+		try {
+			ObjectInputStream ois = new ObjectInputStream(dis);
+			object = ois.readObject();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+			System.exit(1);
+		}
+		return object;
 	}
 
 	/**

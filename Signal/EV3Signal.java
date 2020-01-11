@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import lejos.hardware.lcd.LCD;
 import lejos.remote.nxt.BTConnector;
 import lejos.remote.nxt.BTConnection;
+import lejos.utility.Delay;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -65,9 +66,17 @@ public class EV3Signal {
 	 * @return 受信したオブジェクト
 	 * @throws IOException
 	 */
-	public Object getSig() throws IOException, ClassNotFoundException{
-		ObjectInputStream ois = new ObjectInputStream(dis);
-		return ois.readObject();
+	public Object getSig() throws IOException{
+		Object object = null;
+		try {
+			ObjectInputStream ois = new ObjectInputStream(dis);
+			object = ois.readObject();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+			Delay.msDelay(10000);
+			System.exit(1);
+		}
+		return object;
 	}
 	
 	public boolean getBoolSig() throws IOException {
