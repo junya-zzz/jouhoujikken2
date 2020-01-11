@@ -67,6 +67,7 @@ public class BTController extends Thread{
 		btois = new ObjectInputStream(connection.openDataInputStream());
 		btoos = new ObjectOutputStream(connection.openDataOutputStream());
 		
+		// ê⁄ë±Ç∑ÇÈÉ|Å[Égî‘çÜÇï‘Ç∑
 		return btois.readInt();
 	}
 	
@@ -75,5 +76,6 @@ public class BTController extends Thread{
 		Socket sc = new Socket("localhost", port);
 		cois = new ObjectInputStream(sc.getInputStream());
 		coos = new ObjectOutputStream(sc.getOutputStream());
+		coos.writeBoolean(true);
 	}
 }

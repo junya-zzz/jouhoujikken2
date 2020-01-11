@@ -22,7 +22,7 @@ public class EV3Signal {
 
 	/**
 	 * ev3からdeviceに接続する
-	 * @param device 接続するBluetoothデバイスのMACアドレス
+	 * @param p 接続するシステムのポート Port.RECEIVE_PORT など
 	 * @return 成功時:true 失敗時:false
 	 */
 	public boolean openSig(Port p) throws IOException{

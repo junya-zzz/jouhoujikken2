@@ -26,36 +26,41 @@ public class PCSignal {
 	private ObjectOutputStream oos = null;
 	private ServerSocket ss = null;
 	private Socket sc = null;
+	private boolean isConnectToBT;
+	private boolean isServer;
 	
 	/**
-	 * pcからev3に接続する
-	 * @param command
-	 * @param device 接続するev3のMACアドレス
+	 * 他のシステムに接続する
+	 * @param p 接続するシステムのPort
 	 * @return 成功時:true 失敗時:false
 	 * @throws IOException
 	 */
-	/*
-	public boolean openSig(String device) throws IOException{
-		isServerMode = false;
-		con = Connector.open("btspp://" + device + ":1");
-		if (con == null)
-			return false;
-		dos = new DataOutputStream(((OutputConnection)con).openOutputStream());
-		dis = new DataInputStream(((InputConnection)con).openInputStream());
+	public boolean openSig(Port p) throws IOException{
+		System.out.println("connecting to " + p.name() + " : " + p.portNum);
+		sc = new Socket("localhost", p.portNum);
+		oos = new ObjectOutputStream(sc.getOutputStream());
+		ois = new ObjectInputStream(sc.getInputStream());
+		oos.writeBoolean(false);
+		isServer = false;
+		System.out.println("signal opened to " + p.name());
 		return true;
 	}
-	*/
 
 	/**
 	 * システムを接続待ち状態にする
+	 * @param p 自分のシステムを入れる receiveSystemだったらPort.RECEIVE_PORT
 	 * @return 成功時:true 失敗時:false
 	 * @throws IOException
 	 */
 	public Boolean waitSig(Port p) throws IOException {
+		System.out.println("waiting... : " + p.portNum);
 		ss = new ServerSocket(p.portNum);
 		sc = ss.accept();
-		ois = new ObjectInputStream(sc.getInputStream());
 		oos = new ObjectOutputStream(sc.getOutputStream());
+		ois = new ObjectInputStream(sc.getInputStream());
+		isConnectToBT = ois.readBoolean();
+		isServer = true;
+		System.out.println("signal opened.");
 		return true;
 	}
 
@@ -82,7 +87,9 @@ public class PCSignal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException {
-		oos.writeBoolean(true);
+		if (isConnectToBT) {
+			oos.writeBoolean(true);
+		}
 		oos.writeObject(data);
 		oos.flush();
 	}
@@ -93,11 +100,15 @@ public class PCSignal {
 	 * @throws IOException
 	 */
 	public String closeSig() throws IOException {
-		oos.writeBoolean(false);
+		if (isConnectToBT) {
+			oos.writeBoolean(false);
+		}
 		ois.close();
 		oos.close();
-		ss.close();
 		sc.close();
+		if (isServer) {
+			ss.close();
+		}
 		return "OK";
 	}
 }
