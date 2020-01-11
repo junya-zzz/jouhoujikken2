@@ -80,7 +80,7 @@ public class RelayStation {
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
-	public void receiveDeliveryResult() throws Exception{
+	public boolean receiveDeliveryResult() throws Exception{
 		int id = 0;
 		Date time = null;
 		Luggage luggage = null;
@@ -102,6 +102,7 @@ public class RelayStation {
 				LCD.drawString("time"+time, 0, 2);
 				Delay.msDelay(5000);
 				LCD.refresh();
+				return true;
 				//System.out.println(time + "," + id);
 			}
 			else if(result.equals("absence")){
@@ -115,6 +116,7 @@ public class RelayStation {
 				LCD.drawString("ID:"+luggageList.get(0).getLuggageID(), 0, 2);
 				Delay.msDelay(10000);
 				LCD.refresh();
+				return true;
 				//System.out.println(luggageList.get(0).getLuggageID());
 			}
 			else if(result.equals("wrongAddress")){
@@ -124,12 +126,13 @@ public class RelayStation {
 				LCD.drawString("ID:"+wrongLugList.get(0).getLuggageID(), 0, 2);
 				Delay.msDelay(2000);
 				LCD.refresh();
+				return true;
 				//System.out.println(wrongLugList.get(0).getLuggageID());
 			}
 			signal.closeSig();
+			return false;
 			//this.reportDeliveryResult(result, id, time);
 		}catch(Exception e){
-			
 			System.out.println("Sorry, Don't receive report.");
 			throw e;
 		}
