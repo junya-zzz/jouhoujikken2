@@ -1,8 +1,26 @@
 package robotSystem;
-import recordSystem.Luggage;
-import signal.EV3Signal;
 
-import java.io.IOException;
+import java.util.Date;
+
+import lejos.hardware.lcd.LCD;
+
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3GyroSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorMode;
+import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
+import recordSystem.Luggage;
+
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.SensorMode;
+import signal.*;
+import recordSystem.*;
 public class DeliveryRobot extends Robot {
 
 	private static String deliveryResult;
@@ -11,7 +29,7 @@ public class DeliveryRobot extends Robot {
 	 * 受け取り時間を得るために中継所から受取人宅までの時間を計り、配達開始時間に足して、受け取り時間を作る
 	 */
 	private static long elapsedTime;   //元々Date型だったけどlong型だった
-
+    
 	/*private Signal signal;
 
 	private Signal signal;
@@ -19,178 +37,201 @@ public class DeliveryRobot extends Robot {
 	private Signal signal;*/
 
 	public static void main(String[] args) {
-		while(true){
-			try {
+		try{
+			while(true){
 				Thread.sleep(10000);
-			} catch(InterruptedException e){
-				e.printStackTrace();
-			}      
-
-			waitingToRelayStation();
-			try{
+				waitingToRelayStation();
 				if(getLug()){
-
-					relayStationToReceiver();
-					sendLug();
-					receiverToRelayStation();
-					sendDeliveryRecord();
+				    relayStationToReceiver();
+				    sendLug();
+				    receiverToRelayStation();
+				    sendDeliveryRecord();
 				}//if
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-			relayStationToWaiting();
-		}//while(1)
+				relayStationToWaiting();
+			    }//while(1)
+		}catch(InterruptedException e){
+			System.out.println("error.");
+		}
 	}//main
 
 
 	private static void changeDeliveryResult(String result) {
-		deliveryResult=result;
+	    deliveryResult=result;
 	}
 
 	private static void relayStationToWaiting() {
-		robotExists(RIGHT,45,50);
-		stopOnGray(LEFT);
+		Robot rob=new Robot();
+		rob.robotExists(RIGHT,45,50);
+		rob.stopOnGray(LEFT);
 		//lineTrace(300,RIGHT,300);   灰色ゾーンを通り過ぎるための調整用
-		stopOnGray(RIGHT);
-		changePos("Waiting");
-		turn(LEFT,180);
+		rob.stopOnGray(RIGHT);
+		rob.changePos("Waiting");
+		rob.turn(LEFT,180);
 	}//relayStationToWaiting
 
 	private static void receiverToRelayStation() {
-
-		Integer ID=getLuggage().getRequestInformation().getReceiverAddress();
-		Integer re;//余り
-		Integer quo;//商
-		re=ID/4;
-		quo=ID%4;
-		for(int i=0;i<re;i++){
-			stopOnGray(RIGHT);
+		Robot rob=new Robot();
+		 Luggage lug=rob.getLuggage();
+		    Integer ID = lug.getRequestInformation().getReceiverAddress();
+		    Integer re;//余り
+		    Integer quo;//商
+		    re=ID/4;
+		    quo=ID%4;
+		    for(int i=0;i<re;i++){
+				rob.stopOnGray(RIGHT);
+				//調整用
+			}
+	    rob.turn(RIGHT,90);
+	    for(int i=0;i<quo;i++){
+			rob.stopOnGray(LEFT);
 			//調整用
 		}
-		turn(RIGHT,90);
-		for(int i=0;i<quo;i++){
-			stopOnGray(LEFT);
-			//調整用
-		}
-		stopOnGray(RIGHT);
-		robotExists(RIGHT,45,50);
-		turn(RIGHT,90);
-		stopOnGray(RIGHT);
-		changePos("RelayStation");
-		turn(LEFT,180);
+	    rob.stopOnGray(RIGHT);
+	    rob.robotExists(RIGHT,45,50);
+	    rob.turn(RIGHT,90);
+	    rob.stopOnGray(RIGHT);
+		rob.changePos("RelayStation");
+		rob.turn(LEFT,180);
 	}//receiverToRelayStation
 
 	private static void waitingToRelayStation() {
-		stopOnGray(LEFT);
+		Robot rob=new Robot();
+		rob.stopOnGray(LEFT);
 		//lineTrace(300,RIGHT,300);   灰色ゾーンを通り過ぎるための調整用
-		robotExists(RIGHT,45,50);
-		stopOnGray(RIGHT);
-		changePos("RelayStation");
-		turn(LEFT,180);
+		  rob.robotExists(RIGHT,45,50);
+		rob.stopOnGray(RIGHT);
+		rob.changePos("RelayStation");
+		rob.turn(LEFT,180);
 	}//waitingToRelayStation
 
 	/**
 	 * 中継所から受取人宅まで行く
 	 */
 	private static void relayStationToReceiver() {
+		Robot rob=new Robot();
 		long start=0;
-		long end=0;
-		Integer ID=getLuggage().getRequestInformation().getReceiverAddress();
-		Integer re;//余り
-		Integer quo;//商
-		re=ID/4;
-		quo=ID%4;
-		robotExists(RIGHT,45,50);
-		start=System.currentTimeMillis();
-		stopOnGray(LEFT);
-		stopOnGray(LEFT);
-
-		for(int i=0;i<re;i++){
-			stopOnGray(RIGHT);
+	    long end=0;
+	    Luggage lug=rob.getLuggage();
+	    Integer ID=lug.getRequestInformation().getReceiverAddress();
+	    Integer re;//余り
+	    Integer quo;//商
+	    re=ID/4;
+	    quo=ID%4;
+	    rob.robotExists(RIGHT,45,50);
+	    start=System.currentTimeMillis();
+		rob.stopOnGray(LEFT);
+		rob.stopOnGray(LEFT);
+		
+	    for(int i=0;i<re;i++){
+				rob.stopOnGray(RIGHT);
+				//goStraight(300,300);   灰色ゾーンを通り過ぎるための調整用
+			}
+	    rob.turn(LEFT,90);
+	    for(int i=0;i<quo;i++){
+			rob.stopOnGray(RIGHT);
 			//goStraight(300,300);   灰色ゾーンを通り過ぎるための調整用
 		}
-		turn(LEFT,90);
-		for(int i=0;i<quo;i++){
-			stopOnGray(RIGHT);
-			//goStraight(300,300);   灰色ゾーンを通り過ぎるための調整用
-		}
-		end=System.currentTimeMillis();
-		elapsedTime=end-start;
-		changePos("Receiver");
-		turn(LEFT,180);
+	    end=System.currentTimeMillis();
+	    elapsedTime=end-start;
+	    rob.changePos("Receiver");
+		rob.turn(LEFT,180);
 	}
 
-	public static boolean getLug() throws IOException{
-		EV3Signal sig=new EV3Signal();
-		if(sig.openSig("RelayStation")){   	
-			sig.sendSig("workExist");
-			String flag=sig.getSig().toString();
-			if(flag.equals("true")){
-				setLuggage((Luggage) sig.getSig());//荷物多分大丈夫
-				sig.closeSig();
-				return true;
-			}//iftrue
-			else{
-				sig.closeSig();
-				return false;
-			}//else
-		}//ifOK
-		return false;
+	public static boolean getLug() {
+		Robot rob=new Robot();
+	    EV3Signal sig=new EV3Signal();
+	    try{
+	    	if(sig.openSig("00:16:53:4F:9E:DB")){
+	    		sig.sendSig("Is the luggageList empty?");
+	    		String flag=sig.getSig().toString();
+	    		if(flag.equals("false")){
+	    		    Luggage lug=(Luggage)sig.getSig();//荷物多分大丈夫
+	    		    rob.setLuggage(lug);
+	    		    LCD.clear();
+					LCD.drawString("received.", 0, 2);
+					Delay.msDelay(5000);
+					LCD.refresh();
+	    		    sig.closeSig();
+	    		    return true;
+	    		}//iftrue
+	    		else{
+	    			sig.getSig();
+	    		    sig.closeSig();
+	    		    return false;
+	    		}//else
+	    	    }//ifOK
+	    }catch(Exception e){
+	    	System.out.println("error.");
+	    }
+	    return false;
 	}//getLug
 
-	public static void sendLug() throws IOException{
-		long start=0;
-		long end=0;
-		EV3Signal sig=new EV3Signal();
-		if(sig.openSig("Receiver")){
-			sig.sendSig("isExist");
+	public static void sendLug() {
+	    long start=0;
+	    long end=0;
+	    PCSignal sig=new PCSignal();
+        Robot rob=new Robot();
+        try{
+        	if(sig.openSig("Receiver")){
+        		sig.sendSig("isExist");
+        		
+        		start=System.currentTimeMillis();
+        		while(end-start>10 || (sig.getSig().toString()).equals("Exist")){
+        		    end=System.currentTimeMillis();
+        		    try{
+        			Thread.sleep(1000);
+        		    }catch (InterruptedException e){
+        			e.printStackTrace();
+        		    }
+        		}//while
 
-			start=System.currentTimeMillis();
-			while(end-start>10 || (sig.getSig().toString()).equals("Exist")){
-				end=System.currentTimeMillis();
-				try{
-					Thread.sleep(1000);
-				}catch (InterruptedException e){
-					e.printStackTrace();
-				}
-			}//while
+        		if(end-start>10){
+        		    sig.sendSig(true);
+        		String receiverName=sig.getSig().toString();
+        		String receiverAddress=sig.getSig().toString();
+                Luggage lug=rob.getLuggage();
+        		if(receiverName.equals(lug.getRequestInformation().getReceiverName()) && receiverAddress.equals(lug.getRequestInformation().getReceiverAddress())){
+        		    changeDeliveryResult("FINISHED");
+        		    sig.sendSig(true);
+        		    sig.sendSig(lug);
+        		}//ifreceiver
 
-			if(end-start>10){
-				sig.sendSig(true);
-				String receiverName=sig.getSig().toString();
-				String receiverAddress=sig.getSig().toString();
-				if(receiverName.equals(getLuggage().getRequestInformation().getReceiverName()) && receiverAddress.equals(getLuggage().getRequestInformation().getReceiverAddress()+"")){
-					changeDeliveryResult("FINISHED");
-					sig.sendSig(true);
-					sig.sendSig(getLuggage());
-				}//ifreceiver
+        		else{
+        		    changeDeliveryResult("WRONG");
+        		    sig.sendSig(false);
+        		}//else
 
-				else{
-					changeDeliveryResult("WRONG");
-					sig.sendSig(false);
-				}//else
-
-			}//ifendstart
-			else  sig.sendSig(false);
-			sig.closeSig();
-		}//ifopensig
-
+        		}//ifendstart
+        		else  sig.sendSig(false);
+        		sig.closeSig();
+        	    }//ifopensig
+        }catch(Exception e){
+        	System.out.println("error.");
+        }   
 	}//sendLug
 
-	public static void sendDeliveryRecord() throws IOException{
-		EV3Signal sig=new EV3Signal();
-		if(sig.openSig("RelayStation")){
-			sig.sendSig(deliveryResult);
-			if(deliveryResult.equals("FINISHED")){
-				sig.sendSig(elapsedTime);
-				sig.sendSig(getLuggage().getLuggageID());
-			}//ifFINISHED
-			else{
-				sig.sendSig(getLuggage());
-			}
-			sig.closeSig();
-		}//ifopen	
+	public static void sendDeliveryRecord() {
+		//Robot rob=new Robot();
+	    EV3Signal sig=new EV3Signal();
+	    Luggage lug=getLuggage();
+	    try{
+	    	if(sig.openSig("00:16:53:4F:9E:DB")){
+	    		//changeDeliveryResult("wrongAddress");
+	    		//elapsedTime = 1200;
+	    		sig.sendSig(deliveryResult);
+	    		if(deliveryResult.equals("finished")){
+	    		    sig.sendSig(elapsedTime);
+	    		    sig.sendSig(lug.getLuggageID());
+	    		}//ifFINISHED
+	    		else{
+	    			sig.sendSig(lug);
+	    		}
+	    		sig.closeSig();
+	    	    }//ifopen
+	    }catch(Exception e){
+	    	System.out.println("error.");
+	    }	
 	}//sendDeliveryRecord
 
-
+	
 }
