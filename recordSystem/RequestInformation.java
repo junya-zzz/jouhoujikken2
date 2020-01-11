@@ -5,27 +5,35 @@ import java.io.Serializable;
 public class RequestInformation implements Serializable{
 
 	/**
-	 * ˆË—Šl–¼
+	 * ä¾é ¼äººå
 	 */
 	private String clientName;
 
 	/**
-	 * óæl–¼
+	 * å—å–äººå
 	 */
 	private String receiverName;
 
 	/**
-	 * ˆË—Šl“d˜b”Ô†
+	 * ä¾é ¼äººé›»è©±ç•ªå·
 	 */
 	private String clientPhoneNum;
 
 	/**
-	 * óælZŠ
+	 * å—å–äººä½æ‰€
 	 */
 	private int receiverAddress;
 	
 	
 	
+
+	public RequestInformation() {
+		super();
+		this.clientName = "clientName";
+		this.receiverName = "receiverName";
+		this.clientPhoneNum = "clientPhoneNum";
+		this.receiverAddress = 1;
+	}
 
 	public RequestInformation(String clientName, String receiverName,
 			String clientPhoneNum, int receiverAddress) {
@@ -70,9 +78,9 @@ public class RequestInformation implements Serializable{
 
 	@Override
 	public String toString() {
-		return "ˆË—Šl@" + clientName
-				+ "\nóæl@" + receiverName + "\nˆË—Šl“d˜b”Ô†@"
-				+ clientPhoneNum + "\nóæl‘îZŠ@" + receiverAddress+"\n";
+		return "è“æ™ï¿½è ï½ºèœ·é˜ªï¿½ï¿½å£¹ï¿½" + clientName
+				+ "\nèœ¿æ€œå™è ï½ºèœ·é˜ªï¿½ï¿½å£¹ï¿½" + receiverName + "\nè“æ™ï¿½è ï½ºé«®ï½»éš§ï½±é€¡ï½ªèœ¿ï½·ç¸²ï¿½ï½¼å£¹ï¿½"
+				+ clientPhoneNum + "\nèœ¿æ€œå™è ï½ºè³ï¿½ï½½ä¹—åœ’ç¸²ï¿½ï½¼å£¹ï¿½" + receiverAddress+"\n";
 	}
 	
 	

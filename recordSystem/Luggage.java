@@ -5,13 +5,21 @@ import java.io.Serializable;
 public class Luggage implements Serializable{
 
 	/**
-	 * ‰×•¨ID
+	 * è·ç‰©ID
 	 */
 	private Integer luggageID;
 	
 	private String luggageName;
 
 	private RequestInformation requestInformation;
+	
+	public Luggage(int luggageID){
+		super();
+		this.luggageID = luggageID;
+		this.luggageName = "test";
+		this.requestInformation = new RequestInformation();
+		
+	}
 	
 	public Luggage(Integer luggageID, String luggageName,
 			RequestInformation requestInformation) {
@@ -49,8 +57,8 @@ public class Luggage implements Serializable{
 
 	@Override
 	public String toString() {
-		return "‰×•¨ID@" + luggageID + ",@‰×•¨–¼ "
-				+ luggageName + "\nŒÚ‹qî•ñ\n" + requestInformation;
+		return "é—•ï½·è¿šï½©IDç¸²ï¿½ï½¼å£¹ï¿½" + luggageID + "\né—•ï½·è¿šï½©èœ·é˜ªï¿½ï¿½å£¹ï¿½ "
+				+ luggageName + "\n[é¬˜ï½§è³ï½¢è« ï¿½ï¿½]------------------\n" + requestInformation;
 	}
 	
 	

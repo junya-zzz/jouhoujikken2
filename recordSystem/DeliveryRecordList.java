@@ -61,7 +61,11 @@ public class DeliveryRecordList implements Serializable{
 
 	@Override
 	public String toString() {
-		return "驟埼＃險倬鹸繝ｪ繧ｹ繝�n " + deliveryRecordMap;
+		String result = "――――――――――――――――――――――――――――――――――――――――――――――\n";
+		for (DeliveryRecord dr : deliveryRecordMap.values()) {
+			result += dr+"――――――――――――――――――――――――――――――――――――――――――――――――\n";
+		}
+		return "配達記録リスト　\n " + result;
 	}
 	
 	

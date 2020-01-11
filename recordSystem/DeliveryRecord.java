@@ -30,6 +30,13 @@ public class DeliveryRecord implements Serializable{
 
 	
 
+	public DeliveryRecord(int deliveryID) {
+		super();
+		this.deliveryID = deliveryID;
+		this.luggage = new Luggage(deliveryID);
+		this.luggageCondition = LuggageCondition.unshipped;
+	}
+
 	public DeliveryRecord(Integer deliveryID, Luggage luggage/*ArrayList<Luggage> luggageList*/) {
 		super();
 		this.deliveryID = deliveryID;
@@ -128,11 +135,20 @@ public class DeliveryRecord implements Serializable{
 
 	@Override
 	public String toString() {
-		return "\ny”z’B‹L˜^ID " + deliveryID + "z\n‰×•¨“à—e\n"
-				+ luggage + "\n‰×•¨ó‘Ô@" + luggageCondition +"\n--ŠÔî•ñ--\nóæŠÔ@" + receiptTime + "\n”­‘—ŠÔ@"
-				+ shipTime + "\n’†ŒpŠ“’…ŠÔ@" + arrivalTime + "\n”z’BŠJnŠÔ@"
-				+ startTime + "\nó‚¯æ‚èŠ®—¹ŠÔ@" + receiveTime + "\n”z’BŠ®—¹ŠÔ@"
-				+ finishTime +  "\n";
+		return "ã€é…é”è¨˜éŒ²ID : " + deliveryID + "ã€‘\n[è·ç‰©å†…å®¹]------------------\n"
+				+ luggage  +"[é…é”æƒ…å ±]------------------\n"
+				+ "è·ç‰©çŠ¶æ…‹ã€€: " + luggageCondition + "\nå—å–æ™‚é–“ã€€"
+				+ showDate(receiptTime) + "\nç™ºé€æ™‚é–“ã€€: "
+				+ showDate(shipTime) + "\nä¸­ç¶™æ‰€åˆ°ç€æ™‚é–“ã€€: " + showDate(arrivalTime) + "\né…é”é–‹å§‹æ™‚é–“ã€€: "
+				+ showDate(startTime) + "\nå—ã‘å–ã‚Šå®Œäº†æ™‚é–“ã€€: " + showDate(receiveTime) + "\né…é”å®Œäº†æ™‚é–“ã€€: "
+				+ showDate(finishTime) +  "\n";
+	}
+	
+	String showDate(Date date){
+		String result = "";
+		if(date==null)result = "æœªå®Œäº†";
+		else result += date;
+		return result;	
 	}
 
 	
