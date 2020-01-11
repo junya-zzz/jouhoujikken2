@@ -13,7 +13,11 @@ public class test_relaystation {
 		RelayStation rs = new RelayStation();
 		
 		// 荷物の配達結果を本部に報告する
-		//rs.receiveDeliveryResult();
+		/*while(true){
+			if(rs.receiveDeliveryResult()){
+				break;
+			}
+		}*/
 		
 		// 収集担当ロボットから荷物を受け取る
 		//rs.receiveLugfromCollectingRobot();
@@ -25,7 +29,11 @@ public class test_relaystation {
 			RequestInformation ri = new RequestInformation("keita","saito","000-1111-2222",1);
 			Luggage lug = new Luggage(1,"keita",ri);
 			rs.getLuggageList().add(lug);
-			rs.reportReceivingToHeadquarters(time);
+			while(true){
+				if(rs.reportReceivingToHeadquarters(time)){
+					break;
+				}
+			}
 		}catch(Exception e){
 			System.out.println("error.");
 			throw e;
