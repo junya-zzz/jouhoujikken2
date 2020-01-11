@@ -25,6 +25,14 @@ public class RequestInformation {
 	
 	
 
+	public RequestInformation() {
+		super();
+		this.clientName = "clientName";
+		this.receiverName = "receiverName";
+		this.clientPhoneNum = "clientPhoneNum";
+		this.receiverAddress = 1;
+	}
+
 	public RequestInformation(String clientName, String receiverName,
 			String clientPhoneNum, int receiverAddress) {
 		super();
@@ -68,9 +76,9 @@ public class RequestInformation {
 
 	@Override
 	public String toString() {
-		return "依頼人　" + clientName
-				+ "\n受取人　" + receiverName + "\n依頼人電話番号　"
-				+ clientPhoneNum + "\n受取人宅住所　" + receiverAddress+"\n";
+		return "依頼人名　：　" + clientName
+				+ "\n受取人名　：　" + receiverName + "\n依頼人電話番号　：　"
+				+ clientPhoneNum + "\n受取人宅住所　：　" + receiverAddress+"\n";
 	}
 	
 	

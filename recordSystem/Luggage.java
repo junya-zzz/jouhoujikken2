@@ -11,6 +11,14 @@ public class Luggage {
 
 	private RequestInformation requestInformation;
 	
+	public Luggage(int luggageID){
+		super();
+		this.luggageID = luggageID;
+		this.luggageName = "test";
+		this.requestInformation = new RequestInformation();
+		
+	}
+	
 	public Luggage(Integer luggageID, String luggageName,
 			RequestInformation requestInformation) {
 		super();
@@ -47,8 +55,8 @@ public class Luggage {
 
 	@Override
 	public String toString() {
-		return "荷物ID　" + luggageID + ",　荷物名 "
-				+ luggageName + "\n顧客情報\n" + requestInformation;
+		return "荷物ID　：　" + luggageID + "\n荷物名　：　 "
+				+ luggageName + "\n[顧客情報]------------------\n" + requestInformation;
 	}
 	
 	

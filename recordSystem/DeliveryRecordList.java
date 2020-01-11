@@ -60,7 +60,11 @@ public class DeliveryRecordList {
 
 	@Override
 	public String toString() {
-		return "配達記録リスト\n " + deliveryRecordMap;
+		String result = "――――――――――――――――――――――――――――――――――――――――――――――\n";
+		for (DeliveryRecord dr : deliveryRecordMap.values()) {
+			result += dr+"――――――――――――――――――――――――――――――――――――――――――――――――\n";
+		}
+		return "配達記録リスト　\n " + result;
 	}
 	
 	
