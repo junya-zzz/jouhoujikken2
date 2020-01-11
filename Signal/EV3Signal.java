@@ -1,44 +1,44 @@
 package signal;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import lejos.remote.nxt.BTConnector;
 import lejos.remote.nxt.BTConnection;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import lejos.utility.Delay;
 
 /**
  * ev3用の通信クラス
  */
 public class EV3Signal {
 	
-	private DataInputStream dis = null;
-	private DataOutputStream dos = null;
+	private ObjectInputStream ois = null;
+	private ObjectOutputStream oos = null;
 	private BTConnection btConnection = null;
 	private BTConnector btConnector = null;
 	private boolean isServerMode;
+	private final String BTAddress = "";
 
 	/**
 	 * ev3からdeviceに接続する
 	 * @param device 接続するBluetoothデバイスのMACアドレス
 	 * @return 成功時:true 失敗時:false
 	 */
-	public boolean openSig(String device) {
+	public boolean openSig(Port p) throws IOException{
 		isServerMode = false;
 		btConnector = new BTConnector();
-		btConnection = btConnector.connect(device, BTConnection.RAW);
+		btConnection = btConnector.connect(BTAddress, BTConnection.RAW);
 		
 		if (btConnection == null) {
 			return false;
 		}
 		
-		dis = btConnection.openDataInputStream();
-		dos = btConnection.openDataOutputStream();
+		ois = new ObjectInputStream(btConnection.openDataInputStream());
+		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
+		
+		// 接続するシステムのポート番号を送る
+		oos.writeInt(p.portNum);
 		
 		return true;
 	}
@@ -47,15 +47,15 @@ public class EV3Signal {
 	 * ev3を接続待ち状態にする
 	 * @return 成功時:true 失敗時:false
 	 */
-	public boolean waitSig() {
+	public boolean waitSig() throws IOException{
 		isServerMode = true;
 		btConnector = new BTConnector();
 		btConnection = btConnector.waitForConnection(0, BTConnection.RAW);
 		if (btConnection == null) {
 			return false;
 		}
-		dis = btConnection.openDataInputStream();
-		dos = btConnection.openDataOutputStream();
+		ois = new ObjectInputStream(btConnection.openDataInputStream());
+		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
 		return true;
 	}
 
@@ -66,12 +66,11 @@ public class EV3Signal {
 	 */
 	public Object getSig() throws IOException{
 		Object object = null;
-		int byteSize = dis.readInt();
-		byte[] b = new byte[byteSize];
-		dis.read(b);
 		try {
-			object = deserialize(b);
-		} catch (ClassNotFoundException e) {
+			object = ois.readObject();
+		} catch (ClassNotFoundException e){
+			e.printStackTrace();
+			Delay.msDelay(10000);
 			System.exit(1);
 		}
 		return object;
@@ -83,10 +82,9 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException{
-		byte[] bytes = serialize(data);
-		dos.writeInt(bytes.length);
-		dos.write(bytes);
-		dos.flush();
+		oos.writeBoolean(true);
+		oos.writeObject(data);
+		oos.flush();
 	}
 
 	/**
@@ -95,8 +93,9 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void closeSig() throws IOException{
-		dis.close();
-		dos.close();
+		oos.writeBoolean(false);
+		ois.close();
+		oos.close();
 		
 		if (isServerMode) {
 			btConnector.close();
@@ -105,24 +104,4 @@ public class EV3Signal {
 		
 		return;
 	}
-
-    // オブジェクトをバイト配列に変換する
-	// 変換するクラスには implements Serializable をつける
-    private static byte[] serialize(Object obj) throws IOException {
-        try (ByteArrayOutputStream b = new ByteArrayOutputStream()) {
-            try (ObjectOutputStream o = new ObjectOutputStream(b)) {
-                o.writeObject(obj);
-            }
-            return b.toByteArray();
-        }
-    }
-
-    // バイト配列をオブジェクトに変換する
-    private static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
-        try (ByteArrayInputStream b = new ByteArrayInputStream(bytes)) {
-            try (ObjectInputStream o = new ObjectInputStream(b)) {
-                return o.readObject();
-            }
-        }
-    }
 }
