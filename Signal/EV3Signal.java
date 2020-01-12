@@ -17,8 +17,8 @@ public class EV3Signal {
 	private ObjectOutputStream oos = null;
 	private BTConnection btConnection = null;
 	private BTConnector btConnector = null;
+	private boolean isConnectToPC;
 	private boolean isServerMode;
-	private final String BTAddress = "";
 
 	/**
 	 * ev3からdeviceに接続する
@@ -28,17 +28,26 @@ public class EV3Signal {
 	public boolean openSig(Port p) throws IOException{
 		isServerMode = false;
 		btConnector = new BTConnector();
-		btConnection = btConnector.connect(BTAddress, BTConnection.RAW);
+		btConnection = btConnector.connect(p.address, BTConnection.RAW);
 		
 		if (btConnection == null) {
 			return false;
 		}
+		if (p == Port.RELAY) {
+			isConnectToPC = true;
+		}
 		
-		ois = new ObjectInputStream(btConnection.openDataInputStream());
 		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
+		ois = new ObjectInputStream(btConnection.openDataInputStream());
 		
 		// 接続するシステムのポート番号を送る
 		oos.writeInt(p.portNum);
+
+		// 接続可能か受信
+		if (!ois.readBoolean()) {
+			closeSig();
+			return false;
+		}
 		
 		return true;
 	}
@@ -49,13 +58,20 @@ public class EV3Signal {
 	 */
 	public boolean waitSig() throws IOException{
 		isServerMode = true;
+		isConnectToPC = false;
 		btConnector = new BTConnector();
 		btConnection = btConnector.waitForConnection(0, BTConnection.RAW);
 		if (btConnection == null) {
 			return false;
 		}
-		ois = new ObjectInputStream(btConnection.openDataInputStream());
 		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
+		ois = new ObjectInputStream(btConnection.openDataInputStream());
+
+		// 接続するシステムのポート番号を受け取るけど使わないから捨てる
+		ois.readInt();
+		// 接続可能を送信する
+		oos.writeBoolean(true);
+
 		return true;
 	}
 
@@ -82,7 +98,9 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException{
-		oos.writeBoolean(true);
+		if (isConnectToPC) {
+			oos.writeBoolean(true);
+		}
 		oos.writeObject(data);
 		oos.flush();
 	}
@@ -93,7 +111,9 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void closeSig() throws IOException{
-		oos.writeBoolean(false);
+		if (isConnectToPC) {
+			oos.writeBoolean(false);
+		}
 		ois.close();
 		oos.close();
 		

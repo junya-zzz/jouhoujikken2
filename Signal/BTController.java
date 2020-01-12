@@ -18,8 +18,6 @@ public class BTController extends Thread{
 		while (true) {
 			int port = controller.waitBTSig();
 			controller.connectToSubSystem(port);
-			controller.start();
-			controller.systemToObject();
 		}
 	}
 	
@@ -34,8 +32,8 @@ public class BTController extends Thread{
 			btoos.close();
 			cois.close();
 			coos.close();
-			scn.close();
 			connection.close();
+			scn.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -46,9 +44,17 @@ public class BTController extends Thread{
 	}
 	
 	// システムからEV3にオブジェクトを流す
-	public void systemToObject() throws IOException, ClassNotFoundException{
-		while (cois.readBoolean()) {
-			btoos.writeObject(cois.readObject());
+	public void systemToObject(){
+		try {
+			while (cois.readBoolean()) {
+				btoos.writeObject(cois.readObject());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	
@@ -73,9 +79,22 @@ public class BTController extends Thread{
 	
 	//各サブシステムに接続
 	private void connectToSubSystem(int port) throws IOException{
-		Socket sc = new Socket("localhost", port);
-		cois = new ObjectInputStream(sc.getInputStream());
-		coos = new ObjectOutputStream(sc.getOutputStream());
-		coos.writeBoolean(true);
+		try {
+			Socket sc = new Socket("localhost", port);
+			cois = new ObjectInputStream(sc.getInputStream());
+			coos = new ObjectOutputStream(sc.getOutputStream());
+			coos.writeBoolean(true);
+		} catch (IOException e) {
+			// サブシステムに接続できなかったらEV3側に接続不可を知らせて接続を閉じる
+			btoos.writeBoolean(false);
+			btoos.close();
+			btois.close();
+			connection.close();
+			scn.close();
+		}
+		// サブシステムに接続できたらEV3側に接続可能を知らせて通信開始
+		btoos.writeBoolean(true);
+		start();
+		systemToObject();
 	}
 }
