@@ -30,6 +30,7 @@ public class PCSignal {
 		oos = new ObjectOutputStream(sc.getOutputStream());
 		ois = new ObjectInputStream(sc.getInputStream());
 		oos.writeBoolean(false);
+		oos.flush();
 		isServer = false;
 		System.out.println("signal opened to " + p.name());
 		return true;
@@ -78,6 +79,7 @@ public class PCSignal {
 	public void sendSig(Object data) throws IOException {
 		if (isConnectToBT) {
 			oos.writeBoolean(true);
+			oos.flush();
 		}
 		oos.writeObject(data);
 		oos.flush();
@@ -91,6 +93,7 @@ public class PCSignal {
 	public String closeSig() throws IOException {
 		if (isConnectToBT) {
 			oos.writeBoolean(false);
+			oos.flush();
 		}
 		ois.close();
 		oos.close();

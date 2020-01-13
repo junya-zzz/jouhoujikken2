@@ -1,9 +1,12 @@
 package signal;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import lejos.hardware.lcd.LCD;
 import lejos.remote.nxt.BTConnector;
 import lejos.remote.nxt.BTConnection;
 import lejos.utility.Delay;
@@ -12,12 +15,12 @@ import lejos.utility.Delay;
  * ev3用の通信クラス
  */
 public class EV3Signal {
-	
+
 	private ObjectInputStream ois = null;
 	private ObjectOutputStream oos = null;
 	private BTConnection btConnection = null;
 	private BTConnector btConnector = null;
-	private boolean isConnectToPC;
+	private boolean isConnectToEV3;
 	private boolean isServerMode;
 
 	/**
@@ -26,29 +29,49 @@ public class EV3Signal {
 	 * @return 成功時:true 失敗時:false
 	 */
 	public boolean openSig(Port p) throws IOException{
+		LCD.clear();
+		LCD.drawString("connecting to", 0, 0);
+		LCD.drawString(p.address, 0, 1);
+		LCD.drawInt(p.portNum, 0, 2);
+		LCD.refresh();
 		isServerMode = false;
 		btConnector = new BTConnector();
 		btConnection = btConnector.connect(p.address, BTConnection.RAW);
-		
+
 		if (btConnection == null) {
+			LCD.drawString("aaaaaa", 0, 5);
+			LCD.refresh();
+			Delay.msDelay(100000);
 			return false;
 		}
 		if (p == Port.RELAY) {
-			isConnectToPC = true;
+			isConnectToEV3 = true;
 		}
-		
-		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
-		ois = new ObjectInputStream(btConnection.openDataInputStream());
-		
+
+		LCD.clear();
+		LCD.drawString("connected.", 0, 0);
+		LCD.refresh();
+		DataOutputStream dos = btConnection.openDataOutputStream();
+		DataInputStream dis = btConnection.openDataInputStream();
+		LCD.clear();
+		LCD.drawString("data opened.", 0, 0);
+		LCD.refresh();
+		oos = new ObjectOutputStream(dos);
+		ois = new ObjectInputStream(dis);
+		oos.flush();
+
 		// 接続するシステムのポート番号を送る
 		oos.writeInt(p.portNum);
+		oos.flush();
 
 		// 接続可能か受信
 		if (!ois.readBoolean()) {
-			closeSig();
+			ois.close();
+			oos.close();
+			btConnection.close();
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -58,7 +81,7 @@ public class EV3Signal {
 	 */
 	public boolean waitSig() throws IOException{
 		isServerMode = true;
-		isConnectToPC = false;
+		isConnectToEV3 = true;
 		btConnector = new BTConnector();
 		btConnection = btConnector.waitForConnection(0, BTConnection.RAW);
 		if (btConnection == null) {
@@ -71,6 +94,7 @@ public class EV3Signal {
 		ois.readInt();
 		// 接続可能を送信する
 		oos.writeBoolean(true);
+		oos.flush();
 
 		return true;
 	}
@@ -98,8 +122,9 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException{
-		if (isConnectToPC) {
+		if (!isConnectToEV3) {
 			oos.writeBoolean(true);
+			oos.flush();
 		}
 		oos.writeObject(data);
 		oos.flush();
@@ -111,17 +136,18 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void closeSig() throws IOException{
-		if (isConnectToPC) {
+		if (!isConnectToEV3) {
 			oos.writeBoolean(false);
+			oos.flush();
 		}
 		ois.close();
 		oos.close();
-		
+
 		if (isServerMode) {
 			btConnector.close();
 		}
 		btConnection.close();
-		
+
 		return;
 	}
 }

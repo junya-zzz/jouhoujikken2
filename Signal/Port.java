@@ -6,7 +6,7 @@ public enum Port {
 	RECEIVE(50003),
 	RELAY(0);
 
-	private final String PC_BT_ADDRESS = "";
+	private final String PC_BT_ADDRESS = "00:1b:dc:f2:2c:33";
 	private final String EV3_BT_ADDRESS = "";
 	public int portNum;
 	public String address;
