@@ -47,16 +47,17 @@ public class EV3Signal {
 		}
 
 		LCD.clear();
-		LCD.drawString("connected.", 0, 0);
+		LCD.drawString("connected.", 0, 3);
 		LCD.refresh();
 		DataOutputStream dos = btConnection.openDataOutputStream();
 		DataInputStream dis = btConnection.openDataInputStream();
-		LCD.clear();
-		LCD.drawString("data opened.", 0, 0);
-		LCD.refresh();
+		
 		oos = new ObjectOutputStream(dos);
-		ois = new ObjectInputStream(dis);
 		oos.flush();
+		ois = new ObjectInputStream(dis);
+		LCD.clear();
+		LCD.drawString("connection opened.", 0, 3);
+		LCD.refresh();
 
 		// 接続するシステムのポート番号を送る
 		oos.writeInt(p.portNum);
@@ -78,6 +79,9 @@ public class EV3Signal {
 	 * @return 成功時:true 失敗時:false
 	 */
 	public boolean waitSig() throws IOException{
+		LCD.clear();
+		LCD.drawString("waiting...", 0, 3);
+		LCD.refresh();
 		isServerMode = true;
 		isConnectToEV3 = true;
 		btConnector = new BTConnector();
@@ -85,8 +89,15 @@ public class EV3Signal {
 		if (btConnection == null) {
 			return false;
 		}
-		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
-		ois = new ObjectInputStream(btConnection.openDataInputStream());
+		DataOutputStream dos = btConnection.openDataOutputStream();
+		DataInputStream dis = btConnection.openDataInputStream();
+		oos = new ObjectOutputStream(dos);
+		oos.flush();
+		ois = new ObjectInputStream(dis);
+		
+		LCD.clear();
+		LCD.drawString("connection opened.", 0, 3);
+		LCD.refresh();
 
 		// 接続するシステムのポート番号を受け取るけど使わないから捨てる
 		ois.readInt();
