@@ -42,19 +42,7 @@ public class PCSignal {
 	 * @return ê¨å˜éû:true é∏îséû:false
 	 * @throws IOException
 	 */
-<<<<<<< HEAD
-	public Boolean waitSig() throws IOException {
-		isServerMode = true;
-		scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
-		if (scn == null) {
-			return false;
-		}
-		connection = scn.acceptAndOpen();
-		
-		dis = connection.openDataInputStream();
-		dos = connection.openDataOutputStream();
-		
-=======
+
 	public Boolean waitSig(Port p) throws IOException {
 		System.out.println("waiting... : " + p.portNum);
 		ss = new ServerSocket(p.portNum);
@@ -64,7 +52,6 @@ public class PCSignal {
 		isConnectToBT = ois.readBoolean();
 		isServer = true;
 		System.out.println("signal opened.");
->>>>>>> feature/Signal
 		return true;
 	}
 
@@ -76,10 +63,6 @@ public class PCSignal {
 	public Object getSig() throws IOException{
 		Object object = null;
 		try {
-<<<<<<< HEAD
-			ObjectInputStream ois = new ObjectInputStream(dis);
-=======
->>>>>>> feature/Signal
 			object = ois.readObject();
 		} catch (ClassNotFoundException e){
 			e.printStackTrace();
@@ -95,23 +78,12 @@ public class PCSignal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException {
-<<<<<<< HEAD
-		ObjectOutputStream oos = new ObjectOutputStream(dos);
-		oos.writeObject(data);
-		oos.flush();
-	}
-	
-	public void sendBoolSig(boolean b)throws IOException {
-		dos.writeBoolean(b);
-		dos.flush();
-=======
 		if (isConnectToBT) {
 			oos.writeBoolean(true);
 			oos.flush();
 		}
 		oos.writeObject(data);
 		oos.flush();
->>>>>>> feature/Signal
 	}
 	
 	/**
