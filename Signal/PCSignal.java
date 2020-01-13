@@ -1,54 +1,48 @@
 package signal;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import javax.microedition.io.Connector;
-import javax.microedition.io.InputConnection;
-import javax.microedition.io.OutputConnection;
-import javax.microedition.io.Connection;
-import javax.microedition.io.StreamConnectionNotifier;
-import javax.microedition.io.StreamConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  *パソコン用の通信クラス
  */
 public class PCSignal {
 
-	private DataInputStream dis = null;
-	private DataOutputStream dos = null;
-	private StreamConnectionNotifier scn = null;
-	private StreamConnection connection = null;
-	private Connection con = null;
-	private boolean isServerMode;
-
+	private ObjectInputStream ois = null;
+	private ObjectOutputStream oos = null;
+	private ServerSocket ss = null;
+	private Socket sc = null;
+	private boolean isConnectToBT;
+	private boolean isServer;
+	
 	/**
-	 * pcからev3に接続する
-	 * @param command
-	 * @param device 接続するev3のMACアドレス
+	 * 他のシステムに接続する
+	 * @param p 接続するシステムのPort
 	 * @return 成功時:true 失敗時:false
 	 * @throws IOException
 	 */
-	public boolean openSig(String device) throws IOException{
-		isServerMode = false;
-		con = Connector.open("btspp://" + device + ":1");
-		if (con == null)
-			return false;
-		dos = new DataOutputStream(((OutputConnection)con).openOutputStream());
-		dis = new DataInputStream(((InputConnection)con).openInputStream());
+	public boolean openSig(Port p) throws IOException{
+		System.out.println("connecting to " + p.name() + " : " + p.portNum);
+		sc = new Socket("localhost", p.portNum);
+		oos = new ObjectOutputStream(sc.getOutputStream());
+		ois = new ObjectInputStream(sc.getInputStream());
+		oos.writeBoolean(false);
+		oos.flush();
+		isServer = false;
+		System.out.println("signal opened to " + p.name());
 		return true;
 	}
 
 	/**
-	 * pcを接続待ち状態にする
+	 * システムを接続待ち状態にする
+	 * @param p 自分のシステムを入れる receiveSystemだったらPort.RECEIVE_PORT
 	 * @return 成功時:true 失敗時:false
 	 * @throws IOException
 	 */
+<<<<<<< HEAD
 	public Boolean waitSig() throws IOException {
 		isServerMode = true;
 		scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
@@ -60,6 +54,17 @@ public class PCSignal {
 		dis = connection.openDataInputStream();
 		dos = connection.openDataOutputStream();
 		
+=======
+	public Boolean waitSig(Port p) throws IOException {
+		System.out.println("waiting... : " + p.portNum);
+		ss = new ServerSocket(p.portNum);
+		sc = ss.accept();
+		oos = new ObjectOutputStream(sc.getOutputStream());
+		ois = new ObjectInputStream(sc.getInputStream());
+		isConnectToBT = ois.readBoolean();
+		isServer = true;
+		System.out.println("signal opened.");
+>>>>>>> feature/Signal
 		return true;
 	}
 
@@ -71,7 +76,10 @@ public class PCSignal {
 	public Object getSig() throws IOException{
 		Object object = null;
 		try {
+<<<<<<< HEAD
 			ObjectInputStream ois = new ObjectInputStream(dis);
+=======
+>>>>>>> feature/Signal
 			object = ois.readObject();
 		} catch (ClassNotFoundException e){
 			e.printStackTrace();
@@ -87,6 +95,7 @@ public class PCSignal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException {
+<<<<<<< HEAD
 		ObjectOutputStream oos = new ObjectOutputStream(dos);
 		oos.writeObject(data);
 		oos.flush();
@@ -95,44 +104,32 @@ public class PCSignal {
 	public void sendBoolSig(boolean b)throws IOException {
 		dos.writeBoolean(b);
 		dos.flush();
+=======
+		if (isConnectToBT) {
+			oos.writeBoolean(true);
+			oos.flush();
+		}
+		oos.writeObject(data);
+		oos.flush();
+>>>>>>> feature/Signal
 	}
-
+	
 	/**
 	 * 接続を閉じる
-	 * @param command
-	 * @param device
 	 * @return
 	 * @throws IOException
 	 */
 	public String closeSig() throws IOException {
-		dis.close();
-		dos.close();
-		if (isServerMode) {
-			scn.close();
-			connection.close();
-		} else {
-			con.close();
+		if (isConnectToBT) {
+			oos.writeBoolean(false);
+			oos.flush();
+		}
+		ois.close();
+		oos.close();
+		sc.close();
+		if (isServer) {
+			ss.close();
 		}
 		return "OK";
 	}
-
-    // オブジェクトをバイト配列に変換する
-	// 変換するクラスには implements Serializable をつける
-    private static byte[] serialize(Object obj) throws IOException {
-        try (ByteArrayOutputStream b = new ByteArrayOutputStream()) {
-            try (ObjectOutputStream o = new ObjectOutputStream(b)) {
-                o.writeObject(obj);
-            }
-            return b.toByteArray();
-        }
-    }
-
-    // バイト配列をオブジェクトに変換する
-    private static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
-        try (ByteArrayInputStream b = new ByteArrayInputStream(bytes)) {
-            try (ObjectInputStream o = new ObjectInputStream(b)) {
-                return o.readObject();
-            }
-        }
-    }
 }

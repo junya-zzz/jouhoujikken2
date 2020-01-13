@@ -11,37 +11,65 @@ import lejos.remote.nxt.BTConnector;
 import lejos.remote.nxt.BTConnection;
 import lejos.utility.Delay;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 /**
  * ev3用の通信クラス
  */
 public class EV3Signal {
-	
-	private DataInputStream dis = null;
-	private DataOutputStream dos = null;
+
+	private ObjectInputStream ois = null;
+	private ObjectOutputStream oos = null;
 	private BTConnection btConnection = null;
 	private BTConnector btConnector = null;
+	private boolean isConnectToEV3;
 	private boolean isServerMode;
 
 	/**
 	 * ev3からdeviceに接続する
-	 * @param device 接続するBluetoothデバイスのMACアドレス
+	 * @param p 接続するシステムのポート Port.RECEIVE_PORT など
 	 * @return 成功時:true 失敗時:false
 	 */
-	public boolean openSig(String device) {
+	public boolean openSig(Port p) throws IOException{
+		LCD.clear();
+		LCD.drawString("connecting to", 0, 0);
+		LCD.drawString(p.address, 0, 1);
+		LCD.drawInt(p.portNum, 0, 2);
+		LCD.refresh();
 		isServerMode = false;
 		btConnector = new BTConnector();
-		btConnection = btConnector.connect(device, BTConnection.RAW);
-		
+		btConnection = btConnector.connect(p.address, BTConnection.RAW);
+
 		if (btConnection == null) {
 			return false;
 		}
-		
-		dis = btConnection.openDataInputStream();
-		dos = btConnection.openDataOutputStream();
-		
+		if (p == Port.RELAY) {
+			isConnectToEV3 = true;
+		}
+
+		LCD.clear();
+		LCD.drawString("connected.", 0, 0);
+		LCD.refresh();
+		DataOutputStream dos = btConnection.openDataOutputStream();
+		DataInputStream dis = btConnection.openDataInputStream();
+		LCD.clear();
+		LCD.drawString("data opened.", 0, 0);
+		LCD.refresh();
+		oos = new ObjectOutputStream(dos);
+		ois = new ObjectInputStream(dis);
+		oos.flush();
+
+		// 接続するシステムのポート番号を送る
+		oos.writeInt(p.portNum);
+		oos.flush();
+
+		// 接続可能か受信
+		if (!ois.readBoolean()) {
+			ois.close();
+			oos.close();
+			btConnection.close();
+			return false;
+		}
+
 		return true;
 	}
 
@@ -49,15 +77,23 @@ public class EV3Signal {
 	 * ev3を接続待ち状態にする
 	 * @return 成功時:true 失敗時:false
 	 */
-	public boolean waitSig() {
+	public boolean waitSig() throws IOException{
 		isServerMode = true;
+		isConnectToEV3 = true;
 		btConnector = new BTConnector();
 		btConnection = btConnector.waitForConnection(0, BTConnection.RAW);
 		if (btConnection == null) {
 			return false;
 		}
-		dis = btConnection.openDataInputStream();
-		dos = btConnection.openDataOutputStream();
+		oos = new ObjectOutputStream(btConnection.openDataOutputStream());
+		ois = new ObjectInputStream(btConnection.openDataInputStream());
+
+		// 接続するシステムのポート番号を受け取るけど使わないから捨てる
+		ois.readInt();
+		// 接続可能を送信する
+		oos.writeBoolean(true);
+		oos.flush();
+
 		return true;
 	}
 
@@ -69,7 +105,6 @@ public class EV3Signal {
 	public Object getSig() throws IOException{
 		Object object = null;
 		try {
-			ObjectInputStream ois = new ObjectInputStream(dis);
 			object = ois.readObject();
 		} catch (ClassNotFoundException e){
 			e.printStackTrace();
@@ -79,9 +114,6 @@ public class EV3Signal {
 		return object;
 	}
 	
-	public boolean getBoolSig() throws IOException {
-		return dis.readBoolean();
-	}
 
 	/**
 	 * オブジェクトを送信する
@@ -89,7 +121,10 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void sendSig(Object data) throws IOException{
-		ObjectOutputStream oos = new ObjectOutputStream(dos);
+		if (!isConnectToEV3) {
+			oos.writeBoolean(true);
+			oos.flush();
+		}
 		oos.writeObject(data);
 		oos.flush();
 	}
@@ -100,34 +135,18 @@ public class EV3Signal {
 	 * @throws IOException
 	 */
 	public void closeSig() throws IOException{
-		dis.close();
-		dos.close();
-		
+		if (!isConnectToEV3) {
+			oos.writeBoolean(false);
+			oos.flush();
+		}
+		ois.close();
+		oos.close();
+
 		if (isServerMode) {
 			btConnector.close();
 		}
 		btConnection.close();
-		
+
 		return;
 	}
-
-    // オブジェクトをバイト配列に変換する
-	// 変換するクラスには implements Serializable をつける
-    private static byte[] serialize(Object obj) throws IOException {
-        try (ByteArrayOutputStream b = new ByteArrayOutputStream()) {
-            try (ObjectOutputStream o = new ObjectOutputStream(b)) {
-                o.writeObject(obj);
-            }
-            return b.toByteArray();
-        }
-    }
-
-    // バイト配列をオブジェクトに変換する
-    private static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
-        try (ByteArrayInputStream b = new ByteArrayInputStream(bytes)) {
-            try (ObjectInputStream o = new ObjectInputStream(b)) {
-                return o.readObject();
-            }
-        }
-    }
 }
