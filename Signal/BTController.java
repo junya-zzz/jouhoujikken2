@@ -37,7 +37,6 @@ public class BTController extends Thread{
 			btois.close();
 			btoos.close();
 			connection.close();
-			scn.close();
 			System.out.println("closed connection.");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -105,7 +104,6 @@ public class BTController extends Thread{
 			btoos.close();
 			btois.close();
 			connection.close();
-			scn.close();
 			return;
 		}
 		System.out.println("connected to system.");
