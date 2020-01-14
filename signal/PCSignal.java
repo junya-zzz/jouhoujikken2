@@ -28,11 +28,12 @@ public class PCSignal {
 		System.out.println("connecting to " + p.name() + " : " + p.portNum);
 		sc = new Socket("localhost", p.portNum);
 		oos = new ObjectOutputStream(sc.getOutputStream());
+		oos.flush();
 		ois = new ObjectInputStream(sc.getInputStream());
 		oos.writeBoolean(false);
 		oos.flush();
 		isServer = false;
-		System.out.println("signal opened to " + p.name());
+		System.out.println("connection opened to " + p.name());
 		return true;
 	}
 
@@ -48,10 +49,11 @@ public class PCSignal {
 		ss = new ServerSocket(p.portNum);
 		sc = ss.accept();
 		oos = new ObjectOutputStream(sc.getOutputStream());
+		oos.flush();
 		ois = new ObjectInputStream(sc.getInputStream());
 		isConnectToBT = ois.readBoolean();
 		isServer = true;
-		System.out.println("signal opened.");
+		System.out.println("connection opened.");
 		return true;
 	}
 

@@ -66,7 +66,7 @@ public class BTController extends Thread{
 	}
 	
 	/**
-	 * pc‚ğEV3‚©‚çÚ‘±‘Ò‚¿ó‘Ô‚É‚·‚é
+	 * PC‚ğEV3‚©‚çÚ‘±‘Ò‚¿ó‘Ô‚É‚·‚é
 	 * @return ¬Œ÷:true ¸”s:false
 	 * @throws IOException
 	 */
@@ -76,13 +76,14 @@ public class BTController extends Thread{
 		}
 		System.out.println("waiting ev3 sig...");
 		connection = scn.acceptAndOpen();
-		System.out.println("connected to ev3.");
 		
 		DataOutputStream dos = connection.openDataOutputStream();
 		DataInputStream dis = connection.openDataInputStream();
 		btoos = new ObjectOutputStream(dos);
+		btoos.flush();
 		btois = new ObjectInputStream(dis);
 		
+		System.out.println("connected to ev3.");
 		// Ú‘±‚·‚éƒ|[ƒg”Ô†‚ğ•Ô‚·
 		return btois.readInt();
 	}
@@ -93,8 +94,9 @@ public class BTController extends Thread{
 			System.out.println("connecting to system...");
 			System.out.println("port : " + port);
 			Socket sc = new Socket("localhost", port);
-			cois = new ObjectInputStream(sc.getInputStream());
 			coos = new ObjectOutputStream(sc.getOutputStream());
+			coos.flush();
+			cois = new ObjectInputStream(sc.getInputStream());
 			coos.writeBoolean(true);
 			coos.flush();
 		} catch (IOException e) {

@@ -31,9 +31,9 @@ public class EV3Signal {
 	 */
 	public boolean openSig(Port p) throws IOException{
 		LCD.clear();
-		LCD.drawString("connecting to", 0, 0);
-		LCD.drawString(p.address, 0, 1);
-		LCD.drawInt(p.portNum, 0, 2);
+		LCD.drawString("connecting to", 0, 3);
+		LCD.drawString(p.address, 0, 4);
+		LCD.drawInt(p.portNum, 0, 5);
 		LCD.refresh();
 		isServerMode = false;
 		btConnector = new BTConnector();
@@ -46,9 +46,6 @@ public class EV3Signal {
 			isConnectToEV3 = true;
 		}
 
-		LCD.clear();
-		LCD.drawString("connected.", 0, 3);
-		LCD.refresh();
 		DataOutputStream dos = btConnection.openDataOutputStream();
 		DataInputStream dis = btConnection.openDataInputStream();
 		
@@ -56,7 +53,7 @@ public class EV3Signal {
 		oos.flush();
 		ois = new ObjectInputStream(dis);
 		LCD.clear();
-		LCD.drawString("connection opened.", 0, 3);
+		LCD.drawString("connected.", 0, 3);
 		LCD.refresh();
 
 		// 接続するシステムのポート番号を送る
