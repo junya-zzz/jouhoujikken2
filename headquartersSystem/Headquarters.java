@@ -52,6 +52,7 @@ public class Headquarters{
 
 
 	public void addDeliveryRecord(DeliveryRecord deliveryrecord) {
+		deliveryrecord.setReceiptTime(new Date());
 		DeliveryRecordList.addDeliveryRecord(deliveryrecord);
 		System.out.println("list added.");
 	}
