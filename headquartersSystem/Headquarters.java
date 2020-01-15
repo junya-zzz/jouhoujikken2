@@ -7,22 +7,23 @@ import recordSystem.DeliveryRecord;
 import recordSystem.DeliveryRecordList;
 import recordSystem.LuggageCondition;
 import signal.PCSignal;
+import signal.Port;
 
-public class Headquarters {
-	/**
-	 * 驟埼＃險倬鹸繝ェ繧ケ繝
-	 */
+public class Headquarters{
+
 	private DeliveryRecordList DeliveryRecordList = new DeliveryRecordList();
 
-	/**
-	 * 騾壻ソ。蜿嶺サ倡憾諷九↓蜈・繧
-	 */
-	
-	public void systemExe(){
+	public static void main(String[] args) {
+		Headquarters h = new Headquarters();
+		h.systemExe();
+	}
+
+
+	public void systemExe() {
 		while(true){
 			PCSignal sig = new PCSignal();
 			try{
-				sig.waitSig();	
+				sig.waitSig(Port.HEAD);	
 				Integer methodFlag = (int)sig.getSig();
 				if(methodFlag==0){
 					DeliveryRecord deliveryrecord = (DeliveryRecord)sig.getSig();
@@ -31,6 +32,7 @@ public class Headquarters {
 					int luggageID = (int)sig.getSig();
 					LuggageCondition luggageCondition = (LuggageCondition)sig.getSig();
 					Date time = (Date)sig.getSig();
+					System.out.println("ID:"+luggageID+"LC:"+luggageCondition+"time:"+time);
 					updateDeliveryRecord(luggageID,luggageCondition,time);	
 				}else if(methodFlag==2){
 					sig.sendSig(new Date());
@@ -38,31 +40,17 @@ public class Headquarters {
 				System.out.println(getDeliveryRecordList());
 				sig.closeSig();
 			} catch (IOException e) {
-				// TODO 閾ェ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝け
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	/**
-	 * 驟埼＃險倬鹸繧呈峩譁ー縺吶ｋ
-	 * 
-	 * 謇矩
-	 * 繝。繧ス繝ラ縺ォ蟇セ蠢懊☆繧区桃菴懊ｒ陦後≧
-	 * 
-	 * 
-	 */
+
+
 	public void updateDeliveryRecord(int luggageID, LuggageCondition luggagecondition, Date time) {
 		DeliveryRecordList.updateDeliveryRecord(luggageID, luggagecondition, time);
 	}
 
-	/**
-	 * 驟埼＃險倬鹸繧定ソス蜉☆繧
-	 * 
-	 * 謇矩
-	 * 繝。繧ス繝ラ縺ォ蟇セ蠢懊☆繧区桃菴懊ｒ陦後≧
-	 * 
-	 */
+
 	public void addDeliveryRecord(DeliveryRecord deliveryrecord) {
 		DeliveryRecordList.addDeliveryRecord(deliveryrecord);
 		System.out.println("list added.");
@@ -77,5 +65,5 @@ public class Headquarters {
 	}
 
 
-	
+
 }
