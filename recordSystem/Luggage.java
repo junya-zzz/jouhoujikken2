@@ -1,6 +1,8 @@
 package recordSystem;
 
-public class Luggage {
+import java.io.Serializable;
+
+public class Luggage implements Serializable{
 
 	/**
 	 * 荷物ID
@@ -11,20 +13,20 @@ public class Luggage {
 
 	private RequestInformation requestInformation;
 	
-	public Luggage(int luggageID){
-		super();
-		this.luggageID = luggageID;
-		this.luggageName = "test";
-		this.requestInformation = new RequestInformation();
-		
-	}
-	
 	public Luggage(Integer luggageID, String luggageName,
 			RequestInformation requestInformation) {
 		super();
 		this.luggageID = luggageID;
 		this.luggageName = luggageName;
 		this.requestInformation = requestInformation;
+	}
+	
+	public Luggage(){
+		super();
+		this.luggageID = 1;
+		this.luggageName = "test";
+		this.requestInformation = new RequestInformation();
+		
 	}
 
 	public Integer getLuggageID() {
@@ -58,7 +60,6 @@ public class Luggage {
 		return "荷物ID　：　" + luggageID + "\n荷物名　：　 "
 				+ luggageName + "\n[顧客情報]------------------\n" + requestInformation;
 	}
-	
 	
 	
 

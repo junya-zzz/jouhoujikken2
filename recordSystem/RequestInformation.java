@@ -1,6 +1,8 @@
 package recordSystem;
 
-public class RequestInformation {
+import java.io.Serializable;
+
+public class RequestInformation implements Serializable{
 
 	/**
 	 * 依頼人名
@@ -25,14 +27,13 @@ public class RequestInformation {
 	
 	
 
-	public RequestInformation() {
+	public RequestInformation(){
 		super();
 		this.clientName = "clientName";
 		this.receiverName = "receiverName";
 		this.clientPhoneNum = "clientPhoneNum";
 		this.receiverAddress = 1;
 	}
-
 	public RequestInformation(String clientName, String receiverName,
 			String clientPhoneNum, int receiverAddress) {
 		super();

@@ -8,11 +8,11 @@ public class DeliveryRecordList {
 	//private ArrayList<DeliveryRecord> DeliveryRecordList= new ArrayList<>();
 	HashMap<Integer, DeliveryRecord> deliveryRecordMap = new HashMap<Integer, DeliveryRecord>();
 	/**
-   * 配達記録リストに追加する
-   *
-   * 手順
-	 * メソッドに対応する操作を行う 
-	 */
+	   * 配達記録リストに追加する
+	   *
+	   * 手順
+		 * メソッドに対応する操作を行う 
+		 */
 	public void addDeliveryRecord(DeliveryRecord deliveryRecord) {
 		deliveryRecordMap.put(deliveryRecord.getDeliveryID(),deliveryRecord);
 	}
@@ -35,13 +35,13 @@ public class DeliveryRecordList {
         	 deliveryRecordMap.get(luggageID).setShipTime(time);
              break;
          case waitDelivering:
+        	 System.out.println(deliveryRecordMap);
         	 deliveryRecordMap.get(luggageID).setArrivalTime(time);
              break;
          case delivering:
         	 deliveryRecordMap.get(luggageID).setStartTime(time);
              break;
          case delivered:
-           //差分を受け取っているので修正しないと
         	 deliveryRecordMap.get(luggageID).setReceiveTime(time);
              break;
          case finished:
@@ -66,7 +66,6 @@ public class DeliveryRecordList {
 		}
 		return "配達記録リスト　\n " + result;
 	}
-	
 	
 	
 }

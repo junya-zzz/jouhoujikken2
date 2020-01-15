@@ -1,10 +1,11 @@
 package recordSystem;
 
+import java.io.Serializable;
 //import java.util.Calendar;
 import java.util.Date;
 //import java.util.ArrayList;
 
-public class DeliveryRecord {
+public class DeliveryRecord implements Serializable{
 	
 	private Integer deliveryID;
 	
@@ -28,13 +29,6 @@ public class DeliveryRecord {
 	
 
 	
-
-	public DeliveryRecord(int deliveryID) {
-		super();
-		this.deliveryID = deliveryID;
-		this.luggage = new Luggage(deliveryID);
-		this.luggageCondition = LuggageCondition.unshipped;
-	}
 
 	public DeliveryRecord(Integer deliveryID, Luggage luggage/*ArrayList<Luggage> luggageList*/) {
 		super();
