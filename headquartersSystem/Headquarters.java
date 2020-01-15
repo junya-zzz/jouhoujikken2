@@ -2,6 +2,7 @@ package headquartersSystem;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Calendar;
 
 import recordSystem.DeliveryRecord;
 import recordSystem.DeliveryRecordList;
@@ -35,7 +36,16 @@ public class Headquarters{
 					System.out.println("ID:"+luggageID+"LC:"+luggageCondition+"time:"+time);
 					updateDeliveryRecord(luggageID,luggageCondition,time);	
 				}else if(methodFlag==2){
-					sig.sendSig(new Date());
+					int luggageID = (int)sig.getSig();
+					LuggageCondition luggageCondition = (LuggageCondition)sig.getSig();
+					Date time = (Date)sig.getSig();
+					Date result = new Date(new Date().getTime()+time.getTime());
+					/*Calendar calendar = Calendar.getInstance();
+					calendar.setTime(time);
+					calendar.add(Calendar.getInstance().setTime(new Date()));
+					time = calendar.getTime;*/
+					System.out.println("ID:"+luggageID+"LC:"+luggageCondition+"time:"+result);
+					updateDeliveryRecord(luggageID,luggageCondition,result);	
 				}
 				System.out.println(getDeliveryRecordList());
 				sig.closeSig();

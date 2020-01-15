@@ -18,11 +18,16 @@ public class CollectingRobot extends Robot {
 	
 	public static void main(String[] args) throws IOException {
 		CollectingRobot c = new CollectingRobot();
-		c.initSensors();
+		//c.initSensors();
+		/*while (c.robotExists(RIGHT, 70, 1.0f)){
+			turn(LEFT, 70);
+			Delay.msDelay(1000);
+		}*/
+		//turn(LEFT, 70);
 		c.getLugfrom();
-		c.receptionToRelayStation();
+		//c.receptionToRelayStation();
 		c.sendLug();
-		c.relayStationToReception();
+		//c.relayStationToReception();
 	}
 
 	/**

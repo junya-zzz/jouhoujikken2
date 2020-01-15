@@ -19,9 +19,9 @@ public class Boundary {
 		try{
 			System.out.print("clientName => ");
 			str1 = br.readLine();
-			System.out.print("clentPhoneNum => ");
-			str2 = br.readLine();
 			System.out.print("receiverName => ");
+			str2 = br.readLine();
+			System.out.print("clentPhoneNum => ");
 			str3 = br.readLine();
 			System.out.print("receiverAddress => ");
 			str4 = br.readLine();

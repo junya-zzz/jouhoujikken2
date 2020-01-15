@@ -4,6 +4,9 @@ import signal.*;
 import java.util.Date;
 import java.io.IOException;
 import java.util.Date;
+
+import javax.swing.text.DefaultEditorKit.BeepAction;
+
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
@@ -22,7 +25,7 @@ public class DeliveryRobot extends Robot {
 	/**
 	 * 荷物の配達結果を保持する変数
 	 */
-	private static String deliveryResult;
+	private static LuggageCondition deliveryResult;
 
 	/**
 	 * 受け取り時間
@@ -42,29 +45,29 @@ public class DeliveryRobot extends Robot {
 	private final static String Receiver = "";
 
 
-	public static void main(String[] args){
-		initSensors();
+	public static void main(String[] args) throws IOException{
+		//initSensors();
 
-		while(true){   
-			try {
-				Delay.msDelay(1000);
-				waitingToRelayStation();
+		//while(true){   
+			//try {
+				//Delay.msDelay(1000);
+				//waitingToRelayStation();
 				if(getLug()){
-					relayStationToReceiver();
+					//relayStationToReceiver();
 					sendLug();
-					receiverToRelayStation();
+					//receiverToRelayStation();
 					sendDeliveryRecord();
 				}//if
-				relayStationToWaiting();
-			} catch(IOException e){
-				e.printStackTrace();
-			}      
-		}//while(1) 
+				//relayStationToWaiting();
+			//} catch(IOException e){
+				//e.printStackTrace();
+			//}      
+		//}//while(1) 
 
 	}//main
 
 
-	private static void changeDeliveryResult(String result) {
+	private static void changeDeliveryResult(LuggageCondition result) {
 		deliveryResult=result;
 	}
 
@@ -294,11 +297,11 @@ public class DeliveryRobot extends Robot {
 
 				if(end-start<10){
 					sig.sendSig("true");
-					String receiverName=sig.getSig().toString();
-					String receiverAddress=sig.getSig().toString();
+					String receiverName=(String)sig.getSig();
+					int receiverAddress=(int)sig.getSig();
 					Luggage lug=getLuggage();
-					if(receiverName.equals(lug.getRequestInformation().getReceiverName()) && receiverAddress.equals(String.valueOf(lug.getRequestInformation().getReceiverAddress()))){
-						changeDeliveryResult("FINISHED");
+					if(receiverName.equals(lug.getRequestInformation().getReceiverName()) && receiverAddress == lug.getRequestInformation().getReceiverAddress()){
+						changeDeliveryResult(LuggageCondition.finished);
 						LCD.clear();
 						LCD.drawString("FINISHED", 0, 2);
 						Delay.msDelay(5000);
@@ -308,7 +311,7 @@ public class DeliveryRobot extends Robot {
 					}//ifreceiver
 
 					else{
-						changeDeliveryResult("WRONG");
+						changeDeliveryResult(LuggageCondition.absence);
 						sig.sendSig("false");
 					}//else
 
@@ -323,16 +326,17 @@ public class DeliveryRobot extends Robot {
 
 	/**
 	 * 中継所に配達結果を報告する
+	 * @throws IOException 
 	 */
-	public static void sendDeliveryRecord(){
+	public static void sendDeliveryRecord() throws IOException{
 		EV3Signal sig=new EV3Signal();
 		Luggage lug=getLuggage();
-		try{
+		//try{
 			if(sig.openSig(Port.RELAY)){
 				//changeDeliveryResult("wrongAddress");
-				//elapsedTime = 1200;
+				elapsedTime = 1200;
 				sig.sendSig(deliveryResult);
-				if(deliveryResult.equals("finished")){
+				if(deliveryResult == LuggageCondition.finished){
 					sig.sendSig(elapsedTime);
 					sig.sendSig(lug.getLuggageID());
 				}//ifFINISHED
@@ -341,9 +345,9 @@ public class DeliveryRobot extends Robot {
 				}
 				sig.closeSig();
 			}//ifopen
-		}catch(Exception e){
+		//}catch(Exception e){
 			System.out.println("error.");
-		}	
+		//}	
 
 
 	}//sendDeliveryRecord
