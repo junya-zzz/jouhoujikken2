@@ -10,7 +10,7 @@ import javax.microedition.io.*;
 import com.intel.bluetooth.BlueCoveImpl;
 
 public class BTController extends Thread{
-	public StreamConnectionNotifier scn = null;
+	public static StreamConnectionNotifier scn = null;
 	private StreamConnection connection = null;
 	private ObjectInputStream btois;
 	private ObjectOutputStream btoos;
@@ -18,9 +18,9 @@ public class BTController extends Thread{
 	private ObjectOutputStream coos;
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException{
-		BTController controller = new BTController();
-		controller.scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
+		scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
 		while (true) {
+			BTController controller = new BTController();
 			int port = controller.waitBTSig();
 			controller.connectToSubSystem(port);
 		}

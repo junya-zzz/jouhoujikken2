@@ -13,20 +13,20 @@ public class Luggage implements Serializable{
 
 	private RequestInformation requestInformation;
 	
-	public Luggage(int luggageID){
-		super();
-		this.luggageID = luggageID;
-		this.luggageName = "test";
-		this.requestInformation = new RequestInformation();
-		
-	}
-	
 	public Luggage(Integer luggageID, String luggageName,
 			RequestInformation requestInformation) {
 		super();
 		this.luggageID = luggageID;
 		this.luggageName = luggageName;
 		this.requestInformation = requestInformation;
+	}
+	
+	public Luggage(){
+		super();
+		this.luggageID = 1;
+		this.luggageName = "test";
+		this.requestInformation = new RequestInformation();
+		
 	}
 
 	public Integer getLuggageID() {
@@ -57,8 +57,8 @@ public class Luggage implements Serializable{
 
 	@Override
 	public String toString() {
-		return "闕ｷ迚ｩID縲�ｼ壹�" + luggageID + "\n闕ｷ迚ｩ蜷阪��壹� "
-				+ luggageName + "\n[鬘ｧ螳｢諠��]------------------\n" + requestInformation;
+		return "荷物ID　" + luggageID + ",　荷物名 "
+				+ luggageName + "\n顧客情報\n" + requestInformation;
 	}
 	
 	

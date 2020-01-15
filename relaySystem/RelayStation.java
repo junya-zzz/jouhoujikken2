@@ -31,6 +31,12 @@ public class RelayStation {
 		signal = new EV3Signal();
 	}
 
+	public static void main(String[] args) {
+		RelayStation rs = new RelayStation();
+		rs.receiveLugfromCollectingRobot();
+		//rs.sendLugtoDeliveryRobot();
+		
+	}
 	/**
 	 * 収集担当ロボットから荷物を受け取る
 	 *
@@ -48,6 +54,7 @@ public class RelayStation {
 			LCD.refresh();
 			signal.sendSig("Receiving completed.");
 			signal.closeSig();
+			reportReceivingToHeadquarters(new Date(1200));
 		}catch(Exception e){
 			System.out.println("Sorry, Don't receive.");
 		}
@@ -61,7 +68,7 @@ public class RelayStation {
 	 */
 	public void reportReceivingToHeadquarters(Date ship_time) {
 		try{
-			signal.openSig("00:1b:dc:f2:2c:33");
+			signal.openSig(Port.HEAD);
 			//signal.waitSig();
 			signal.sendSig(1);
 			signal.sendSig(luggageList.get(0).getLuggageID());
@@ -148,8 +155,16 @@ public class RelayStation {
 		try{
 			signal.waitSig();
 			signal.getSig();
+			LCD.clear();
+			LCD.drawString("message received.", 0, 2);
+			Delay.msDelay(2000);
+			LCD.refresh();
 			if(luggageList.isEmpty()){
-				signal.sendSig(luggageList.isEmpty());
+				LCD.clear();
+				LCD.drawString("empty.", 0, 2);
+				Delay.msDelay(2000);
+				LCD.refresh();
+				signal.sendSig("true");
 				signal.closeSig();
 			}
 			else{
@@ -175,7 +190,7 @@ public class RelayStation {
 	 */
 	public void reportDeliveryResult(String result, int lug_id, Date fin_time) {
 		try{
-			signal.openSig("00:1b:dc:f2:2c:33");
+			signal.openSig(Port.HEAD);
 			//signal.openSig("Headquarters");
 			//signal.waitSig();
 			if(result.equals("finished")){
@@ -213,7 +228,7 @@ public class RelayStation {
 	public void reportDeliveryStart(int id, Date start) {
 		try{
 			//signal.openSig("Headquarters");
-			signal.openSig("00:1b:dc:f2:2c:2c");
+			signal.openSig(Port.HEAD);
 			//signal.waitSig();
 			signal.sendSig(id);
 			signal.sendSig(start);

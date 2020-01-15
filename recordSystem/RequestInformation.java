@@ -27,14 +27,13 @@ public class RequestInformation implements Serializable{
 	
 	
 
-	public RequestInformation() {
+	public RequestInformation(){
 		super();
 		this.clientName = "clientName";
 		this.receiverName = "receiverName";
 		this.clientPhoneNum = "clientPhoneNum";
 		this.receiverAddress = 1;
 	}
-
 	public RequestInformation(String clientName, String receiverName,
 			String clientPhoneNum, int receiverAddress) {
 		super();
@@ -78,9 +77,9 @@ public class RequestInformation implements Serializable{
 
 	@Override
 	public String toString() {
-		return "萓晞�莠ｺ蜷阪��壹�" + clientName
-				+ "\n蜿怜叙莠ｺ蜷阪��壹�" + receiverName + "\n萓晞�莠ｺ髮ｻ隧ｱ逡ｪ蜿ｷ縲�ｼ壹�"
-				+ clientPhoneNum + "\n蜿怜叙莠ｺ螳�ｽ乗園縲�ｼ壹�" + receiverAddress+"\n";
+		return "依頼人　" + clientName
+				+ "\n受取人　" + receiverName + "\n依頼人電話番号　"
+				+ clientPhoneNum + "\n受取人宅住所　" + receiverAddress+"\n";
 	}
 	
 	

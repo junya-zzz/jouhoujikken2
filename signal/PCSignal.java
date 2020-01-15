@@ -34,6 +34,11 @@ public class PCSignal {
 		oos.flush();
 		isServer = false;
 		System.out.println("connection opened to " + p.name());
+		if (p == Port.HEAD || p == Port.RECEIVE||p==Port.RECEPTION) {
+			isConnectToBT = false;
+		} else {
+			isConnectToBT = true;
+		}
 		return true;
 	}
 
@@ -52,6 +57,7 @@ public class PCSignal {
 		oos.flush();
 		ois = new ObjectInputStream(sc.getInputStream());
 		isConnectToBT = ois.readBoolean();
+		System.out.println(isConnectToBT);
 		isServer = true;
 		System.out.println("connection opened.");
 		return true;

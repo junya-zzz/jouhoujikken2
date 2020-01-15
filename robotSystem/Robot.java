@@ -1,6 +1,5 @@
 package robotSystem;
 
-import recordSystem.Luggage;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 
@@ -13,12 +12,13 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Stopwatch;
+import recordSystem.Luggage;
 
 public class Robot {
 
-	protected static Luggage luggage;
+	private static Luggage luggage;
 
-	private static String position;
+	private String position;
 
 	private static EV3UltrasonicSensor sonicSensor;
 	private static EV3GyroSensor gyroSensor;
@@ -260,7 +260,6 @@ public class Robot {
 			angleProvider.fetchSample(angleSample, 0);
 			distanceProvider.fetchSample(distanceSample, 0);
 			LCD.clear();
-			LCD.drawString("gyro = " + angleSample[0], 0, 0);
 			LCD.drawString("sonic = " + distanceSample[0], 1, 0);
 			LCD.refresh();
 			if (distanceSample[0] < distance) {
@@ -278,8 +277,8 @@ public class Robot {
 	 * position‚ð•ÏX‚·‚é
 	 * @param position
 	 */
-	protected static void changePos(String pos) {
-		position = pos;
+	protected void changePos(String position) {
+		this.position = position;
 	}
 
 	/**
@@ -298,11 +297,11 @@ public class Robot {
 		rightMotor.stop(true);
 	}
 
-	protected static Luggage getLuggage() {
+	public static Luggage getLuggage() {
 		return luggage;
 	}
 	
-	protected static void setLuggage(Luggage lug) {
+	public static void setLuggage(Luggage lug) {
 		luggage = lug;
 		return;
 	}

@@ -30,13 +30,6 @@ public class DeliveryRecord implements Serializable{
 
 	
 
-	public DeliveryRecord(int deliveryID) {
-		super();
-		this.deliveryID = deliveryID;
-		this.luggage = new Luggage(deliveryID);
-		this.luggageCondition = LuggageCondition.unshipped;
-	}
-
 	public DeliveryRecord(Integer deliveryID, Luggage luggage/*ArrayList<Luggage> luggageList*/) {
 		super();
 		this.deliveryID = deliveryID;
@@ -135,20 +128,11 @@ public class DeliveryRecord implements Serializable{
 
 	@Override
 	public String toString() {
-		return "【配達記録ID : " + deliveryID + "】\n[荷物内容]------------------\n"
-				+ luggage  +"[配達情報]------------------\n"
-				+ "荷物状態　: " + luggageCondition + "\n受取時間　"
-				+ showDate(receiptTime) + "\n発送時間　: "
-				+ showDate(shipTime) + "\n中継所到着時間　: " + showDate(arrivalTime) + "\n配達開始時間　: "
-				+ showDate(startTime) + "\n受け取り完了時間　: " + showDate(receiveTime) + "\n配達完了時間　: "
-				+ showDate(finishTime) +  "\n";
-	}
-	
-	String showDate(Date date){
-		String result = "";
-		if(date==null)result = "未完了";
-		else result += date;
-		return result;	
+		return "\n【配達記録ID " + deliveryID + "】\n荷物内容\n"
+				+ luggage + "\n荷物状態　" + luggageCondition +"\n--時間情報--\n受取時間　" + receiptTime + "\n発送時間　"
+				+ shipTime + "\n中継所到着時間　" + arrivalTime + "\n配達開始時間　"
+				+ startTime + "\n受け取り完了時間　" + receiveTime + "\n配達完了時間　"
+				+ finishTime +  "\n";
 	}
 
 	

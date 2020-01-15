@@ -6,6 +6,7 @@ import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
 import lejos.utility.Stopwatch;
 import signal.EV3Signal;
+import signal.Port;
 import recordSystem.Luggage;
 
 public class CollectingRobot extends Robot {
@@ -15,8 +16,16 @@ public class CollectingRobot extends Robot {
 	private final String relaySystem = "";
 	private final String reception = "";
 	
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws IOException {
+		CollectingRobot c = new CollectingRobot();
+		c.initSensors();
+		while (robotExists(RIGHT, 90, 1f)){
+			turn(LEFT, 90);
+		}
+		turn(LEFT, 90);
+		//c.getLugfrom();
+		//c.receptionToRelayStation();
+		//c.sendLug();
 	}
 
 	/**
@@ -30,11 +39,11 @@ public class CollectingRobot extends Robot {
 	/**
 	 * â◊ï®ÇíÜåpèäÇ…à¯Ç´ìnÇ∑
 	 */
-	public void sendLug() throws ClassNotFoundException{
+	public void sendLug() throws IOException{
 		signal = new EV3Signal();
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.reset();
-		while (!signal.openSig("00:16:53:4F:9E:DB")) {
+		while (!signal.openSig(Port.RELAY)) {
 			if (10000 < stopwatch.elapsed()) {
 				changeIsDelivery(false);
 				return;
@@ -59,13 +68,8 @@ public class CollectingRobot extends Robot {
 	 * íÜåpèäÇ©ÇÁëÓîzéÛïtèäÇ…à⁄ìÆÇ∑ÇÈ
 	 */
 	private static void relayStationToReception() {
-		lineTrace(3500, RIGHT, 350);
+		lineTrace(5000, RIGHT, 350);
 		stopOnGray(RIGHT);
-		Delay.msDelay(1000);
-		robotExists(RIGHT, 90, 50);
-		lineTrace(200, RIGHT, 300);
-		lineTrace(1000, LEFT, 300);
-		stopOnGray(LEFT);
 		turn(LEFT, 180);
 	}
 
@@ -75,7 +79,7 @@ public class CollectingRobot extends Robot {
 	public void sendIsDelivery() {
 		signal = new EV3Signal();
 		try {
-			signal.openSig(reception);
+			signal.openSig(Port.RECEPTION);
 			signal.sendSig(reception);
 			if (!isDelivery) {
 				signal.sendSig(getLuggage());
@@ -89,21 +93,32 @@ public class CollectingRobot extends Robot {
 	/**
 	 * ëÓîzéÛïtèäÇ©ÇÁíÜåpèäÇ…à⁄ìÆÇ∑ÇÈ
 	 */
-	private void receptionToRelayStation() {
-		lineTrace(5000, RIGHT, 350);
+	private static void receptionToRelayStation() {
+		lineTrace(3500, RIGHT, 350);
+		Delay.msDelay(1000);
 		stopOnGray(RIGHT);
+		Delay.msDelay(1000);
+		while (robotExists(RIGHT, 90, 0.2f)){
+			turn(LEFT, 90);
+		}
+		turn(LEFT, 90);
+		lineTrace(200, RIGHT, 300);
+		lineTrace(1000, LEFT, 300);
+		stopOnGray(LEFT);
 		turn(LEFT, 180);
 	}
+
 
 	/**
 	 * ëÓîzéÛïtèäÇ©ÇÁâ◊ï®ÇéÛÇØéÊÇÈ
 	 */
-	public void getLugfrom() throws ClassNotFoundException{
+	public void getLugfrom() {
 		signal = new EV3Signal();
 		try {
-			while (signal.openSig(reception)) {
+			while (signal.openSig(Port.RECEPTION)) {
 				Delay.msDelay(3000);
 			}
+			signal.sendSig("existLuggage");
 			boolean existsLug = (boolean) signal.getSig();
 			if (existsLug) {
 				setLuggage((Luggage)signal.getSig());

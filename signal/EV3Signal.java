@@ -44,6 +44,8 @@ public class EV3Signal {
 		}
 		if (p == Port.RELAY) {
 			isConnectToEV3 = true;
+		} else {
+			isConnectToEV3 = false;
 		}
 
 		DataOutputStream dos = btConnection.openDataOutputStream();
@@ -153,7 +155,7 @@ public class EV3Signal {
 		if (isServerMode) {
 			btConnector.close();
 		}
-		btConnection.close();
+		if (btConnection != null) btConnection.close();
 
 		return;
 	}
