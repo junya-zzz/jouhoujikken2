@@ -1,6 +1,7 @@
 package receiveSystem;
 import java.io.IOException;
 import signal.PCSignal;
+import signal.Port;
 public class Receiver {
 	
 	  private static String receiverName;
@@ -24,7 +25,7 @@ public class Receiver {
 	       
 	  public void getLug() throws IOException{
 	    PCSignal sig1 = new PCSignal();
-		sig1.waitSig();
+		sig1.waitSig(Port.RECEIVE);
 		sig1.getSig();
 		sig1.sendSig("Exist");
 		if(sig1.getSig().equals("false")) sig1.closeSig();    //falseÅ®10ïbà»ì‡Ç…ï‘êMÇ≈Ç´Ç»Ç©Ç¡ÇΩ
