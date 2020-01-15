@@ -13,7 +13,8 @@ import recordSystem.*;
 public class Reception {
 	private final int portNum = 8080;
     private ArrayList<Luggage> lugList;
-    private DeliveryRecordList deliList;
+   // private DeliveryRecordList deliList;
+    private ArrayList<DeliveryRecord> deliList;
 
     private Signal signal;
     public final String  EXIST_LUGGAGE = "existLuggage";
@@ -23,7 +24,7 @@ public class Reception {
 
     public Reception(){
 	this.lugList = new ArrayList<Luggage>();
-	this.deliList = new DeliveryRecordList();
+	this.deliList = new ArrayList<DeliveryRecord>();
 
 	this.signal = new Signal();
     }
@@ -31,39 +32,41 @@ public class Reception {
 
     /*発送時間を本部に報告する*/    //未完成
     public void sendShipTime() {
+    		DeliveryRecord deliveryRecord = this.deliList.remove(0);
     	try {
     		signal.openSig("START","Headquarters");
-    		/**配達記録リストからサーチ**/
 
-
-
-
-    		/**************/
     		signal.sendSig(deliveryRecord);
     		signal.closeSig("FINISH","Headquarters");
 
+
+    		this.getIsDelivery();
     	}catch(Exception e) {
     		//例外処理
     		e.printStackTrace();
 
     	}
+    	this.getIsDelivery(deliveryRecord);
     }
 
 
     /*中継所との引渡し結果を得る*/   //未完成
-    public void getIsDelivery() {
+    public void getIsDelivery(DeliveryRecord deliveryRecord) {
     	try {
     		signal.openSig("START","CollectingRobot");
     		String getMessage=signal.getSig();
     		if(getMessage.equals(DELIVERY_FAILURE)) {
     			Luggage lug = signal.getSig();
     			this.lugList.add(lug);
+    			this.deliList.add(deliveryRecord);
 
     		}
     		signal.closeSig("FINISH","CollectingRobot");
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
+
+    	this.sendLug();
     }
 
 
@@ -79,15 +82,17 @@ public class Reception {
 	    				Luggage sendLug = this.LugList.remove(0);  //荷物リストから先頭の要素を取り出して送る
 	    				signal.sendSig(sendLug);
 	    				/******渡した荷物に対応する配達記録に発送時間を追記**/
-	    				deliList.updateDeliveryRecord(sendLug.getLuggageID, LuggageCondition.delivering, new Date());
+	    				DeliveryRecord a=deliList.remove(0).setStartTime(new Date());
+	    				deliList.add(0,a);
+	    				signal.closeSig("FINISH","CollectingRobot");
 
-	    				break;
+	    				this.sendShipTime();
+
 	    			}else {
 	    				continue;
 	    			}
     			}
     		}
-    		signal.closeSig("FINISH","CollectingRobot");
 
 
 
@@ -109,13 +114,15 @@ public class Reception {
 		    	lugList.add(lug);   //荷物リストに追加
 		    	DeliveryRecord deliveryRecord = new DeliveryRecord(lug); //荷物の配達記録生成
 		    	deliveryRecord.setReceiptTime(new Date()); //配達記録に受付時間を追加
-		    	deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
+		    	deliList.add(deliveryRecord); //配達記録リストに追加
+
+
 	    	}
     	}
 
     }
 
-    public int idNum=0; //荷物ID
+    public  static int idNum=0; //荷物ID
 
     private int setLuggageIDNum() { //荷物IDを設定   //完成
 		idNum++;

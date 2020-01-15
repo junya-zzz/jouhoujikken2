@@ -23,6 +23,7 @@ public class SocketServer {
 
 		try {
 			ServerSocket serverSocket = new ServerSocket(portNum) ;
+				System.out.println("Server Start");
 		      Socket socket = serverSocket.accept();
 		      System.out.println("接続されました "
                       + socket.getRemoteSocketAddress() );
