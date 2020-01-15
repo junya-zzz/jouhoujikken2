@@ -18,7 +18,7 @@ public class Robot {
 
 	private static Luggage luggage;
 
-	private String position;
+	private static String position;
 
 	private static EV3UltrasonicSensor sonicSensor;
 	private static EV3GyroSensor gyroSensor;
@@ -96,7 +96,7 @@ public class Robot {
 		SensorMode redLightSampleProvider = colorSensor.getRedMode();
 		float sample[] = new float[redLightSampleProvider.sampleSize()];
 		float target = 0.3f;
-		float black = 0.03f;
+		float black = 0.02f;
 		float white = 0.80f;
 		float barance;
 		int power;
@@ -277,8 +277,8 @@ public class Robot {
 	 * positionÇïœçXÇ∑ÇÈ
 	 * @param position
 	 */
-	protected void changePos(String position) {
-		this.position = position;
+	protected static void changePos(String pos) {
+		position = pos;
 	}
 
 	/**

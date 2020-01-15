@@ -3,6 +3,7 @@ package recordSystem;
 import java.io.Serializable;
 //import java.util.Calendar;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 //import java.util.ArrayList;
 
 public class DeliveryRecord implements Serializable{
@@ -143,9 +144,10 @@ public class DeliveryRecord implements Serializable{
 	}
 	
 	String showDate(Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy'年'MM'月'dd'日'E'曜日'k'時'mm'分'ss'秒'");
 		String result = "";
 		if(date==null)result = "未完了";
-		else result += date;
+		else result += sdf.format(date);
 		return result;	
 	}
 

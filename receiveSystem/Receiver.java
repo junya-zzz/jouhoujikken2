@@ -11,6 +11,11 @@ public class Receiver {
 		receiverName = name;
 		receiverAddress = ad;
 	  }
+	  
+	  public static void main(String[] args) throws IOException{
+		Receiver r = new Receiver("saito", 3);
+		r.getLug();
+	  }
 
 	  /*public static void main(String[] args) {
 		  Receiver r = new Receiver("saito",3);//‚±‚±‚Åî•ñ‚ğ•Ï‚¦‚é

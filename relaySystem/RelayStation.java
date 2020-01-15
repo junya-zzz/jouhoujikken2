@@ -31,11 +31,11 @@ public class RelayStation {
 		signal = new EV3Signal();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		RelayStation rs = new RelayStation();
 		rs.receiveLugfromCollectingRobot();
-		//rs.sendLugtoDeliveryRobot();
-		
+		rs.sendLugtoDeliveryRobot();
+		rs.receiveDeliveryResult();
 	}
 	/**
 	 * 収集担当ロボットから荷物を受け取る
@@ -137,8 +137,8 @@ public class RelayStation {
 				//System.out.println(wrongLugList.get(0).getLuggageID());
 			}
 			signal.closeSig();
+			this.reportDeliveryResult(result, id, time);
 			return false;
-			//this.reportDeliveryResult(result, id, time);
 		}catch(Exception e){
 			System.out.println("Sorry, Don't receive report.");
 			throw e;
@@ -175,7 +175,7 @@ public class RelayStation {
 				//signal.sendSig(luggageList.isEmpty());
 				signal.sendSig(luggage);
 				signal.closeSig();
-				//this.reportDeliveryStart(id, start);
+				this.reportDeliveryStart(id, start);
 			}
 		}catch(Exception e){
 			System.out.println("Sorry, Don't report.");
@@ -230,7 +230,9 @@ public class RelayStation {
 			//signal.openSig("Headquarters");
 			signal.openSig(Port.HEAD);
 			//signal.waitSig();
+			signal.sendSig(1);
 			signal.sendSig(id);
+			signal.sendSig(LuggageCondition.delivering);
 			signal.sendSig(start);
 			signal.closeSig();
 		}catch(Exception e){

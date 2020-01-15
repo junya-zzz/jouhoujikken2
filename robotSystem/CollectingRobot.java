@@ -19,13 +19,10 @@ public class CollectingRobot extends Robot {
 	public static void main(String[] args) throws IOException {
 		CollectingRobot c = new CollectingRobot();
 		c.initSensors();
-		while (robotExists(RIGHT, 90, 1f)){
-			turn(LEFT, 90);
-		}
-		turn(LEFT, 90);
-		//c.getLugfrom();
-		//c.receptionToRelayStation();
-		//c.sendLug();
+		c.getLugfrom();
+		c.receptionToRelayStation();
+		c.sendLug();
+		c.relayStationToReception();
 	}
 
 	/**
@@ -68,7 +65,7 @@ public class CollectingRobot extends Robot {
 	 * íÜåpèäÇ©ÇÁëÓîzéÛïtèäÇ…à⁄ìÆÇ∑ÇÈ
 	 */
 	private static void relayStationToReception() {
-		lineTrace(5000, RIGHT, 350);
+		lineTrace(10000, RIGHT, 350);
 		stopOnGray(RIGHT);
 		turn(LEFT, 180);
 	}

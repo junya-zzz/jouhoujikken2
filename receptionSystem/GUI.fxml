@@ -68,7 +68,7 @@
             <Font name="Arial" size="18.0" />
          </font>
       </Button>
-      <Label fx:id="resultLabel" layoutX="234.0" layoutY="375.0" text="aaaa">
+      <Label fx:id="resultLabel" layoutX="234.0" layoutY="375.0" text="">
          <font>
             <Font name="Yu Gothic UI Regular" size="12.0" />
          </font>

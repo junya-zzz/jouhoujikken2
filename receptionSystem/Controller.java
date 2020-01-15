@@ -56,6 +56,7 @@ public class Controller {
         else {
         	SocketClient socketClient = new SocketClient(PORTNUM);
         	socketClient.send(readClientName,readReceiverName,readClientPhoneNum,readAddress,readLuggageName);
+        	resultLabel.setText("荷物が追加されました。");
         }
     }
 

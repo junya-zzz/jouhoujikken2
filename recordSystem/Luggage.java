@@ -57,10 +57,9 @@ public class Luggage implements Serializable{
 
 	@Override
 	public String toString() {
-		return "荷物ID　" + luggageID + ",　荷物名 "
-				+ luggageName + "\n顧客情報\n" + requestInformation;
+		return "荷物ID　：　" + luggageID + "\n荷物名　：　 "
+				+ luggageName + "\n[顧客情報]------------------\n" + requestInformation;
 	}
-	
 	
 	
 
