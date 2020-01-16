@@ -12,7 +12,7 @@ import java.util.Date;
 
 
 
-public class Reception {
+public class Reception extends Thread{
 	public static final String EXIST_LUGGAGE = "existLuggage";
 
 	private ArrayList<Luggage> lugList;
@@ -24,8 +24,10 @@ public class Reception {
 	public static void main(String[] args) {
 		// テスト用
 		Reception reception = new Reception();
-		reception.getLug();
-		reception.sendLug();
+		reception.run();
+		while (true) {
+			reception.sendLug();
+		}
 	}
 
 	public Reception(){
@@ -94,11 +96,35 @@ public class Reception {
 			signal.closeSig();
 			sendShipTime(new DeliveryRecord(sendLug.getLuggageID(), sendLug));
 		}catch(Exception e) {
-			//例外処理
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
 	public int idNum=0;
+	
+	// 操作選択
+	@Override
+	public void run() {
+		while(true) {
+			String input = null;
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+				System.out.println("操作を選択");
+				System.out.println("依頼 : 0, 荷物状態確認 : 1 -> ");
+				input = br.readLine();
+			} catch (IOException e){
+				e.printStackTrace();
+				System.exit(1);
+			}
+			if (input.equals("0")){
+				getLug();
+			} else if (input.equals("1")){
+				luggageTracking();
+			}
+		}
+	}
+	
 
 	/*荷物を依頼人から受け取る*/
 	public void getLug() {
@@ -114,6 +140,30 @@ public class Reception {
 			deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
 		} catch (IOException e){
 			//例外
+		}
+	}
+	
+	// 荷物の状態を本部に問い合わせて取得し、表示する
+	private void luggageTracking() {
+		int id;
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("荷物IDを入力 -> ");
+			id = Integer.parseInt(br.readLine());
+			signal.openSig(Port.HEAD);
+			signal.sendSig(4); //荷物問い合わせ
+			signal.sendSig(id);
+			DeliveryRecord dr = (DeliveryRecord)signal.getSig();
+			if (dr == null) {
+				System.out.println("荷物が見つかりません");
+			} else {
+				System.out.println(dr);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		} catch (NumberFormatException e) {
+			System.out.println("数字を入力してください");
 		}
 	}
 
