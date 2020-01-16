@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import lejos.hardware.BrickFinder;
+import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.lcd.TextLCD;
@@ -108,37 +110,18 @@ public class RelayStation {
 		Date time = null;
 		Luggage luggage = null;
 
-		//try{
-		//signal.openSig("00:16:53:5D:D3:BC");
-		LCD.clear();
-		LCD.drawString("p", 0, 2);
-		LCD.refresh();
-		LCD.clear();
-		LCD.drawString("pass", 0, 2);
-		LCD.refresh();
 		LuggageCondition result = (LuggageCondition)signal.getSig();
-		LCD.clear();
-		LCD.drawString("result:"+result, 0, 2);
-		LCD.refresh();
 		if(result == LuggageCondition.finished){
 			time = new Date((long)signal.getSig());
 			id = (int)signal.getSig();
 			LCD.clear();
 			LCD.drawString("time"+time, 0, 2);
 			LCD.refresh();
-			//System.out.println(time + "," + id);
 		}
 		else if(result == LuggageCondition.receive_absence){
 			luggage = (Luggage)signal.getSig();
 			id = luggage.getLuggageID();
-			LCD.clear();
-			LCD.drawString("luggage:"+luggage.getLuggageID(), 0, 2);
-			LCD.refresh();
 			luggageList.add(luggage);
-			LCD.clear();
-			LCD.drawString("ID:"+luggageList.get(0).getLuggageID(), 0, 2);
-			LCD.refresh();
-			//System.out.println(luggageList.get(0).getLuggageID());
 		}
 		else if(result == LuggageCondition.wrongAddress){
 			luggage = (Luggage)signal.getSig();
@@ -147,15 +130,9 @@ public class RelayStation {
 			LCD.clear();
 			LCD.drawString("ID:"+wrongLugList.get(0).getLuggageID(), 0, 2);
 			LCD.refresh();
-			//System.out.println(wrongLugList.get(0).getLuggageID());
 		}
 		signal.closeSig();
-		//this.reportDeliveryResult(LuggageCondition.delivered, id, );
 		this.reportDeliveryResult(result, id, time);
-		/*}catch(Exception e){
-			System.out.println("Sorry, Don't receive report.");
-			throw e;
-		}*/
 	}
 
 	/**
@@ -178,7 +155,7 @@ public class RelayStation {
 				signal.closeSig();
 			}
 			else{
-				Luggage luggage = luggageList.get(0);
+				Luggage luggage = luggageList.remove(0);
 				int id = luggage.getLuggageID();
 				//DeliveryRecord dr = new DeliveryRecord(id, luggageList.get(0));
 				//Date start = dr.getStartTime();

@@ -312,8 +312,9 @@ public class DeliveryRobot extends Robot {
 				}//ifendstart
 				else  sig.sendSig("false");
 				sig.closeSig();
-			}//ifopensig
-			changeDeliveryResult(LuggageCondition.receive_absence);
+			} else {
+				changeDeliveryResult(LuggageCondition.receive_absence);
+			}
 		}catch(Exception e){
 			System.out.println("error.");
 		}   
