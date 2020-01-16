@@ -119,7 +119,9 @@ public class Reception extends Thread{
 				}
 			}
 			signal.closeSig();
-			sendShipTime(sendLug/*new DeliveryRecord(sendLug.getLuggageID(), sendLug)*/);
+			if (sendLug != null) {
+				sendShipTime(sendLug/*new DeliveryRecord(sendLug.getLuggageID(), sendLug)*/);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
