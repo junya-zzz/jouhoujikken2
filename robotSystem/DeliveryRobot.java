@@ -1,5 +1,6 @@
 package robotSystem;
 import recordSystem.*;
+import relaySystem.RelayStation;
 import signal.*;
 import java.util.Date;
 import java.io.IOException;
@@ -35,14 +36,6 @@ public class DeliveryRobot extends Robot {
 
 
 	private final static int ID=10;
-	/**
-	 * íÜåpèäÇ∆í êMÇ∑ÇÈÇΩÇﬂÇÃïœêî
-	 */
-	private final static String RelayStation = "";
-	/**
-	 * éÛéÊêlëÓÇ∆í êMÇ∑ÇÈÇΩÇﬂÇÃïœêî
-	 */
-	private final static String Receiver = "";
 
 
 	public static void main(String[] args) throws IOException{
@@ -245,6 +238,7 @@ public class DeliveryRobot extends Robot {
 		EV3Signal sig=new EV3Signal();
 		try{
 			if(sig.openSig(Port.RELAY)){
+				sig.sendSig(RelayStation.SEND_LUG_TO_DELIVERY);
 				sig.sendSig("Is the luggageList empty?");
 				Object flag=sig.getSig();
 				if(!flag.equals("true")){
@@ -333,6 +327,7 @@ public class DeliveryRobot extends Robot {
 		Luggage lug=getLuggage();
 		//try{
 			if(sig.openSig(Port.RELAY)){
+				sig.sendSig(RelayStation.REPORT_DELIVERY_RESULT);
 				//changeDeliveryResult("wrongAddress");
 				elapsedTime = 1200;
 				sig.sendSig(deliveryResult);

@@ -8,6 +8,7 @@ import lejos.utility.Stopwatch;
 import signal.EV3Signal;
 import signal.Port;
 import recordSystem.Luggage;
+import relaySystem.RelayStation;
 
 public class CollectingRobot extends Robot {
 
@@ -19,15 +20,13 @@ public class CollectingRobot extends Robot {
 	public static void main(String[] args) throws IOException {
 		CollectingRobot c = new CollectingRobot();
 		//c.initSensors();
-		/*while (c.robotExists(RIGHT, 70, 1.0f)){
-			turn(LEFT, 70);
-			Delay.msDelay(1000);
-		}*/
-		//turn(LEFT, 70);
-		c.getLugfrom();
-		//c.receptionToRelayStation();
-		c.sendLug();
-		//c.relayStationToReception();
+		while(true) {
+			if (c.getLugfrom()){
+				//c.receptionToRelayStation();
+				c.sendLug();
+				//c.relayStationToReception();
+			}
+		}
 	}
 
 	/**
@@ -52,6 +51,7 @@ public class CollectingRobot extends Robot {
 			}
 		}
 		try {
+			signal.sendSig(RelayStation.SEND_LUG_TO_RELAY);
 			signal.sendSig(getLuggage());
 			signal.getSig();
 			LCD.clear();
@@ -114,21 +114,24 @@ public class CollectingRobot extends Robot {
 	/**
 	 * ëÓîzéÛïtèäÇ©ÇÁâ◊ï®ÇéÛÇØéÊÇÈ
 	 */
-	public void getLugfrom() {
+	public boolean getLugfrom() {
 		signal = new EV3Signal();
+		boolean result = false;
 		try {
-			while (signal.openSig(Port.RECEPTION)) {
+			while (!signal.openSig(Port.RECEPTION)) {
 				Delay.msDelay(3000);
 			}
 			signal.sendSig("existLuggage");
 			boolean existsLug = (boolean) signal.getSig();
 			if (existsLug) {
 				setLuggage((Luggage)signal.getSig());
-			}
+				result = true;
+			} else result = false;
 			signal.closeSig();
 		} catch (IOException e) {
 			System.exit(1);
 		}
+		return result;
 	}
 
 }

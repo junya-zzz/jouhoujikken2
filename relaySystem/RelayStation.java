@@ -4,12 +4,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
 import recordSystem.*;
 import signal.*;
 
 public class RelayStation {
+
+	public static int SEND_LUG_TO_RELAY = 0;
+	public static int SEND_LUG_TO_DELIVERY = 1;
+	public static int REPORT_DELIVERY_RESULT = 2;
 
 	/**
 	 * 保管荷物
@@ -34,9 +40,21 @@ public class RelayStation {
 
 	public static void main(String[] args) throws Exception{
 		RelayStation rs = new RelayStation();
-		rs.receiveLugfromCollectingRobot();
-		rs.sendLugtoDeliveryRobot();
-		rs.receiveDeliveryResult();
+		while (true) {
+			rs.choseFunction();
+		}
+	}
+
+	public void choseFunction() throws IOException{
+		signal.waitSig();
+		int methodFlag = (int) signal.getSig();
+		if (methodFlag == SEND_LUG_TO_RELAY) {
+			receiveLugfromCollectingRobot();
+		} else if (methodFlag == SEND_LUG_TO_DELIVERY) {
+			sendLugtoDeliveryRobot();
+		} else if (methodFlag == REPORT_DELIVERY_RESULT) {
+			receiveDeliveryResult();
+		}
 	}
 	/**
 	 * 収集担当ロボットから荷物を受け取る
@@ -46,7 +64,6 @@ public class RelayStation {
 	 */
 	public void receiveLugfromCollectingRobot() {
 		try{
-			signal.waitSig();
 			Luggage luggage = (Luggage)signal.getSig();
 			luggageList.add(luggage);
 			LCD.clear();
@@ -88,66 +105,65 @@ public class RelayStation {
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
-	public void receiveDeliveryResult() throws Exception{
+	public void receiveDeliveryResult() throws IOException{
 		int id = 0;
 		Date time = null;
 		Luggage luggage = null;
-		
+
 		//try{
-			//signal.openSig("00:16:53:5D:D3:BC");
+		//signal.openSig("00:16:53:5D:D3:BC");
 		LCD.clear();
 		LCD.drawString("p", 0, 2);
 		LCD.refresh();
-			signal.waitSig();
+		LCD.clear();
+		LCD.drawString("pass", 0, 2);
+		LCD.refresh();
+		Delay.msDelay(3000);
+		LuggageCondition result = (LuggageCondition)signal.getSig();
+		LCD.clear();
+		LCD.drawString("result:"+result, 0, 2);
+		LCD.refresh();
+		Delay.msDelay(3000);
+		if(result == LuggageCondition.finished){
+			time = new Date((long)signal.getSig());
+			id = (int)signal.getSig();
 			LCD.clear();
-			LCD.drawString("pass", 0, 2);
+			LCD.drawString("time"+time, 0, 2);
+			Delay.msDelay(5000);
 			LCD.refresh();
-			Delay.msDelay(3000);
-			LuggageCondition result = (LuggageCondition)signal.getSig();
+			//System.out.println(time + "," + id);
+		}
+		else if(result == LuggageCondition.absence){
+			luggage = (Luggage)signal.getSig();
+			id = luggage.getLuggageID();
 			LCD.clear();
-			LCD.drawString("result:"+result, 0, 2);
+			LCD.drawString("luggage:"+luggage.getLuggageID(), 0, 2);
+			Delay.msDelay(10000);
 			LCD.refresh();
-			Delay.msDelay(3000);
-			if(result == LuggageCondition.finished){
-				time = new Date((long)signal.getSig());
-				id = (int)signal.getSig();
-				LCD.clear();
-				LCD.drawString("time"+time, 0, 2);
-				Delay.msDelay(5000);
-				LCD.refresh();
-				//System.out.println(time + "," + id);
-			}
-			else if(result == LuggageCondition.absence){
-				luggage = (Luggage)signal.getSig();
-				id = luggage.getLuggageID();
-				LCD.clear();
-				LCD.drawString("luggage:"+luggage.getLuggageID(), 0, 2);
-				Delay.msDelay(10000);
-				LCD.refresh();
-				luggageList.add(luggage);
-				LCD.clear();
-				LCD.drawString("ID:"+luggageList.get(0).getLuggageID(), 0, 2);
-				Delay.msDelay(10000);
-				LCD.refresh();
-				//System.out.println(luggageList.get(0).getLuggageID());
-			}
-			else if(result == LuggageCondition.wrongAddress){
-				luggage = (Luggage)signal.getSig();
-				id = luggage.getLuggageID();
-				wrongLugList.add(luggage);
-				LCD.clear();
-				LCD.drawString("ID:"+wrongLugList.get(0).getLuggageID(), 0, 2);
-				Delay.msDelay(2000);
-				LCD.refresh();
-				//System.out.println(wrongLugList.get(0).getLuggageID());
-			}
-			signal.closeSig();
-			if(result == LuggageCondition.finished){
-				//this.reportDeliveryResult(LuggageCondition.delivered, id, );
-				this.reportDeliveryResult(result, id, time);
-			}else {
-				reportDeliveryResult(result, id, time);
-			}
+			luggageList.add(luggage);
+			LCD.clear();
+			LCD.drawString("ID:"+luggageList.get(0).getLuggageID(), 0, 2);
+			Delay.msDelay(10000);
+			LCD.refresh();
+			//System.out.println(luggageList.get(0).getLuggageID());
+		}
+		else if(result == LuggageCondition.wrongAddress){
+			luggage = (Luggage)signal.getSig();
+			id = luggage.getLuggageID();
+			wrongLugList.add(luggage);
+			LCD.clear();
+			LCD.drawString("ID:"+wrongLugList.get(0).getLuggageID(), 0, 2);
+			Delay.msDelay(2000);
+			LCD.refresh();
+			//System.out.println(wrongLugList.get(0).getLuggageID());
+		}
+		signal.closeSig();
+		if(result == LuggageCondition.finished){
+			//this.reportDeliveryResult(LuggageCondition.delivered, id, );
+			this.reportDeliveryResult(result, id, time);
+		}else {
+			reportDeliveryResult(result, id, time);
+		}
 		/*}catch(Exception e){
 			System.out.println("Sorry, Don't receive report.");
 			throw e;
@@ -162,7 +178,6 @@ public class RelayStation {
 	 */
 	public void sendLugtoDeliveryRobot() {
 		try{
-			signal.waitSig();
 			signal.getSig();
 			LCD.clear();
 			LCD.drawString("message received.", 0, 2);
@@ -199,17 +214,17 @@ public class RelayStation {
 	 */
 	public void reportDeliveryResult(LuggageCondition result, int lug_id, Date fin_time)throws IOException {
 		//try{
-			signal.openSig(Port.HEAD);
-			//signal.openSig("Headquarters");
-			//signal.waitSig();
-			signal.sendSig(2);
-			signal.sendSig(lug_id);
-			signal.sendSig(result);
-			signal.sendSig(fin_time);
-			signal.closeSig();
+		signal.openSig(Port.HEAD);
+		//signal.openSig("Headquarters");
+		//signal.waitSig();
+		signal.sendSig(2);
+		signal.sendSig(lug_id);
+		signal.sendSig(result);
+		signal.sendSig(fin_time);
+		signal.closeSig();
 		/*}catch(Exception e){
 			System.out.println("Sorry, Don't report.");
-			
+
 		}*/
 	}
 
@@ -235,7 +250,7 @@ public class RelayStation {
 			System.out.println("Sorry, Don't report.");
 		}
 	}
-	
+
 	public ArrayList<Luggage> getLuggageList(){
 		return luggageList;
 	}

@@ -27,7 +27,7 @@ public class Reception extends Thread{
 	public static void main(String[] args) {
 		// テスト用
 		Reception reception = new Reception();
-		reception.run();
+		reception.start();
 		while (true) {
 			reception.sendLug();
 		}
@@ -39,13 +39,13 @@ public class Reception extends Thread{
 		this.boundary = new Boundary();
 		this.signal = new PCSignal();
 	}
+
+
 	/*配達記録を本部に送る
     public void sendDeliveryRecord() {
 
     }
-
 	 */
-	
 	public void sendReceiptTime(DeliveryRecord d) {
 		try {
 			signal.openSig(Port.HEAD);
@@ -94,31 +94,31 @@ public class Reception extends Thread{
 
 	/*中継所との引渡し結果を得る*/
 	public void getIsDelivery() {
-
+		
 	}
 
 
 	/*荷物を収集担当ロボットに渡す*/
 	public void sendLug() {
+		PCSignal sig = new PCSignal();
 		try {
 			Luggage sendLug = null;
-			System.out.println("send lug.");
-			signal.waitSig(Port.RECEPTION);
-			String getMessage = (String)signal.getSig();
+			sig.waitSig(Port.RECEPTION);
+			String getMessage = (String)sig.getSig();
 			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ロボットからのメッセージが正しかったら
 				if(!this.lugList.isEmpty()) { //荷物リストに荷物があったら
-					signal.sendSig(true);
+					sig.sendSig(true);
 					sendLug = this.lugList.remove(0);  //荷物リストから先頭の要素を取り出して送る
 					System.out.println("send lug:" + sendLug);
-					signal.sendSig(sendLug);
+					sig.sendSig(sendLug);
 					/******渡した荷物に対応する配達記録に発送時間を追記**/
 					//deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
-					
 				} else {
-					signal.sendSig(false);
+					System.out.println("no lug.");
+					sig.sendSig(false);
 				}
 			}
-			signal.closeSig();
+			sig.closeSig();
 			if (sendLug != null) {
 				sendShipTime(sendLug/*new DeliveryRecord(sendLug.getLuggageID(), sendLug)*/);
 			}
@@ -158,6 +158,7 @@ public class Reception extends Thread{
 		try {
 			RequestInformation info = this.boundary.inputReqInfo(); //バウンダリから配達情報を入力
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("荷物の名前を入力 -> ");
 			String luggageName = br.readLine();
 			int id = setLuggageIDNum();
 			Luggage lug = new Luggage(id,luggageName, info);                      /****ID,Amount追加****/
