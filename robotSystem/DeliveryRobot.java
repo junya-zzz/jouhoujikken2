@@ -305,7 +305,7 @@ public class DeliveryRobot extends Robot {
 					}//ifreceiver
 
 					else{
-						changeDeliveryResult(LuggageCondition.absence);
+						changeDeliveryResult(LuggageCondition.wrongAddress);
 						sig.sendSig("false");
 					}//else
 
@@ -313,6 +313,7 @@ public class DeliveryRobot extends Robot {
 				else  sig.sendSig("false");
 				sig.closeSig();
 			}//ifopensig
+			changeDeliveryResult(LuggageCondition.receive_absence);
 		}catch(Exception e){
 			System.out.println("error.");
 		}   

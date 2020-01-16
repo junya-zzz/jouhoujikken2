@@ -23,6 +23,7 @@ public class CollectingRobot extends Robot {
 				//c.receptionToRelayStation();
 				c.sendLug();
 				//c.relayStationToReception();
+				c.sendIsDelivery();
 			}
 	}
 
@@ -118,10 +119,10 @@ public class CollectingRobot extends Robot {
 		signal = new EV3Signal();
 		boolean result = false;
 		try {
-			signal.sendSig(0);
 			while (!signal.openSig(Port.RECEPTION)) {
 				Delay.msDelay(3000);
 			}
+			signal.sendSig(0);
 			signal.sendSig("existLuggage");
 			boolean existsLug = (boolean) signal.getSig();
 			if (existsLug) {

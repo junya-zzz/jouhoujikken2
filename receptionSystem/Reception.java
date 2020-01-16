@@ -108,8 +108,16 @@ public class Reception extends Thread{
 	public void getIsDelivery(PCSignal sig) {
 		try {
 			boolean isDelivery = (boolean) sig.getSig();
+
 			if (!isDelivery) {
-				lugList.add((Luggage) sig.getSig());
+				Luggage receiveLuggage = (Luggage) sig.getSig();
+				lugList.add(receiveLuggage);
+				sig.closeSig();
+				sig.openSig(Port.HEAD);
+				sig.sendSig(1);
+				sig.sendSig(receiveLuggage.getLuggageID());
+				sig.sendSig(LuggageCondition.relay_absence);
+				sig.sendSig(null);
 			}
 			sig.closeSig();
 		} catch (IOException e){
@@ -123,7 +131,6 @@ public class Reception extends Thread{
 	public void sendLug(PCSignal sig) {
 		try {
 			Luggage sendLug = null;
-			sig.waitSig(Port.RECEPTION);
 			String getMessage = (String)sig.getSig();
 			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ロボットからのメッセージが正しかったら
 				if(!this.lugList.isEmpty()) { //荷物リストに荷物があったら

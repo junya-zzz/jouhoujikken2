@@ -128,7 +128,7 @@ public class RelayStation {
 			LCD.refresh();
 			//System.out.println(time + "," + id);
 		}
-		else if(result == LuggageCondition.absence){
+		else if(result == LuggageCondition.receive_absence){
 			luggage = (Luggage)signal.getSig();
 			id = luggage.getLuggageID();
 			LCD.clear();

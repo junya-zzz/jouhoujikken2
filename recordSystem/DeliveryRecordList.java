@@ -48,11 +48,8 @@ public class DeliveryRecordList {
              break;     
          case wrongAddress:
              break;     
-         case absence:
-                 
+         default: 
              break;     
-             
-
 		 }
 		 deliveryRecordMap.get(luggageID).setLuggageCondition(luggagecondition);
 	}

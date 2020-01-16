@@ -34,8 +34,12 @@ public enum LuggageCondition {
 	wrongAddress,
 
 	/**
-	 * 不在
+	 * 中継所不在
 	 */
-	absence
-
+	relay_absence,
+	
+	/**
+	 * 受取人不在
+	 */
+	receive_absence
 }
