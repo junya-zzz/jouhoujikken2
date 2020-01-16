@@ -14,7 +14,6 @@ public class CollectingRobot extends Robot {
 
 	private Boolean isDelivery;
 	private EV3Signal signal;
-	private final String relaySystem = "";
 	private final String reception = "";
 	
 	public static void main(String[] args) throws IOException {
@@ -80,9 +79,11 @@ public class CollectingRobot extends Robot {
 		signal = new EV3Signal();
 		try {
 			signal.openSig(Port.RECEPTION);
-			signal.sendSig(reception);
+			signal.sendSig(1);
+			signal.sendSig(isDelivery);
 			if (!isDelivery) {
 				signal.sendSig(getLuggage());
+				setLuggage(null);
 			}
 			signal.closeSig();
 		} catch (IOException e) {
@@ -117,6 +118,7 @@ public class CollectingRobot extends Robot {
 		signal = new EV3Signal();
 		boolean result = false;
 		try {
+			signal.sendSig(0);
 			while (!signal.openSig(Port.RECEPTION)) {
 				Delay.msDelay(3000);
 			}

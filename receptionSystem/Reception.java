@@ -29,7 +29,23 @@ public class Reception extends Thread{
 		Reception reception = new Reception();
 		reception.start();
 		while (true) {
-			reception.sendLug();
+			reception.choseFunction();
+		}
+	}
+	
+	private void choseFunction() {
+		try {
+			PCSignal sig = new PCSignal();
+			sig.waitSig(Port.RECEPTION);
+			int flag = (int) sig.getSig();
+			if (flag == 0) {
+				sendLug(sig);
+			} else if (flag == 1) {
+				getIsDelivery(sig);
+			}
+		}catch (IOException e){
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -40,12 +56,8 @@ public class Reception extends Thread{
 		this.signal = new PCSignal();
 	}
 
-
-	/*配達記録を本部に送る
-    public void sendDeliveryRecord() {
-
-    }
-	 */
+	
+	// 荷物を依頼人から受け取ったことを本部に報告する
 	public void sendReceiptTime(DeliveryRecord d) {
 		try {
 			signal.openSig(Port.HEAD);
@@ -68,7 +80,7 @@ public class Reception extends Thread{
 	}
 
 
-	/*発送時間を本部に報告する*/
+	/*荷物を収集担当ロボットに渡したことを本部に報告する*/
 	public void sendShipTime(Luggage lug) {
 		try {
 			signal.openSig(Port.HEAD);
@@ -93,14 +105,22 @@ public class Reception extends Thread{
 
 
 	/*中継所との引渡し結果を得る*/
-	public void getIsDelivery() {
-		
+	public void getIsDelivery(PCSignal sig) {
+		try {
+			boolean isDelivery = (boolean) sig.getSig();
+			if (!isDelivery) {
+				lugList.add((Luggage) sig.getSig());
+			}
+			sig.closeSig();
+		} catch (IOException e){
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 
 	/*荷物を収集担当ロボットに渡す*/
-	public void sendLug() {
-		PCSignal sig = new PCSignal();
+	public void sendLug(PCSignal sig) {
 		try {
 			Luggage sendLug = null;
 			sig.waitSig(Port.RECEPTION);
