@@ -57,8 +57,9 @@ public class Luggage implements Serializable{
 
 	@Override
 	public String toString() {
-		return "荷物ID　：　" + luggageID + "\n荷物名　：　 "
-				+ luggageName + "\n[顧客情報]------------------\n" + requestInformation;
+		String separator = System.getProperty("line.separator");
+		return "荷物ID　：　" + luggageID + separator + "荷物名　：　 "
+				+ luggageName + separator + "[顧客情報]------------------" + separator + requestInformation;
 	}
 	
 	

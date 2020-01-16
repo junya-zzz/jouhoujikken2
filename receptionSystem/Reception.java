@@ -21,18 +21,26 @@ public class Reception extends Thread{
 	//private DeliveryRecordList deliList;
 	//private ArrayDeque<DeliveryRecord>; = new ArrayDeque<DeliveryRecord>();
 	private Boundary boundary;
+	private int idNum=0;
 
 	private PCSignal signal;
 
 	public static void main(String[] args) {
-		// テスト用
+		/*
 		Reception reception = new Reception();
 		reception.start();
 		while (true) {
 			reception.choseFunction();
 		}
+		 */
+		Reception reception = new Reception();
+		GUI gui = new GUI("delivery system", reception);
+		gui.setVisible(true);
+		while (true) {
+			reception.choseFunction();
+		}
 	}
-	
+
 	private void choseFunction() {
 		try {
 			PCSignal sig = new PCSignal();
@@ -56,7 +64,7 @@ public class Reception extends Thread{
 		this.signal = new PCSignal();
 	}
 
-	
+
 	// 荷物を依頼人から受け取ったことを本部に報告する
 	public void sendReceiptTime(DeliveryRecord d) {
 		try {
@@ -155,73 +163,34 @@ public class Reception extends Thread{
 		}
 	}
 
-	public int idNum=0;
-	
-	// 操作選択
-	@Override
-	public void run() {
-		while(true) {
-			String input = null;
-			try {
-				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-				System.out.println("操作を選択");
-				System.out.println("依頼 : 0, 荷物状態確認 : 1 -> ");
-				input = br.readLine();
-			} catch (IOException e){
-				e.printStackTrace();
-				System.exit(1);
-			}
-			if (input.equals("0")){
-				getLug();
-			} else if (input.equals("1")){
-				luggageTracking();
-			}
-		}
-	}
-	
 
 	/*荷物を依頼人から受け取る*/
-	public void getLug() {
-		try {
-			RequestInformation info = this.boundary.inputReqInfo(); //バウンダリから配達情報を入力
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("荷物の名前を入力 -> ");
-			String luggageName = br.readLine();
-			int id = setLuggageIDNum();
-			Luggage lug = new Luggage(id,luggageName, info);                      /****ID,Amount追加****/
-			lugList.add(lug);   //荷物リストに追加
-			//DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //荷物の配達記録生成
-			//deliveryRecord.setReceiveTime(new Date()); //配達記録に受付時間を追加
-			//deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
-			sendReceiptTime(new DeliveryRecord(lug.getLuggageID(),lug));
-		} catch (IOException e){
-			//例外
-		}
+	public Luggage getLug(RequestInformation requestInformation, String luggageName) {
+		int id = setLuggageIDNum();
+		Luggage lug = new Luggage(id,luggageName, requestInformation);                      /****ID,Amount追加****/
+		lugList.add(lug);   //荷物リストに追加
+		//DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //荷物の配達記録生成
+		//deliveryRecord.setReceiveTime(new Date()); //配達記録に受付時間を追加
+		//deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
+		sendReceiptTime(new DeliveryRecord(lug.getLuggageID(),lug));
+		return lug;
 	}
-	
+
 	// 荷物の状態を本部に問い合わせて取得し、表示する
-	private void luggageTracking() {
-		int id;
+	public DeliveryRecord luggageTracking(int id) {
+		// int id;
+		DeliveryRecord dr = null;
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("荷物IDを入力 -> ");
-			id = Integer.parseInt(br.readLine());
 			signal.openSig(Port.HEAD);
 			signal.sendSig(Headquarters.TRACK_LUGGAGE); //荷物問い合わせ
 			signal.sendSig(id);
-			DeliveryRecord dr = (DeliveryRecord)signal.getSig();
-			if (dr == null) {
-				System.out.println("荷物が見つかりません");
-			} else {
-				System.out.println(dr);
-			}
+			dr = (DeliveryRecord)signal.getSig();
 			signal.closeSig();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
-		} catch (NumberFormatException e) {
-			System.out.println("数字を入力してください");
 		}
+		return dr;
 	}
 
 	private int setLuggageIDNum() { //荷物IDを設定

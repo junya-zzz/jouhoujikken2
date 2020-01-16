@@ -134,13 +134,14 @@ public class DeliveryRecord implements Serializable{
 
 	@Override
 	public String toString() {
-		return "【配達記録ID : " + deliveryID + "】\n[荷物内容]------------------\n"
-				+ luggage  +"[配達情報]------------------\n"
-				+ "荷物状態　: " + luggageCondition + "\n受取時間　: "
-				+ showDate(receiptTime) + "\n発送時間　: "
-				+ showDate(shipTime) + "\n中継所到着時間　: " + showDate(arrivalTime) + "\n配達開始時間　: "
-				+ showDate(startTime) + "\n受け取り完了時間　: " + showDate(receiveTime) + "\n配達完了時間　: "
-				+ showDate(finishTime) +  "\n";
+		String separator = System.getProperty("line.separator");
+		return "【配達記録ID : " + deliveryID + "】" + separator + "[荷物内容]------------------" + separator
+				+ luggage  +"[配達情報]------------------" + separator
+				+ "荷物状態　: " + luggageCondition + separator + "受取時間　: "
+				+ showDate(receiptTime) + separator + "発送時間　: "
+				+ showDate(shipTime) + separator + "中継所到着時間　: " + showDate(arrivalTime) + separator + "配達開始時間　: "
+				+ showDate(startTime) + separator + "受け取り完了時間　: " + showDate(receiveTime) + separator + "配達完了時間　: "
+				+ showDate(finishTime) +  separator;
 	}
 	
 	String showDate(Date date){
