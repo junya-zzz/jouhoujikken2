@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 
+import headquartersSystem.Headquarters;
+
 
 
 
@@ -175,7 +177,7 @@ public class Reception extends Thread{
 			System.out.println("â◊ï®IDÇì¸óÕ -> ");
 			id = Integer.parseInt(br.readLine());
 			signal.openSig(Port.HEAD);
-			signal.sendSig(4); //â◊ï®ñ‚Ç¢çáÇÌÇπ
+			signal.sendSig(Headquarters.TRACK_LUGGAGE); //â◊ï®ñ‚Ç¢çáÇÌÇπ
 			signal.sendSig(id);
 			DeliveryRecord dr = (DeliveryRecord)signal.getSig();
 			if (dr == null) {
@@ -183,6 +185,7 @@ public class Reception extends Thread{
 			} else {
 				System.out.println(dr);
 			}
+			signal.closeSig();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);

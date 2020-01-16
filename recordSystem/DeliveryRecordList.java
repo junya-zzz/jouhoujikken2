@@ -56,6 +56,10 @@ public class DeliveryRecordList {
 		 }
 		 deliveryRecordMap.get(luggageID).setLuggageCondition(luggagecondition);
 	}
+	
+	public DeliveryRecord getDeliveryRecord(int id) {
+		return deliveryRecordMap.get(id);
+	}
 
 	@Override
 	public String toString() {
