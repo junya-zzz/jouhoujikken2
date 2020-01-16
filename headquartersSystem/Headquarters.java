@@ -41,19 +41,18 @@ public class Headquarters{
 					int luggageID = (int)sig.getSig();
 					LuggageCondition luggageCondition = (LuggageCondition)sig.getSig();
 					Date time = (Date)sig.getSig();
-					System.out.println("ID:"+luggageID+"LC:"+luggageCondition+"time:"+time);
-					updateDeliveryRecord(luggageID,luggageCondition,time);	
+					System.out.println("ID:"+luggageID+"LC:"+luggageCondition+"time:"+new Date());
+					updateDeliveryRecord(luggageID,luggageCondition,new Date());	
 				}else if(methodFlag==2){
 					int luggageID = (int)sig.getSig();
 					LuggageCondition luggageCondition = (LuggageCondition)sig.getSig();
-					Date time = (Date)sig.getSig();
-					Date result = new Date(new Date().getTime()+time.getTime());
-					/*Calendar calendar = Calendar.getInstance();
-					calendar.setTime(time);
-					calendar.add(Calendar.getInstance().setTime(new Date()));
-					time = calendar.getTime;*/
-					System.out.println("ID:"+luggageID+"LC:"+luggageCondition+"time:"+result);
-					updateDeliveryRecord(luggageID,luggageCondition,result);	
+					Date relayTime = (Date)sig.getSig();
+					if (luggageCondition == LuggageCondition.finished) {
+						Date result = new Date(DeliveryRecordList.getDeliveryRecord(luggageID).getStartTime().getTime()+relayTime.getTime());
+						updateDeliveryRecord(luggageID, LuggageCondition.delivered, result);
+					}
+					updateDeliveryRecord(luggageID,luggageCondition,new Date());	
+					
 				} else if (methodFlag == TRACK_LUGGAGE) {
 					sendLuggageInfomation(sig);
 				}

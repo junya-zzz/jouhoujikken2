@@ -7,7 +7,6 @@ import java.util.Date;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.lcd.TextLCD;
-import lejos.utility.Delay;
 import recordSystem.*;
 import signal.*;
 
@@ -68,7 +67,6 @@ public class RelayStation {
 			luggageList.add(luggage);
 			LCD.clear();
 			LCD.drawString("luggage:"+luggageList.get(0).getLuggageID(), 0, 2);
-			Delay.msDelay(5000);
 			LCD.refresh();
 			signal.sendSig("Receiving completed.");
 			signal.closeSig();
@@ -118,18 +116,15 @@ public class RelayStation {
 		LCD.clear();
 		LCD.drawString("pass", 0, 2);
 		LCD.refresh();
-		Delay.msDelay(3000);
 		LuggageCondition result = (LuggageCondition)signal.getSig();
 		LCD.clear();
 		LCD.drawString("result:"+result, 0, 2);
 		LCD.refresh();
-		Delay.msDelay(3000);
 		if(result == LuggageCondition.finished){
 			time = new Date((long)signal.getSig());
 			id = (int)signal.getSig();
 			LCD.clear();
 			LCD.drawString("time"+time, 0, 2);
-			Delay.msDelay(5000);
 			LCD.refresh();
 			//System.out.println(time + "," + id);
 		}
@@ -138,12 +133,10 @@ public class RelayStation {
 			id = luggage.getLuggageID();
 			LCD.clear();
 			LCD.drawString("luggage:"+luggage.getLuggageID(), 0, 2);
-			Delay.msDelay(10000);
 			LCD.refresh();
 			luggageList.add(luggage);
 			LCD.clear();
 			LCD.drawString("ID:"+luggageList.get(0).getLuggageID(), 0, 2);
-			Delay.msDelay(10000);
 			LCD.refresh();
 			//System.out.println(luggageList.get(0).getLuggageID());
 		}
@@ -153,17 +146,12 @@ public class RelayStation {
 			wrongLugList.add(luggage);
 			LCD.clear();
 			LCD.drawString("ID:"+wrongLugList.get(0).getLuggageID(), 0, 2);
-			Delay.msDelay(2000);
 			LCD.refresh();
 			//System.out.println(wrongLugList.get(0).getLuggageID());
 		}
 		signal.closeSig();
-		if(result == LuggageCondition.finished){
-			//this.reportDeliveryResult(LuggageCondition.delivered, id, );
-			this.reportDeliveryResult(result, id, time);
-		}else {
-			reportDeliveryResult(result, id, time);
-		}
+		//this.reportDeliveryResult(LuggageCondition.delivered, id, );
+		this.reportDeliveryResult(result, id, time);
 		/*}catch(Exception e){
 			System.out.println("Sorry, Don't receive report.");
 			throw e;
@@ -181,12 +169,10 @@ public class RelayStation {
 			signal.getSig();
 			LCD.clear();
 			LCD.drawString("message received.", 0, 2);
-			Delay.msDelay(2000);
 			LCD.refresh();
 			if(luggageList.isEmpty()){
 				LCD.clear();
 				LCD.drawString("empty.", 0, 2);
-				Delay.msDelay(2000);
 				LCD.refresh();
 				signal.sendSig("true");
 				signal.closeSig();
@@ -241,7 +227,7 @@ public class RelayStation {
 			//signal.openSig("Headquarters");
 			signal.openSig(Port.HEAD);
 			//signal.waitSig();
-			signal.sendSig(2);
+			signal.sendSig(1);
 			signal.sendSig(id);
 			signal.sendSig(LuggageCondition.delivering);
 			signal.sendSig(new Date(0));

@@ -136,7 +136,7 @@ public class DeliveryRecord implements Serializable{
 	public String toString() {
 		return "【配達記録ID : " + deliveryID + "】\n[荷物内容]------------------\n"
 				+ luggage  +"[配達情報]------------------\n"
-				+ "荷物状態　: " + luggageCondition + "\n受取時間　"
+				+ "荷物状態　: " + luggageCondition + "\n受取時間　: "
 				+ showDate(receiptTime) + "\n発送時間　: "
 				+ showDate(shipTime) + "\n中継所到着時間　: " + showDate(arrivalTime) + "\n配達開始時間　: "
 				+ showDate(startTime) + "\n受け取り完了時間　: " + showDate(receiveTime) + "\n配達完了時間　: "

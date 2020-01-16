@@ -3,7 +3,7 @@ package signal;
 public enum Port {
 	HEAD(50001),
 	RECEPTION(50002),
-	RECEIVE(50003),
+	RECEIVE(50009),
 	RELAY(0);
 
 	private final String PC_BT_ADDRESS = "00:1b:dc:f2:2c:33";

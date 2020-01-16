@@ -20,13 +20,11 @@ public class CollectingRobot extends Robot {
 	public static void main(String[] args) throws IOException {
 		CollectingRobot c = new CollectingRobot();
 		//c.initSensors();
-		while(true) {
 			if (c.getLugfrom()){
 				//c.receptionToRelayStation();
 				c.sendLug();
 				//c.relayStationToReception();
 			}
-		}
 	}
 
 	/**
@@ -88,7 +86,8 @@ public class CollectingRobot extends Robot {
 			}
 			signal.closeSig();
 		} catch (IOException e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
