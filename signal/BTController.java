@@ -37,7 +37,7 @@ public class BTController extends Thread{
 			btois.close();
 			btoos.close();
 			connection.close();
-			System.out.println("closed connection.");
+			System.out.println("closed connection with ev3.");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -56,6 +56,7 @@ public class BTController extends Thread{
 			}
 			cois.close();
 			coos.close();
+			System.out.println("closed connection with system.");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);

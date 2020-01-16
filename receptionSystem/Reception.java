@@ -16,7 +16,8 @@ public class Reception extends Thread{
 	public static final String EXIST_LUGGAGE = "existLuggage";
 
 	private ArrayList<Luggage> lugList;
-	private DeliveryRecordList deliList;
+	//private DeliveryRecordList deliList;
+	//private ArrayDeque<DeliveryRecord>; = new ArrayDeque<DeliveryRecord>();
 	private Boundary boundary;
 
 	private PCSignal signal;
@@ -32,7 +33,7 @@ public class Reception extends Thread{
 
 	public Reception(){
 		this.lugList = new ArrayList<Luggage>();
-		this.deliList = new DeliveryRecordList();
+		//this.deliList = new DeliveryRecordList();
 		this.boundary = new Boundary();
 		this.signal = new PCSignal();
 	}
@@ -42,16 +43,38 @@ public class Reception extends Thread{
     }
 
 	 */
-
-
-	/*発送時間を本部に報告する*/
-	public void sendShipTime(DeliveryRecord d) {
+	
+	public void sendReceiptTime(DeliveryRecord d) {
 		try {
 			signal.openSig(Port.HEAD);
 			/**配達記録リストからサーチ**/
 			signal.sendSig(0);
 			signal.sendSig(d); 
 
+
+
+			/**************/
+			//signal.sendSig(deliveryRecord);
+			signal.closeSig();
+
+		}catch(Exception e) {
+			//例外処理
+			//
+			//
+
+		}
+	}
+
+
+	/*発送時間を本部に報告する*/
+	public void sendShipTime(Luggage lug) {
+		try {
+			signal.openSig(Port.HEAD);
+			/**配達記録リストからサーチ**/
+			signal.sendSig(1);
+			signal.sendSig(lug.getLuggageID()); 
+			signal.sendSig(LuggageCondition.shipping); 
+			signal.sendSig(new Date()); 
 
 
 			/**************/
@@ -87,14 +110,14 @@ public class Reception extends Thread{
 					System.out.println("send lug:" + sendLug);
 					signal.sendSig(sendLug);
 					/******渡した荷物に対応する配達記録に発送時間を追記**/
-					deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
+					//deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
 					
 				} else {
 					signal.sendSig(false);
 				}
 			}
 			signal.closeSig();
-			sendShipTime(new DeliveryRecord(sendLug.getLuggageID(), sendLug));
+			sendShipTime(sendLug/*new DeliveryRecord(sendLug.getLuggageID(), sendLug)*/);
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -135,9 +158,10 @@ public class Reception extends Thread{
 			int id = setLuggageIDNum();
 			Luggage lug = new Luggage(id,luggageName, info);                      /****ID,Amount追加****/
 			lugList.add(lug);   //荷物リストに追加
-			DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //荷物の配達記録生成
-			deliveryRecord.setReceiveTime(new Date()); //配達記録に受付時間を追加
-			deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
+			//DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //荷物の配達記録生成
+			//deliveryRecord.setReceiveTime(new Date()); //配達記録に受付時間を追加
+			//deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
+			sendReceiptTime(new DeliveryRecord(lug.getLuggageID(),lug));
 		} catch (IOException e){
 			//例外
 		}

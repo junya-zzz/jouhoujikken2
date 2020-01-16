@@ -1,5 +1,6 @@
 package relaySystem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -87,33 +88,38 @@ public class RelayStation {
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
-	public boolean receiveDeliveryResult() throws Exception{
+	public void receiveDeliveryResult() throws Exception{
 		int id = 0;
 		Date time = null;
 		Luggage luggage = null;
 		
-		try{
+		//try{
 			//signal.openSig("00:16:53:5D:D3:BC");
+		LCD.clear();
+		LCD.drawString("p", 0, 2);
+		LCD.refresh();
 			signal.waitSig();
 			LCD.clear();
 			LCD.drawString("pass", 0, 2);
+			LCD.refresh();
 			Delay.msDelay(3000);
-			String result = (String)signal.getSig();
+			LuggageCondition result = (LuggageCondition)signal.getSig();
 			LCD.clear();
 			LCD.drawString("result:"+result, 0, 2);
+			LCD.refresh();
 			Delay.msDelay(3000);
-			if(result.equals("finished")){
+			if(result == LuggageCondition.finished){
 				time = new Date((long)signal.getSig());
 				id = (int)signal.getSig();
 				LCD.clear();
 				LCD.drawString("time"+time, 0, 2);
 				Delay.msDelay(5000);
 				LCD.refresh();
-				return true;
 				//System.out.println(time + "," + id);
 			}
-			else if(result.equals("absence")){
+			else if(result == LuggageCondition.absence){
 				luggage = (Luggage)signal.getSig();
+				id = luggage.getLuggageID();
 				LCD.clear();
 				LCD.drawString("luggage:"+luggage.getLuggageID(), 0, 2);
 				Delay.msDelay(10000);
@@ -123,26 +129,29 @@ public class RelayStation {
 				LCD.drawString("ID:"+luggageList.get(0).getLuggageID(), 0, 2);
 				Delay.msDelay(10000);
 				LCD.refresh();
-				return true;
 				//System.out.println(luggageList.get(0).getLuggageID());
 			}
-			else if(result.equals("wrongAddress")){
+			else if(result == LuggageCondition.wrongAddress){
 				luggage = (Luggage)signal.getSig();
+				id = luggage.getLuggageID();
 				wrongLugList.add(luggage);
 				LCD.clear();
 				LCD.drawString("ID:"+wrongLugList.get(0).getLuggageID(), 0, 2);
 				Delay.msDelay(2000);
 				LCD.refresh();
-				return true;
 				//System.out.println(wrongLugList.get(0).getLuggageID());
 			}
 			signal.closeSig();
-			this.reportDeliveryResult(result, id, time);
-			return false;
-		}catch(Exception e){
+			if(result == LuggageCondition.finished){
+				//this.reportDeliveryResult(LuggageCondition.delivered, id, );
+				this.reportDeliveryResult(result, id, time);
+			}else {
+				reportDeliveryResult(result, id, time);
+			}
+		/*}catch(Exception e){
 			System.out.println("Sorry, Don't receive report.");
 			throw e;
-		}
+		}*/
 	}
 
 	/**
@@ -170,12 +179,12 @@ public class RelayStation {
 			else{
 				Luggage luggage = luggageList.get(0);
 				int id = luggage.getLuggageID();
-				DeliveryRecord dr = new DeliveryRecord(id, luggageList.get(0));
-				Date start = dr.getStartTime();
+				//DeliveryRecord dr = new DeliveryRecord(id, luggageList.get(0));
+				//Date start = dr.getStartTime();
 				//signal.sendSig(luggageList.isEmpty());
 				signal.sendSig(luggage);
 				signal.closeSig();
-				this.reportDeliveryStart(id, start);
+				this.reportDeliveryStart(id);
 			}
 		}catch(Exception e){
 			System.out.println("Sorry, Don't report.");
@@ -188,33 +197,20 @@ public class RelayStation {
 	 * 手順
 	 * メソッドに対応する操作を行う
 	 */
-	public void reportDeliveryResult(String result, int lug_id, Date fin_time) {
-		try{
+	public void reportDeliveryResult(LuggageCondition result, int lug_id, Date fin_time)throws IOException {
+		//try{
 			signal.openSig(Port.HEAD);
 			//signal.openSig("Headquarters");
 			//signal.waitSig();
-			if(result.equals("finished")){
-			  signal.sendSig(1);
-			  signal.sendSig(lug_id);
-			  signal.sendSig(LuggageCondition.finished);
-			  signal.sendSig(fin_time);
-			}
-			else if(result.equals("absence")){
-			  signal.sendSig(1);	
-			  signal.sendSig(lug_id);
-			  signal.sendSig(LuggageCondition.absence);
-			  signal.sendSig(fin_time);
-			}
-			else if(result.equals("wrongAddress")){
-			  signal.sendSig(1);	
-			  signal.sendSig(lug_id);
-		      signal.sendSig(LuggageCondition.wrongAddress);
-		      signal.sendSig(fin_time);
-			}
+			signal.sendSig(2);
+			signal.sendSig(lug_id);
+			signal.sendSig(result);
+			signal.sendSig(fin_time);
 			signal.closeSig();
-		}catch(Exception e){
+		/*}catch(Exception e){
 			System.out.println("Sorry, Don't report.");
-		}
+			
+		}*/
 	}
 
 	/**
@@ -225,15 +221,15 @@ public class RelayStation {
 	 *
 	 *
 	 */
-	public void reportDeliveryStart(int id, Date start) {
+	public void reportDeliveryStart(int id) {
 		try{
 			//signal.openSig("Headquarters");
 			signal.openSig(Port.HEAD);
 			//signal.waitSig();
-			signal.sendSig(1);
+			signal.sendSig(2);
 			signal.sendSig(id);
 			signal.sendSig(LuggageCondition.delivering);
-			signal.sendSig(start);
+			signal.sendSig(new Date(0));
 			signal.closeSig();
 		}catch(Exception e){
 			System.out.println("Sorry, Don't report.");
