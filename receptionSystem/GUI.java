@@ -9,8 +9,13 @@ import recordSystem.RequestInformation;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -33,16 +38,36 @@ class GUI extends JFrame{
 	JTextField text12;
 	
 	JLabel resultLabel;
+	CardLayout cardLayout;
+	JPanel cardPanel;
 
 	RequestInformation requestInformation = null;
 	Reception reception;
-
 
 	GUI(String title, Reception r){
 		reception = r;
 		setTitle(title);
 		setBounds(100, 100, 500, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+		cardPanel = new JPanel();
+		cardLayout = new CardLayout();
+		cardPanel.setLayout(cardLayout);
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		JRadioButton requestRadioButton = new JRadioButton("荷物追跡", true);
+		JRadioButton trackRadioButton = new JRadioButton("荷物依頼", false);
+		JRadioButton fixRadioButton = new JRadioButton("荷物情報修正", false);
+		buttonGroup.add(requestRadioButton);
+		buttonGroup.add(trackRadioButton);
+		buttonGroup.add(fixRadioButton);
+		requestRadioButton.setActionCommand("request");
+		trackRadioButton.setActionCommand("track");
+		fixRadioButton.setActionCommand("fix");
+		requestRadioButton.addActionListener(new RadioActionListener());
+		trackRadioButton.addActionListener(new RadioActionListener());
+		fixRadioButton.addActionListener(new RadioActionListener());
 
 		text1 = new JTextField(30);
 		text2 = new JTextField(30);
@@ -85,6 +110,8 @@ class GUI extends JFrame{
 		requestBox.add(text5);
 	    requestBox.add(Box.createVerticalStrut(10));
 		requestBox.add(requestButton);
+		JPanel requestPanel = new JPanel();
+		requestPanel.add(requestBox);
 		
 		Box trackBox = Box.createHorizontalBox();
 	    trackBox.setBorder(BorderFactory.createTitledBorder("荷物問い合わせフォーム"));
@@ -94,6 +121,8 @@ class GUI extends JFrame{
 		trackBox.add(text6);
 	    trackBox.add(Box.createHorizontalStrut(10));
 		trackBox.add(trackButton);
+		JPanel trackPanel = new JPanel();
+		trackPanel.add(trackBox);
 		
 		Box fixLugBox = Box.createVerticalBox();
 	    fixLugBox.setBorder(BorderFactory.createTitledBorder("依頼情報修正フォーム"));
@@ -118,12 +147,23 @@ class GUI extends JFrame{
 	    fixLugBox.add(Box.createVerticalStrut(10));
 		fixLugBox.add(fixButton);
 		
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
-		contentPane.add(requestBox);
-		contentPane.add(trackBox);
-		contentPane.add(fixLugBox);
+		cardPanel.add(requestPanel, "request");
+		cardPanel.add(trackPanel, "track");
+		cardPanel.add(fixLugBox, "fix");
+		
+		contentPane.add(requestRadioButton);
+		contentPane.add(trackRadioButton);
+		contentPane.add(fixRadioButton);
+		contentPane.add(cardPanel);
 		contentPane.add(resultLabel);
+	}
+	
+	class RadioActionListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String command = e.getActionCommand();
+			cardLayout.show(cardPanel, command);
+		}
 	}
 
 	class RequestLuggage implements ActionListener{
