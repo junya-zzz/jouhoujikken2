@@ -34,28 +34,26 @@ public class DeliveryRobot extends Robot {
 	private static long elapsedTime;   //元々Date型だったけどlong型だった
 	//受け取り時間を得るために中継所から受取人宅までの時間を計り、配達開始時間に足して、受け取り時間を作る
 
-
-	private final static int ID=10;
-
+//public static int ID=8;
 
 	public static void main(String[] args) throws IOException{
-		//initSensors();
+		initSensors();
 
-		//while(true){   
-			//try {
-				//Delay.msDelay(1000);
-				//waitingToRelayStation();
+		while(true){   
+			try {
+				Delay.msDelay(30000);
+				waitingToRelayStation();
 				if(getLug()){
-					//relayStationToReceiver();
+					relayStationToReceiver();
 					sendLug();
-					//receiverToRelayStation();
+					receiverToRelayStation();
 					sendDeliveryRecord();
 				}//if
-				//relayStationToWaiting();
-			//} catch(IOException e){
-				//e.printStackTrace();
-			//}      
-		//}//while(1) 
+				relayStationToWaiting();
+			} catch(IOException e){
+				e.printStackTrace();
+			}      
+		}//while(1) 
 
 	}//main
 
@@ -68,12 +66,9 @@ public class DeliveryRobot extends Robot {
 	 * 中継所から待機所まで行く
 	 */
 	private static void relayStationToWaiting() throws IOException{
-		robotExists(RIGHT,45,50);
-		turn(LEFT,45);
-		lineTrace(1300,LEFT,200); 
-		turn(LEFT,40);
-		lineTrace(2100,RIGHT,200); 
-		stopOnGray(LEFT);  
+		lineTrace(1200,LEFT,200); 
+		lineTrace(1000,RIGHT,200); 
+		stopOnGray(RIGHT);  
 		changePos("Waiting");
 		turn(LEFT,180);
 	}//relayStationToWaiting
@@ -83,7 +78,7 @@ public class DeliveryRobot extends Robot {
 	 */
 	private static void receiverToRelayStation(){
 
-		//Integer ID=getLuggage().getRequestInformation().getReceiverAddress();
+		Integer ID=getLuggage().getRequestInformation().getReceiverAddress();
 		Integer quo;//商
 		Integer re;//余り
 		quo=ID/4;
@@ -107,26 +102,27 @@ public class DeliveryRobot extends Robot {
 			}//if re1
 
 			for(int i=0;i<quo;i++){
-				lineTrace(700,LEFT,200); 
+				lineTrace(470,LEFT,200); 
 				stopOnGray(LEFT);	
 			}//for
+			turn(RIGHT, 15);
 
 		}//elseif
 
 		else{
 			if(re==2){	 
-				lineTrace(300,LEFT,150);
+				lineTrace(470,LEFT,150);
 				stopOnGray(LEFT);
 				turn(LEFT,30);
 			}//if
 
 			for(int i=0;i<quo;i++){
-				lineTrace(700,LEFT,200); 
+				lineTrace(470,LEFT,200); 
 				stopOnGray(LEFT);	
 			}//for	
 
 			for(int i=0;i<4;i++){
-				lineTrace(700,RIGHT,200); 
+				lineTrace(470,RIGHT,200); 
 				stopOnGray(RIGHT);	
 			}//for
 
@@ -137,12 +133,14 @@ public class DeliveryRobot extends Robot {
 		lineTrace(3300,RIGHT,200); 
 		stopOnGray(RIGHT);
 		turn(RIGHT,40);
-		lineTrace(750,RIGHT,150);
-		turn(RIGHT,40);
+		lineTrace(700,RIGHT,150);
+		while(robotExists(RIGHT, 40, 1.0f)){
+			turn(LEFT, 40);
+			Delay.msDelay(10000);
+		}
+		//turn(LEFT,40);
 		lineTrace(700,RIGHT,150);
 		stopOnGray(RIGHT);
-
-
 
 		changePos("RelayStation");
 		turn(LEFT,180);
@@ -152,12 +150,13 @@ public class DeliveryRobot extends Robot {
 	 * 待機所から中継所に行く
 	 */
 	private static void waitingToRelayStation() throws IOException{
-		lineTrace(2300,LEFT,300); 
-		robotExists(RIGHT,45,50);
-		turn(LEFT,45);
-		turn(RIGHT,45);
+		lineTrace(2150,LEFT,300); 
+		while(robotExists(RIGHT,45,1.0f)){
+			turn(LEFT,45);
+			Delay.msDelay(10000);
+		}
 		lineTrace(900,RIGHT,200);
-		stopOnGray(LEFT);  
+		stopOnGray(RIGHT);
 
 		changePos("RelayStation");
 		turn(LEFT,180);
@@ -169,19 +168,19 @@ public class DeliveryRobot extends Robot {
 	private static void relayStationToReceiver() throws IOException{
 		long start=0;
 		long end=0;
-		//Integer ID=getLuggage().getRequestInformation().getReceiverAddress();
+		Integer ID=getLuggage().getRequestInformation().getReceiverAddress();
 		Integer quo;//商
 		Integer re;//余り
 		quo=ID/4;
 		re=ID%4;
-		robotExists(RIGHT,45,50);
-		turn(LEFT,45);
+		
 		//受取人宅ゾーン以前
 		start=System.currentTimeMillis();
-		lineTrace(1400,LEFT,200); 
+		lineTrace(1200,LEFT,200); 
 		stopOnGray(LEFT);  
-		turn(LEFT,90);
-		lineTrace(3000,LEFT,300); 
+		turn(LEFT,45);
+		lineTrace(3000,LEFT,300);
+		turn(RIGHT, 15);
 		stopOnGray(RIGHT); 
 		//受取人宅ゾーン
 		if(quo==0){

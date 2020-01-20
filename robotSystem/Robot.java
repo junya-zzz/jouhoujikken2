@@ -98,6 +98,7 @@ public class Robot {
 		float target = 0.3f;
 		float black = 0.02f;
 		float white = 0.80f;
+		//float white = 0.85f;
 		float barance;
 		int power;
 		float diff;
