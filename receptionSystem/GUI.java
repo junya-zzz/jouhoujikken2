@@ -8,8 +8,13 @@ import recordSystem.RequestInformation;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -24,16 +29,32 @@ class GUI extends JFrame{
 	JTextField text5;
 	JTextField text6;
 	JLabel resultLabel;
+	CardLayout cardLayout;
+	JPanel cardPanel;
 
 	RequestInformation requestInformation = null;
 	Reception reception;
-
 
 	GUI(String title, Reception r){
 		reception = r;
 		setTitle(title);
 		setBounds(100, 100, 500, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+		cardPanel = new JPanel();
+		cardLayout = new CardLayout();
+		cardPanel.setLayout(cardLayout);
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		JRadioButton requestRadioButton = new JRadioButton("â◊ï®í«ê’", true);
+		JRadioButton trackRadioButton = new JRadioButton("â◊ï®àÀóä", false);
+		buttonGroup.add(requestRadioButton);
+		buttonGroup.add(trackRadioButton);
+		requestRadioButton.setActionCommand("request");
+		trackRadioButton.setActionCommand("track");
+		requestRadioButton.addActionListener(new RadioActionListener());
+		trackRadioButton.addActionListener(new RadioActionListener());
 
 		text1 = new JTextField(30);
 		text2 = new JTextField(30);
@@ -75,12 +96,24 @@ class GUI extends JFrame{
 		trackBox.add(text6);
 	    trackBox.add(Box.createHorizontalStrut(10));
 		trackBox.add(trackButton);
+		JPanel trackPanel = new JPanel();
+		trackPanel.add(trackBox);
 		
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
-		contentPane.add(requestBox);
-		contentPane.add(trackBox);
+		cardPanel.add(requestBox, "request");
+		cardPanel.add(trackPanel, "track");
+		
+		contentPane.add(requestRadioButton);
+		contentPane.add(trackRadioButton);
+		contentPane.add(cardPanel);
 		contentPane.add(resultLabel);
+	}
+	
+	class RadioActionListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String command = e.getActionCommand();
+			cardLayout.show(cardPanel, command);
+		}
 	}
 
 	class RequestLuggage implements ActionListener{
