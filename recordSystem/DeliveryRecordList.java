@@ -54,6 +54,9 @@ public class DeliveryRecordList {
 		 deliveryRecordMap.get(luggageID).setLuggageCondition(luggagecondition);
 	}
 	
+	public void fixDeliveryRecord(int luggageID, Luggage lug){
+		 deliveryRecordMap.get(luggageID).setLuggage(lug);
+	}
 	public DeliveryRecord getDeliveryRecord(int id) {
 		return deliveryRecordMap.get(id);
 	}

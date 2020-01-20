@@ -19,17 +19,17 @@ public class RelayStation {
 	public static int REPORT_DELIVERY_RESULT = 2;
 
 	/**
-	 * •ÛŠÇ‰×•¨
+	 * ä¿ç®¡è·ç‰©
 	 */
 	private ArrayList<Luggage> luggageList;
 
 	/**
-	 * ˆ¶æŠÔˆá‚¢•ÛŠÇ‰×•¨
+	 * å®›å…ˆé–“é•ã„ä¿ç®¡è·ç‰©
 	 */
 	private ArrayList<Luggage> wrongLugList;
 
 	/**
-	 * ’ÊM—pƒIƒuƒWƒFƒNƒg
+	 * é€šä¿¡ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 */
 	private EV3Signal signal;
 
@@ -43,6 +43,7 @@ public class RelayStation {
 		RelayStation rs = new RelayStation();
 		while (true) {
 			rs.choseFunction();
+			rs.receiveFixedLug();
 		}
 	}
 
@@ -58,10 +59,10 @@ public class RelayStation {
 		}
 	}
 	/**
-	 * ûW’S“–ƒƒ{ƒbƒg‚©‚ç‰×•¨‚ğó‚¯æ‚é
+	 * åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã‹ã‚‰è·ç‰©ã‚’å—ã‘å–ã‚‹
 	 *
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void receiveLugfromCollectingRobot() {
 		try{
@@ -79,10 +80,10 @@ public class RelayStation {
 	}
 
 	/**
-	 * ûW’S“–ƒƒ{ƒbƒg‚©‚ç‚Ì‰×•¨‚Ìó‚¯æ‚è‚ğ–{•”‚É•ñ‚·‚é
+	 * åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã‹ã‚‰ã®è·ç‰©ã®å—ã‘å–ã‚Šã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 *
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void reportReceivingToHeadquarters(Date ship_time) {
 		try{
@@ -100,10 +101,10 @@ public class RelayStation {
 	}
 
 	/**
-	 * ‰×•¨‚Ì”z’BŒ‹‰Ê‚Ì•ñ‚ğó‚¯,–{•”‚É‚à•ñ‚·‚é
+	 * è·ç‰©ã®é…é”çµæœã®å ±å‘Šã‚’å—ã‘,æœ¬éƒ¨ã«ã‚‚å ±å‘Šã™ã‚‹
 	 *
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void receiveDeliveryResult() throws IOException{
 		int id = 0;
@@ -136,10 +137,10 @@ public class RelayStation {
 	}
 
 	/**
-	 * ”z’B’S“–ƒƒ{ƒbƒg‚É‰×•¨‚ğ“n‚µA–{•”‚É•ñ‚·‚é
+	 * é…é”æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«è·ç‰©ã‚’æ¸¡ã—ã€æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 *
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void sendLugtoDeliveryRobot() {
 		try{
@@ -170,10 +171,10 @@ public class RelayStation {
 	}
 
 	/**
-	 * ‰×•¨‚Ì”z’BŒ‹‰Ê‚ğ–{•”‚É•ñ‚·‚é
+	 * è·ç‰©ã®é…é”çµæœã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 *
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 */
 	public void reportDeliveryResult(LuggageCondition result, int lug_id, Date fin_time)throws IOException {
 		//try{
@@ -187,15 +188,14 @@ public class RelayStation {
 		signal.closeSig();
 		/*}catch(Exception e){
 			System.out.println("Sorry, Don't report.");
-
 		}*/
 	}
 
 	/**
-	 * ”z’B’S“–ƒƒ{ƒbƒg‚É‰×•¨‚ğ“n‚µ‚½‚±‚Æ‚ğ–{•”‚É•ñ‚·‚é
+	 * é…é”æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«è·ç‰©ã‚’æ¸¡ã—ãŸã“ã¨ã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	 *
-	 * è‡
-	 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤
+	 * æ‰‹é †
+	 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã†
 	 *
 	 *
 	 */
@@ -208,6 +208,22 @@ public class RelayStation {
 			signal.sendSig(id);
 			signal.sendSig(LuggageCondition.delivering);
 			signal.sendSig(new Date(0));
+			signal.closeSig();
+		}catch(Exception e){
+			System.out.println("Sorry, Don't report.");
+		}
+	}
+	
+	public  void receiveFixedLug(){
+		try{
+			signal.openSig(Port.HEAD);
+			signal.sendSig(5);
+			int listNum = (int)signal.getSig();
+			for(int i = 0;i<listNum;i++){
+				Luggage fixedLug = (Luggage)signal.getSig();
+				wrongLugList.remove(fixedLug.getLuggageID());
+				luggageList.add(fixedLug);
+			}
 			signal.closeSig();
 		}catch(Exception e){
 			System.out.println("Sorry, Don't report.");

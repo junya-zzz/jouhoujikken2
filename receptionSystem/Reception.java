@@ -65,11 +65,11 @@ public class Reception extends Thread{
 	}
 
 
-	// ‰×•¨‚ğˆË—Šl‚©‚çó‚¯æ‚Á‚½‚±‚Æ‚ğ–{•”‚É•ñ‚·‚é
+	// è·ç‰©ã‚’ä¾é ¼äººã‹ã‚‰å—ã‘å–ã£ãŸã“ã¨ã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹
 	public void sendReceiptTime(DeliveryRecord d) {
 		try {
 			signal.openSig(Port.HEAD);
-			/**”z’B‹L˜^ƒŠƒXƒg‚©‚çƒT[ƒ`**/
+			/**é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã‹ã‚‰ã‚µãƒ¼ãƒ**/
 			signal.sendSig(0);
 			signal.sendSig(d); 
 
@@ -80,7 +80,7 @@ public class Reception extends Thread{
 			signal.closeSig();
 
 		}catch(Exception e) {
-			//—áŠOˆ—
+			//ä¾‹å¤–å‡¦ç†
 			//
 			//
 
@@ -88,11 +88,11 @@ public class Reception extends Thread{
 	}
 
 
-	/*‰×•¨‚ğûW’S“–ƒƒ{ƒbƒg‚É“n‚µ‚½‚±‚Æ‚ğ–{•”‚É•ñ‚·‚é*/
+	/*è·ç‰©ã‚’åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«æ¸¡ã—ãŸã“ã¨ã‚’æœ¬éƒ¨ã«å ±å‘Šã™ã‚‹*/
 	public void sendShipTime(Luggage lug) {
 		try {
 			signal.openSig(Port.HEAD);
-			/**”z’B‹L˜^ƒŠƒXƒg‚©‚çƒT[ƒ`**/
+			/**é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã‹ã‚‰ã‚µãƒ¼ãƒ**/
 			signal.sendSig(1);
 			signal.sendSig(lug.getLuggageID()); 
 			signal.sendSig(LuggageCondition.shipping); 
@@ -104,7 +104,7 @@ public class Reception extends Thread{
 			signal.closeSig();
 
 		}catch(Exception e) {
-			//—áŠOˆ—
+			//ä¾‹å¤–å‡¦ç†
 			//
 			//
 
@@ -112,7 +112,7 @@ public class Reception extends Thread{
 	}
 
 
-	/*’†ŒpŠ‚Æ‚Ìˆø“n‚µŒ‹‰Ê‚ğ“¾‚é*/
+	/*ä¸­ç¶™æ‰€ã¨ã®å¼•æ¸¡ã—çµæœã‚’å¾—ã‚‹*/
 	public void getIsDelivery(PCSignal sig) {
 		try {
 			boolean isDelivery = (boolean) sig.getSig();
@@ -135,18 +135,18 @@ public class Reception extends Thread{
 	}
 
 
-	/*‰×•¨‚ğûW’S“–ƒƒ{ƒbƒg‚É“n‚·*/
+	/*è·ç‰©ã‚’åé›†æ‹…å½“ãƒ­ãƒœãƒƒãƒˆã«æ¸¡ã™*/
 	public void sendLug(PCSignal sig) {
 		try {
 			Luggage sendLug = null;
 			String getMessage = (String)sig.getSig();
-			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ƒƒ{ƒbƒg‚©‚ç‚ÌƒƒbƒZ[ƒW‚ª³‚µ‚©‚Á‚½‚ç
-				if(!this.lugList.isEmpty()) { //‰×•¨ƒŠƒXƒg‚É‰×•¨‚ª‚ ‚Á‚½‚ç
+			if(getMessage.contentEquals(EXIST_LUGGAGE)) { //ãƒ­ãƒœãƒƒãƒˆã‹ã‚‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒæ­£ã—ã‹ã£ãŸã‚‰
+				if(!this.lugList.isEmpty()) { //è·ç‰©ãƒªã‚¹ãƒˆã«è·ç‰©ãŒã‚ã£ãŸã‚‰
 					sig.sendSig(true);
-					sendLug = this.lugList.remove(0);  //‰×•¨ƒŠƒXƒg‚©‚çæ“ª‚Ì—v‘f‚ğæ‚èo‚µ‚Ä‘—‚é
+					sendLug = this.lugList.remove(0);  //è·ç‰©ãƒªã‚¹ãƒˆã‹ã‚‰å…ˆé ­ã®è¦ç´ ã‚’å–ã‚Šå‡ºã—ã¦é€ã‚‹
 					System.out.println("send lug:" + sendLug);
 					sig.sendSig(sendLug);
-					/******“n‚µ‚½‰×•¨‚É‘Î‰‚·‚é”z’B‹L˜^‚É”­‘—ŠÔ‚ğ’Ç‹L**/
+					/******æ¸¡ã—ãŸè·ç‰©ã«å¯¾å¿œã™ã‚‹é…é”è¨˜éŒ²ã«ç™ºé€æ™‚é–“ã‚’è¿½è¨˜**/
 					//deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
 				} else {
 					System.out.println("no lug.");
@@ -164,25 +164,25 @@ public class Reception extends Thread{
 	}
 
 
-	/*‰×•¨‚ğˆË—Šl‚©‚çó‚¯æ‚é*/
+	/*è·ç‰©ã‚’ä¾é ¼äººã‹ã‚‰å—ã‘å–ã‚‹*/
 	public Luggage getLug(RequestInformation requestInformation, String luggageName) {
 		int id = setLuggageIDNum();
-		Luggage lug = new Luggage(id,luggageName, requestInformation);                      /****ID,Amount’Ç‰Á****/
-		lugList.add(lug);   //‰×•¨ƒŠƒXƒg‚É’Ç‰Á
-		//DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //‰×•¨‚Ì”z’B‹L˜^¶¬
-		//deliveryRecord.setReceiveTime(new Date()); //”z’B‹L˜^‚Éó•tŠÔ‚ğ’Ç‰Á
-		//deliList.addDeliveryRecord(deliveryRecord); //”z’B‹L˜^ƒŠƒXƒg‚É’Ç‰Á
+		Luggage lug = new Luggage(id,luggageName, requestInformation);                      /****ID,Amountè¿½åŠ ****/
+		lugList.add(lug);   //è·ç‰©ãƒªã‚¹ãƒˆã«è¿½åŠ 
+		//DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //è·ç‰©ã®é…é”è¨˜éŒ²ç”Ÿæˆ
+		//deliveryRecord.setReceiveTime(new Date()); //é…é”è¨˜éŒ²ã«å—ä»˜æ™‚é–“ã‚’è¿½åŠ 
+		//deliList.addDeliveryRecord(deliveryRecord); //é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã«è¿½åŠ 
 		sendReceiptTime(new DeliveryRecord(lug.getLuggageID(),lug));
 		return lug;
 	}
 
-	// ‰×•¨‚Ìó‘Ô‚ğ–{•”‚É–â‚¢‡‚í‚¹‚Äæ“¾‚µA•\¦‚·‚é
+	// è·ç‰©ã®çŠ¶æ…‹ã‚’æœ¬éƒ¨ã«å•ã„åˆã‚ã›ã¦å–å¾—ã—ã€è¡¨ç¤ºã™ã‚‹
 	public DeliveryRecord luggageTracking(int id) {
 		// int id;
 		DeliveryRecord dr = null;
 		try {
 			signal.openSig(Port.HEAD);
-			signal.sendSig(Headquarters.TRACK_LUGGAGE); //‰×•¨–â‚¢‡‚í‚¹
+			signal.sendSig(Headquarters.TRACK_LUGGAGE); //è·ç‰©å•ã„åˆã‚ã›
 			signal.sendSig(id);
 			dr = (DeliveryRecord)signal.getSig();
 			signal.closeSig();
@@ -193,8 +193,20 @@ public class Reception extends Thread{
 		return dr;
 	}
 
-	private int setLuggageIDNum() { //‰×•¨ID‚ğİ’è
+	private int setLuggageIDNum() { //è·ç‰©IDã‚’è¨­å®š
 		idNum++;
 		return idNum;
+	}
+	
+	public void fixeLuggage(Luggage lug){
+		try {
+			signal.openSig(Port.HEAD);
+			signal.sendSig(Headquarters.UPDATE_FIXEDLUGLIST); //è·ç‰©ä¿®æ­£
+			signal.sendSig(lug);
+			signal.closeSig();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 }
