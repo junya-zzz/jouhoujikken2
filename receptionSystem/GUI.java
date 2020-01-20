@@ -58,62 +58,62 @@ class GUI extends JFrame{
 		text11 = new JTextField(30);
 		text12 = new JTextField(30);
 		
-		JButton requestButton = new JButton("ä¾é ¼ã™ã‚‹");
-		JButton trackButton = new JButton("å•ã„åˆã‚ã›ã‚‹");
-		JButton fixButton = new JButton("è·ç‰©æƒ…å ±ã‚’ä¿®æ­£");
+		JButton requestButton = new JButton("ˆË—Š‚·‚é");
+		JButton trackButton = new JButton("–â‚¢‡‚í‚¹‚é");
+		JButton fixButton = new JButton("‰×•¨î•ñ‚ğC³");
 		requestButton.addActionListener(new RequestLuggage());
 		trackButton.addActionListener(new TrackLuggage());
 		fixButton.addActionListener(new FixedLuggage());
 		resultLabel = new JLabel();
 
 		Box requestBox = Box.createVerticalBox();
-	    requestBox.setBorder(BorderFactory.createTitledBorder("ä¾é ¼æƒ…å ±å…¥åŠ›ãƒ•ã‚©ãƒ¼ãƒ "));
+	    requestBox.setBorder(BorderFactory.createTitledBorder("ˆË—Šî•ñ“ü—ÍƒtƒH[ƒ€"));
 	    requestBox.add(Box.createVerticalStrut(10));
-		requestBox.add(new JLabel("ä¾é ¼è€…å"));
+		requestBox.add(new JLabel("ˆË—ŠÒ–¼"));
 		requestBox.add(text1);
 	    requestBox.add(Box.createVerticalStrut(10));
-		requestBox.add(new JLabel("å—å–äººå"));
+		requestBox.add(new JLabel("óæl–¼"));
 		requestBox.add(text2);
 	    requestBox.add(Box.createVerticalStrut(10));
-		requestBox.add(new JLabel("é›»è©±ç•ªå·"));
+		requestBox.add(new JLabel("“d˜b”Ô†"));
 		requestBox.add(text3);
 	    requestBox.add(Box.createVerticalStrut(10));
-		requestBox.add(new JLabel("å—å–äººä½æ‰€"));
+		requestBox.add(new JLabel("óælZŠ"));
 		requestBox.add(text4);
 	    requestBox.add(Box.createVerticalStrut(10));
-		requestBox.add(new JLabel("è·ç‰©å"));
+		requestBox.add(new JLabel("‰×•¨–¼"));
 		requestBox.add(text5);
 	    requestBox.add(Box.createVerticalStrut(10));
 		requestBox.add(requestButton);
 		
 		Box trackBox = Box.createHorizontalBox();
-	    trackBox.setBorder(BorderFactory.createTitledBorder("è·ç‰©å•ã„åˆã‚ã›ãƒ•ã‚©ãƒ¼ãƒ "));
+	    trackBox.setBorder(BorderFactory.createTitledBorder("‰×•¨–â‚¢‡‚í‚¹ƒtƒH[ƒ€"));
 	    trackBox.add(Box.createHorizontalStrut(10));
-		trackBox.add(new JLabel("é…é”è¨˜éŒ²ID"));
+		trackBox.add(new JLabel("”z’B‹L˜^ID"));
 	    trackBox.add(Box.createHorizontalStrut(10));
 		trackBox.add(text6);
 	    trackBox.add(Box.createHorizontalStrut(10));
 		trackBox.add(trackButton);
 		
 		Box fixLugBox = Box.createVerticalBox();
-	    fixLugBox.setBorder(BorderFactory.createTitledBorder("ä¾é ¼æƒ…å ±ä¿®æ­£ãƒ•ã‚©ãƒ¼ãƒ "));
+	    fixLugBox.setBorder(BorderFactory.createTitledBorder("ˆË—Šî•ñC³ƒtƒH[ƒ€"));
 	    fixLugBox.add(Box.createVerticalStrut(10));
-		fixLugBox.add(new JLabel("è·ç‰©ID"));
+		fixLugBox.add(new JLabel("‰×•¨ID"));
 		fixLugBox.add(text7);
 	    fixLugBox.add(Box.createVerticalStrut(10));
-		fixLugBox.add(new JLabel("ä¾é ¼è€…å"));
+		fixLugBox.add(new JLabel("ˆË—ŠÒ–¼"));
 		fixLugBox.add(text8);
 	    fixLugBox.add(Box.createVerticalStrut(10));
-		fixLugBox.add(new JLabel("å—å–äººå"));
+		fixLugBox.add(new JLabel("óæl–¼"));
 		fixLugBox.add(text9);
 	    fixLugBox.add(Box.createVerticalStrut(10));
-		fixLugBox.add(new JLabel("é›»è©±ç•ªå·"));
+		fixLugBox.add(new JLabel("“d˜b”Ô†"));
 		fixLugBox.add(text10);
 	    fixLugBox.add(Box.createVerticalStrut(10));
-		fixLugBox.add(new JLabel("å—å–äººä½æ‰€"));
+		fixLugBox.add(new JLabel("óælZŠ"));
 		fixLugBox.add(text11);
 	    fixLugBox.add(Box.createVerticalStrut(10));
-		fixLugBox.add(new JLabel("è·ç‰©å"));
+		fixLugBox.add(new JLabel("‰×•¨–¼"));
 		fixLugBox.add(text12);
 	    fixLugBox.add(Box.createVerticalStrut(10));
 		fixLugBox.add(fixButton);
@@ -136,17 +136,17 @@ class GUI extends JFrame{
 			String receiverAddress = text4.getText();
 			String luggageName = text5.getText();
 			if (clientName.length()==0||receiverName.length()==0||clientPhoneNum.length()==0||receiverAddress.length()==0||luggageName.length()==0) {
-				resultLabel.setText("å…¨ã¦å…¥åŠ›ã—ã¦ãã ã•ã„");
+				resultLabel.setText("‘S‚Ä“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 				return;
 			}
 			try {
 				receiverAddressNum = Integer.parseInt(receiverAddress);
 				if (receiverAddressNum < 0 || 9 < receiverAddressNum) {
-					resultLabel.setText("å—å–äººä½æ‰€ã¯0~9ã§æŒ‡å®šã—ã¦ãã ã•ã„");
+					resultLabel.setText("óælZŠ‚Í0~9‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢");
 					return;
 				}
 			} catch (NumberFormatException e1) {
-				resultLabel.setText("å—å–äººä½æ‰€ã¯æ•°å­—ã§å…¥åŠ›ã—ã¦ãã ã•ã„");
+				resultLabel.setText("óælZŠ‚Í”š‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 				return;
 			}
 			requestInformation = new RequestInformation(clientName, receiverName, clientPhoneNum, receiverAddressNum);
@@ -164,7 +164,7 @@ class GUI extends JFrame{
 				int id = Integer.parseInt(text6.getText());
 				DeliveryRecord record = reception.luggageTracking(id);
 				if (record == null) {
-					resultLabel.setText("è·ç‰©ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
+					resultLabel.setText("‰×•¨‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
 				} else {
 					String result = record.toString();
 					result = result.replace(System.getProperty("line.separator"), "<br>");
@@ -172,7 +172,7 @@ class GUI extends JFrame{
 					resultLabel.setText(result);
 				}
 			} catch (NumberFormatException e1) {
-				resultLabel.setText("æ•°å­—ã§å…¥åŠ›ã—ã¦ãã ã•ã„");
+				resultLabel.setText("”š‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 				return;
 			}
 		}
@@ -189,22 +189,22 @@ class GUI extends JFrame{
 			String receiverAddress = text11.getText();
 			String luggageName = text12.getText();
 			if (clientName.length()==0||receiverName.length()==0||clientPhoneNum.length()==0||receiverAddress.length()==0||luggageName.length()==0) {
-				resultLabel.setText("å…¨ã¦å…¥åŠ›ã—ã¦ãã ã•ã„");
+				resultLabel.setText("‘S‚Ä“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 				return;
 			}
 			try {
 				receiverAddressNum = Integer.parseInt(receiverAddress);
 				if (receiverAddressNum < 0 || 9 < receiverAddressNum) {
-					resultLabel.setText("å—å–äººä½æ‰€ã¯0~9ã§æŒ‡å®šã—ã¦ãã ã•ã„");
+					resultLabel.setText("óælZŠ‚Í0~9‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢");
 					return;
 				}
 			} catch (NumberFormatException e1) {
-				resultLabel.setText("å—å–äººä½æ‰€ã¯æ•°å­—ã§å…¥åŠ›ã—ã¦ãã ã•ã„");
+				resultLabel.setText("óælZŠ‚Í”š‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
 				return;
 			}
 			requestInformation = new RequestInformation(clientName, receiverName, clientPhoneNum, receiverAddressNum);
 			reception.fixeLuggage(new Luggage(luggageID,luggageName,requestInformation));
-			String result = "ä¿®æ­£å®Œäº†";
+			String result = "C³Š®—¹";
 			result = result.replace(System.getProperty("line.separator"), "<br>");
 			result = "<html>" + result + "<html>";
 			resultLabel.setText(result);
