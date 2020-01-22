@@ -2,25 +2,9 @@ package robotSystem;
 import recordSystem.*;
 import relaySystem.RelayStation;
 import signal.*;
-import java.util.Date;
 import java.io.IOException;
-import java.util.Date;
-
-import javax.swing.text.DefaultEditorKit.BeepAction;
-
-import lejos.hardware.lcd.LCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.hardware.sensor.SensorMode;
-import lejos.robotics.SampleProvider;
-import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
-import lejos.utility.Stopwatch;
 
 /**
  * 配達担当ロボットクラス
