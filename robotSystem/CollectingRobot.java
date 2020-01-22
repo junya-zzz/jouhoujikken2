@@ -10,22 +10,41 @@ import signal.Port;
 import recordSystem.Luggage;
 import relaySystem.RelayStation;
 
+/**
+ * 収集担当ロボットクラス
+ * <PRE>
+ * 受付所から荷物を受け取り、中継所までとどける
+ * </PRE>
+ * @author bp17048
+ */
+
 public class CollectingRobot extends Robot {
 
+	/**
+	 * 荷物が中継所に引き渡されたかどうかをあらわす
+	 */
 	private Boolean isDelivery;
+
+	/**
+	 * 通信をするためのインスタンス
+	 */
 	private EV3Signal signal;
-	private final String reception = "";
-	
-	public static void main(String[] args) throws IOException {
+
+	/**
+	 * EV3で実行したときに呼ばれる
+	 */
+	public static void main(String[] args){
 		CollectingRobot c = new CollectingRobot();
 		c.initSensors();
-		while (!c.getLugfrom()) {
-			Delay.msDelay(3000);
+		while (true) {
+			while (!c.getLugfrom()) {
+				Delay.msDelay(3000);
+			}
+			c.receptionToRelayStation();
+			c.sendLug();
+			c.relayStationToReception();
+			c.sendIsDelivery();
 		}
-		c.receptionToRelayStation();
-		c.sendLug();
-		c.relayStationToReception();
-		c.sendIsDelivery();
 	}
 
 	/**
@@ -39,17 +58,17 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 荷物を中継所に引き渡す
 	 */
-	public void sendLug() throws IOException{
+	private void sendLug() {
 		signal = new EV3Signal();
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.reset();
-		while (!signal.openSig(Port.RELAY)) {
-			if (10000 < stopwatch.elapsed()) {
-				changeIsDelivery(false);
-				return;
-			}
-		}
 		try {
+			while (!signal.openSig(Port.RELAY)) {
+				if (10000 < stopwatch.elapsed()) {
+					changeIsDelivery(false);
+					return;
+				}
+			}
 			signal.sendSig(RelayStation.SEND_LUG_TO_RELAY);
 			signal.sendSig(getLuggage());
 			signal.getSig();
@@ -60,7 +79,7 @@ public class CollectingRobot extends Robot {
 			changeIsDelivery(true);
 			signal.closeSig();
 		} catch (IOException e) {
-			 System.exit(1);
+			System.exit(1);
 		}
 		return;
 	}
@@ -68,7 +87,7 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 中継所から宅配受付所に移動する
 	 */
-	private static void relayStationToReception() {
+	private void relayStationToReception() {
 		lineTrace(12000, RIGHT, 350);
 		stopOnGray(RIGHT);
 		turn(LEFT, 180);
@@ -77,7 +96,7 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 配達が成功したか失敗したかを宅配受付所に送信する
 	 */
-	public void sendIsDelivery() {
+	private void sendIsDelivery() {
 		signal = new EV3Signal();
 		try {
 			signal.openSig(Port.RECEPTION);
@@ -97,7 +116,7 @@ public class CollectingRobot extends Robot {
 	/**
 	 * 宅配受付所から中継所に移動する
 	 */
-	private static void receptionToRelayStation() {
+	private void receptionToRelayStation() {
 		lineTrace(3500, RIGHT, 350);
 		Delay.msDelay(1000);
 		stopOnGray(RIGHT);
@@ -117,8 +136,9 @@ public class CollectingRobot extends Robot {
 
 	/**
 	 * 宅配受付所から荷物を受け取る
+	 * @return 荷物が存在しない、又は通信に失敗したときはfalseを返す。それ以外はtrueを返す。
 	 */
-	public boolean getLugfrom() {
+	private boolean getLugfrom() {
 		signal = new EV3Signal();
 		boolean result = false;
 		try {

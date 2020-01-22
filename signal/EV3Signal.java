@@ -13,7 +13,9 @@ import lejos.utility.Delay;
 
 
 /**
- * ev3用の通信クラス
+ * EV3用通信クラス
+ * @author bp17048
+ *
  */
 public class EV3Signal {
 
@@ -25,7 +27,7 @@ public class EV3Signal {
 	private boolean isServerMode;
 
 	/**
-	 * ev3からdeviceに接続する
+	 * ev3からシステムに接続する
 	 * @param p 接続するシステムのポート Port.RECEIVE_PORT など
 	 * @return 成功時:true 失敗時:false
 	 */
@@ -110,7 +112,7 @@ public class EV3Signal {
 	/**
 	 * オブジェクトを受信する
 	 * @return 受信したオブジェクト
-	 * @throws IOException
+	 * @throws IOException 受信に失敗
 	 */
 	public Object getSig() throws IOException{
 		Object object = null;
@@ -128,7 +130,7 @@ public class EV3Signal {
 	/**
 	 * オブジェクトを送信する
 	 * @param data 送信するオブジェクト
-	 * @throws IOException
+	 * @throws IOException 送信に失敗
 	 */
 	public void sendSig(Object data) throws IOException{
 		if (!isConnectToEV3) {
@@ -141,8 +143,7 @@ public class EV3Signal {
 
 	/**
 	 * 通信を閉じる
-	 * @return
-	 * @throws IOException
+	 * @throws IOException 通信を閉じることを失敗したとき
 	 */
 	public void closeSig() throws IOException{
 		if (!isConnectToEV3) {

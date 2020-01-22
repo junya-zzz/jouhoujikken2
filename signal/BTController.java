@@ -1,13 +1,15 @@
 package signal;
 
 import java.io.*;
-import java.lang.management.ManagementFactory;
 import java.net.Socket;
-import java.util.List;
 
 import javax.microedition.io.*;
 
-import com.intel.bluetooth.BlueCoveImpl;
+/**
+ * パソコンとEV3で通信する際に使用するクラス。EV3と通信するときはこのクラスを経由する。
+ * @author bp17048
+ *
+ */
 
 public class BTController extends Thread{
 	public static StreamConnectionNotifier scn = null;
@@ -17,7 +19,10 @@ public class BTController extends Thread{
 	private ObjectInputStream cois;
 	private ObjectOutputStream coos;
 
-	public static void main(String[] args) throws IOException, ClassNotFoundException{
+	/**
+	 * 起動したときに実行される
+	 */
+	public static void main(String[] args) throws IOException{
 		scn = (StreamConnectionNotifier) Connector.open("btspp://localhost:1");
 		while (true) {
 			BTController controller = new BTController();
@@ -26,10 +31,12 @@ public class BTController extends Thread{
 		}
 	}
 	
-	// EV3からシステムにオブジェクトを流す
+	/**
+	 * EV3からシステムにオブジェクトを流す
+	 */
 	public void run(){
 		try {
-			// 毎回オブジェクトを受け取る前に bool を受け取って close するか決定する
+			// 毎回オブジェクトを受け取る前に boolean を受け取って close するか決定する
 			while(btois.readBoolean()) {
 				coos.writeObject(btois.readObject());
 				coos.flush();
@@ -47,7 +54,9 @@ public class BTController extends Thread{
 		}
 	}
 	
-	// システムからEV3にオブジェクトを流す
+	/**
+	 * システムからEV3にオブジェクトを中継して流す
+	 */
 	public void systemToObject(){
 		try {
 			while (cois.readBoolean()) {
@@ -69,7 +78,7 @@ public class BTController extends Thread{
 	/**
 	 * PCをEV3から接続待ち状態にする
 	 * @return 成功時:true 失敗時:false
-	 * @throws IOException
+	 * @throws IOException 処理失敗
 	 */
 	private int waitBTSig() throws IOException {
 		if (scn == null) {
@@ -89,7 +98,11 @@ public class BTController extends Thread{
 		return btois.readInt();
 	}
 	
-	//各サブシステムに接続
+	/**
+	 * 各システムに接続する
+	 * @param port 接続するシステムのポート番号
+	 * @throws IOException 接続には成功したが、その後の処理に失敗したとき
+	 */
 	private void connectToSubSystem(int port) throws IOException{
 		try {
 			System.out.println("connecting to system...");

@@ -7,7 +7,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- *パソコン用の通信クラス
+ * パソコン用の通信クラス
+ * @author bp17048
+ *
  */
 public class PCSignal {
 
@@ -15,14 +17,20 @@ public class PCSignal {
 	private ObjectOutputStream oos = null;
 	private ServerSocket ss = null;
 	private Socket sc = null;
+	/**
+	 * ev3と接続しているときはtrue、パソコンと接続しているときはfalse
+	 */
 	private boolean isConnectToBT;
+	/**
+	 * サーバーとして接続したときtrue
+	 */
 	private boolean isServer;
 	
 	/**
 	 * 他のシステムに接続する
 	 * @param p 接続するシステムのPort
 	 * @return 成功時:true 失敗時:false
-	 * @throws IOException
+	 * @throws IOException 接続に何らかの失敗があったとき
 	 */
 	public boolean openSig(Port p) throws IOException{
 		System.out.println("connecting to " + p.name() + " : " + p.portNum);
@@ -46,7 +54,7 @@ public class PCSignal {
 	 * システムを接続待ち状態にする
 	 * @param p 自分のシステムを入れる receiveSystemだったらPort.RECEIVE_PORT
 	 * @return 成功時:true 失敗時:false
-	 * @throws IOException
+	 * @throws IOException 失敗したとき
 	 */
 
 	public Boolean waitSig(Port p) throws IOException {
@@ -66,7 +74,7 @@ public class PCSignal {
 	/**
 	 * オブジェクトを受信する
 	 * @return 受信したオブジェクト
-	 * @throws IOException
+	 * @throws IOException 受信に失敗
 	 */
 	public Object getSig() throws IOException{
 		Object object = null;
@@ -82,8 +90,7 @@ public class PCSignal {
 	/**
 	 * オブジェクトを送信する
 	 * @param data 送信するオブジェクト
-	 * @param device
-	 * @throws IOException
+	 * @throws IOException 送信に失敗
 	 */
 	public void sendSig(Object data) throws IOException {
 		if (isConnectToBT) {
@@ -96,8 +103,8 @@ public class PCSignal {
 	
 	/**
 	 * 接続を閉じる
-	 * @return
-	 * @throws IOException
+	 * @return 成功したとき"OK"を返す
+	 * @throws IOException 閉じることを失敗したとき
 	 */
 	public String closeSig() throws IOException {
 		if (isConnectToBT) {

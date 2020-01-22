@@ -14,23 +14,54 @@ import lejos.robotics.SampleProvider;
 import lejos.utility.Stopwatch;
 import recordSystem.Luggage;
 
+/**
+ * ロボットの共通の動作を定義するクラス 最初にinitSensors()を呼び出す必要がある
+ * @author bp17048
+ */
 public class Robot {
 
+	/**
+	 * ロボットが持っている荷物
+	 */
 	private static Luggage luggage;
 
+	/**
+	 * ロボットの現在位置
+	 */
 	private static String position;
 
+	/**
+	 * 超音波センサー
+	 */
 	private static EV3UltrasonicSensor sonicSensor;
+	/**
+	 * ジャイロセンサー
+	 */
 	private static EV3GyroSensor gyroSensor;
+	/**
+	 * 右側のモーター
+	 */
 	private static EV3LargeRegulatedMotor rightMotor;
+	/**
+	 * 左側のモーター
+	 */
 	private static EV3LargeRegulatedMotor leftMotor;
+	/**
+	 * カラーセンサー。反射光モードで使用する。
+	 */
 	private static EV3ColorSensor colorSensor;
 	
+	/**
+	 * ライントレースする際に使用するフラグ。ラインの左側をトレースするときに指定する。
+	 */
 	public static final int LEFT = 0;
+	/**
+	 * ライントレースする際に使用するフラグ。ラインの右側をトレースするときに指定する。
+	 */
 	public static final int RIGHT = 1;
 	
 	/**
-	 * センサーを初期化する
+	 * センサーを初期化する。ロボットを動かすとき最初に呼び出す。
 	 */
 	protected static void initSensors() {
 		LCD.clear();
@@ -276,7 +307,7 @@ public class Robot {
 	
 	/**
 	 * positionを変更する
-	 * @param position
+	 * @param pos 指定した値に変更する
 	 */
 	protected static void changePos(String pos) {
 		position = pos;
@@ -298,10 +329,18 @@ public class Robot {
 		rightMotor.stop(true);
 	}
 
+	/**
+	 * ロボットが持っている荷物を返す
+	 * @return 荷物
+	 */
 	public static Luggage getLuggage() {
 		return luggage;
 	}
 	
+	/**
+	 * ロボットに荷物をセットする
+	 * @param lug 荷物
+	 */
 	public static void setLuggage(Luggage lug) {
 		luggage = lug;
 		return;
