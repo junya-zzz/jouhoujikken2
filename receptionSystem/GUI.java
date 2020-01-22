@@ -19,7 +19,14 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+/** GUIクラス
+ * <PRE>
+ * 依頼情報を入力するクラス
+ * </PRE>
+ * 
+ * @author
+ * @version 1.0
+ */
 class GUI extends JFrame{
 
 	JTextField text1;
@@ -34,7 +41,11 @@ class GUI extends JFrame{
 
 	RequestInformation requestInformation = null;
 	Reception reception;
-
+	/**
+	 * GUIクラスのインスタンスを生成するコンストラクタ
+	 * @param title ウィンドウのタイトル
+	 * @param r 宅配受付所
+	 */
 	GUI(String title, Reception r){
 		reception = r;
 		setTitle(title);

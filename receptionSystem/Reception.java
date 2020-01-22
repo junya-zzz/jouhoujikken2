@@ -11,20 +11,58 @@ import java.util.Date;
 
 import headquartersSystem.Headquarters;
 
+/** 宅配受付所クラス
+ * <PRE>
+ * 依頼人から荷物を受け取る。
+ * 収集担当ロボット、本部と通信する
+ * </PRE>
+ * <OL>
+ * 	<LI>public static void main(String[] args)
+ *  <LI>private void choseFunction()
+ *  <LI>public void sendReceiptTime(DeliveryRecord d)
+ *  <LI>public void sendShipTime(Luggage lug)
+ *  <LI>public void getIsDelivery(PCSignal sig)
+ *  <LI>public void sendLug(PCSignal sig)
+ *  <LI>public Luggage getLug(RequestInformation requestInformation, String luggageName)
+ *  <LI>public DeliveryRecord luggageTracking(int id) 
+ *  <LI>private int setLuggageIDNum() 
+ * </OL>
+ * @author
+ * @version 1.0
+ */
+
 
 
 
 public class Reception extends Thread{
+	/**
+	 * 
+	 */
 	public static final String EXIST_LUGGAGE = "existLuggage";
 
+	/**
+	 * 荷物リスト
+	 */
 	private ArrayList<Luggage> lugList;
 	//private DeliveryRecordList deliList;
 	//private ArrayDeque<DeliveryRecord>; = new ArrayDeque<DeliveryRecord>();
+	/**
+	 * バウンダリ
+	 */
 	private Boundary boundary;
+	/**
+	 * 荷物ID
+	 */
 	private int idNum=0;
-
+	/**
+	 * 通信シグナル
+	 */
 	private PCSignal signal;
-
+	/**
+	 * mainメソッド
+	 * @param args コマンドライン引数
+	 * 
+	 */
 	public static void main(String[] args) {
 		/*
 		Reception reception = new Reception();
@@ -41,6 +79,10 @@ public class Reception extends Thread{
 		}
 	}
 
+	/**
+	 * 収集担当ロボットに荷物を送るメソッドか配達結果のメソッドどちらを呼び出すか判定するメソッド
+	 * 
+	 */
 	private void choseFunction() {
 		try {
 			PCSignal sig = new PCSignal();
@@ -56,7 +98,9 @@ public class Reception extends Thread{
 			System.exit(1);
 		}
 	}
-
+	/**
+	 * 宅配受付所クラスのインスタンスを生成するコンストラクタ
+	 */
 	public Reception(){
 		this.lugList = new ArrayList<Luggage>();
 		//this.deliList = new DeliveryRecordList();
@@ -65,7 +109,11 @@ public class Reception extends Thread{
 	}
 
 
-	// 荷物を依頼人から受け取ったことを本部に報告する
+	/**
+	 *  荷物を依頼人から受け取ったことを本部に報告する
+	 * @param d 配達記録
+	 * 
+	 */
 	public void sendReceiptTime(DeliveryRecord d) {
 		try {
 			signal.openSig(Port.HEAD);
@@ -88,7 +136,11 @@ public class Reception extends Thread{
 	}
 
 
-	/*荷物を収集担当ロボットに渡したことを本部に報告する*/
+	/**
+	 * 荷物を収集担当ロボットに渡したことを本部に報告する
+	 *@param lug 荷物
+	 * 
+	 */
 	public void sendShipTime(Luggage lug) {
 		try {
 			signal.openSig(Port.HEAD);
@@ -112,7 +164,11 @@ public class Reception extends Thread{
 	}
 
 
-	/*中継所との引渡し結果を得る*/
+	/**
+	 * 中継所との引渡し結果を得る
+	 * @param sig PCSignal
+	 * 
+	 */
 	public void getIsDelivery(PCSignal sig) {
 		try {
 			boolean isDelivery = (boolean) sig.getSig();
@@ -135,7 +191,11 @@ public class Reception extends Thread{
 	}
 
 
-	/*荷物を収集担当ロボットに渡す*/
+	/**
+	 * 荷物を収集担当ロボットに渡す
+	 * @param sig PCSignal
+	 * 
+	 */
 	public void sendLug(PCSignal sig) {
 		try {
 			Luggage sendLug = null;
@@ -164,7 +224,12 @@ public class Reception extends Thread{
 	}
 
 
-	/*荷物を依頼人から受け取る*/
+	/**
+	 * 荷物を依頼人から受け取る
+	 * @param requestInformation 依頼情報
+	 * @param luggageName　荷物の名前
+	 * 
+	 */
 	public Luggage getLug(RequestInformation requestInformation, String luggageName) {
 		int id = setLuggageIDNum();
 		Luggage lug = new Luggage(id,luggageName, requestInformation);                      /****ID,Amount追加****/
@@ -176,7 +241,11 @@ public class Reception extends Thread{
 		return lug;
 	}
 
-	// 荷物の状態を本部に問い合わせて取得し、表示する
+	/**
+	 * 荷物の状態を本部に問い合わせて取得し、表示する
+	 * @param id 荷物ID
+	 * 
+	 */
 	public DeliveryRecord luggageTracking(int id) {
 		// int id;
 		DeliveryRecord dr = null;
@@ -193,6 +262,10 @@ public class Reception extends Thread{
 		return dr;
 	}
 
+	/**
+	 * 荷物IDを設定
+	 * 
+	 */
 	private int setLuggageIDNum() { //荷物IDを設定
 		idNum++;
 		return idNum;
