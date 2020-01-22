@@ -1,16 +1,24 @@
 package recordSystem;
 
 import java.io.Serializable;
-//import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-//import java.util.ArrayList;
+
 
 public class DeliveryRecord implements Serializable{
 	
+	/**
+	 * @param deliveryID 配達記録ID
+	 * @param luggage　荷物
+	 * @param receiptTime　荷物預かり時間
+	 * @param shiptime　荷物発送開始時間
+	 * @param arrivalTime　中継所到着時間
+	 * @param startTime　配達開始時間
+	 * @param receiveTime　受け取り完了時間
+	 * @param finishTime　配達完了時間
+	 */
 	private Integer deliveryID;
 	
-	//private  ArrayList<Luggage> luggageList = new ArrayList<Luggage>();
 	private Luggage luggage;
 	
 	private Date receiptTime;
@@ -25,16 +33,9 @@ public class DeliveryRecord implements Serializable{
 
 	private Date finishTime;
 	
-	
-
-	
-
-	
-
-	public DeliveryRecord(Integer deliveryID, Luggage luggage/*ArrayList<Luggage> luggageList*/) {
+	public DeliveryRecord(Integer deliveryID, Luggage luggage) {
 		super();
 		this.deliveryID = deliveryID;
-		//this.luggageList = luggageList;
 		this.luggage = luggage;
 		this.luggageCondition = LuggageCondition.unshipped;
 	}
@@ -61,18 +62,13 @@ public class DeliveryRecord implements Serializable{
 		finishTime = time;
 	}
 
-	public void setReceiveTime(Date time /*, int elapsedTime*/) {
-		/*Calendar calendar = Calendar.getInstance();
-		calendar.setTime(time);
-		calendar.add(Calendar.SECOND, elapsedTime);
-		receiveTime = calendar.getTime();*/
+	public void setReceiveTime(Date time ) {
 		receiveTime = time; 
 	}
 	
 	public void setDeliveryID(Integer id) {
 		deliveryID = id;
 	}
-
 
 	public Date getArrivalTime() {
 		return arrivalTime;
@@ -114,20 +110,6 @@ public class DeliveryRecord implements Serializable{
 		this.luggage = luggage;
 	}
 	
-	
-	/*public void luggageAdd(Luggage luggage){
-		
-		luggageList.add(luggage);
-		
-	}*/
-	
-	/*public ArrayList<Luggage> getLuggageList(){
-		
-		return luggageList;
-		
-	}*/
-	
-
 	public void setReceiptTime(Date receiptTime) {
 		this.receiptTime = receiptTime;
 	}
@@ -144,6 +126,12 @@ public class DeliveryRecord implements Serializable{
 				+ showDate(finishTime) +  separator;
 	}
 	
+	/**
+	 *フィールドのDateからフォーマットを指定して表示する
+	 * 
+	 * @param date
+	 * @return
+	 */
 	String showDate(Date date){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy'年'MM'月'dd'日'E'曜日'k'時'mm'分'ss'秒'");
 		String result = "";

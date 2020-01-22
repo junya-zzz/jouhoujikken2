@@ -54,6 +54,15 @@ public class DeliveryRecordList {
 		 deliveryRecordMap.get(luggageID).setLuggageCondition(luggagecondition);
 	}
 	
+	/**
+	 * 配達記録リスト.配達記録の荷物を変更する
+	 * @param luggageID 荷物ID
+	 * @param lug　荷物
+	 */
+	public void fixDeliveryRecord(int luggageID, Luggage lug){
+		 deliveryRecordMap.get(luggageID).setLuggage(lug);
+		 deliveryRecordMap.get(luggageID).setLuggageCondition(LuggageCondition.waitDelivering);
+	}
 	public DeliveryRecord getDeliveryRecord(int id) {
 		return deliveryRecordMap.get(id);
 	}
