@@ -12,10 +12,43 @@ import lejos.hardware.lcd.TextLCD;
 import recordSystem.*;
 import signal.*;
 
+/**
+ * 中継所クラス
+ * <PRE>
+ * 荷物を保管したり、配達結果を本部に報告する。
+ * 次のメソッドを持つ。
+ * </PRE>
+ * <OL>
+ *  <LI> void choseFunction()
+ *  <LI> void receiveLugfromCollectingRobot()
+ *  <LI> void reportReceivingToHeadquarters(Date ship_time)
+ *  <LI> void receiveDeliveryResult()
+ *  <LI> void sendLugtoDeliveryRobot()
+ *  <LI> void reportDeliveryResult(LuggageCondition result, int lug_id, Date fin_time)
+ *  <LI> void reportDeliveryStart(int id)
+ *  <LI> ArrayList<Luggage> getLuggageList()
+ * </OL>
+ * @author bp17027 Keita Kaneko
+ * @version 1.0
+ */
 public class RelayStation {
 
+	/**
+	 * フラグ0<br>
+	 * 中継所が荷物を受けとる
+	 */
 	public static int SEND_LUG_TO_RELAY = 0;
+	
+	/**
+	 * フラグ1<br>
+	 * 配達担当ロボットへ荷物を引き渡す
+	 */
 	public static int SEND_LUG_TO_DELIVERY = 1;
+	
+	/**
+	 * フラグ2<br>
+	 * 配達結果を引き渡す
+	 */
 	public static int REPORT_DELIVERY_RESULT = 2;
 
 	/**
@@ -33,12 +66,21 @@ public class RelayStation {
 	 */
 	private EV3Signal signal;
 
+	/**
+	 * コンストラクタ
+	 */
 	public RelayStation(){
 		luggageList = new ArrayList<Luggage>();
 		wrongLugList = new ArrayList<Luggage>();
 		signal = new EV3Signal();
 	}
 
+	/**
+	 * main文<br>
+	 * システム起動時はこのメソッドを使用する
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception{
 		RelayStation rs = new RelayStation();
 		while (true) {
@@ -46,6 +88,11 @@ public class RelayStation {
 		}
 	}
 
+	/**
+	 * 処理を区別するメソッド<br>
+	 * 荷物の受け取り or 荷物の引き渡し or 配達結果の報告
+	 * @throws IOException
+	 */
 	public void choseFunction() throws IOException{
 		signal.waitSig();
 		int methodFlag = (int) signal.getSig();
@@ -57,11 +104,9 @@ public class RelayStation {
 			receiveDeliveryResult();
 		}
 	}
+	
 	/**
 	 * 収集担当ロボットから荷物を受け取る
-	 *
-	 * 手順
-	 * メソッドに対応する操作を行う
 	 */
 	public void receiveLugfromCollectingRobot() {
 		try{
@@ -80,9 +125,7 @@ public class RelayStation {
 
 	/**
 	 * 収集担当ロボットからの荷物の受け取りを本部に報告する
-	 *
-	 * 手順
-	 * メソッドに対応する操作を行う
+	 * @param ship_time 発送時間
 	 */
 	public void reportReceivingToHeadquarters(Date ship_time) {
 		try{
@@ -101,9 +144,7 @@ public class RelayStation {
 
 	/**
 	 * 荷物の配達結果の報告を受け,本部にも報告する
-	 *
-	 * 手順
-	 * メソッドに対応する操作を行う
+	 * @throws IOException
 	 */
 	public void receiveDeliveryResult() throws IOException{
 		int id = 0;
@@ -137,9 +178,6 @@ public class RelayStation {
 
 	/**
 	 * 配達担当ロボットに荷物を渡し、本部に報告する
-	 *
-	 * 手順
-	 * メソッドに対応する操作を行う
 	 */
 	public void sendLugtoDeliveryRobot() {
 		try{
@@ -171,9 +209,10 @@ public class RelayStation {
 
 	/**
 	 * 荷物の配達結果を本部に報告する
-	 *
-	 * 手順
-	 * メソッドに対応する操作を行う
+	 * @param result 荷物の配達結果
+	 * @param lug_id 荷物ID
+	 * @param fin_time 配達完了時間
+	 * @throws IOException
 	 */
 	public void reportDeliveryResult(LuggageCondition result, int lug_id, Date fin_time)throws IOException {
 		//try{
@@ -193,11 +232,7 @@ public class RelayStation {
 
 	/**
 	 * 配達担当ロボットに荷物を渡したことを本部に報告する
-	 *
-	 * 手順
-	 * メソッドに対応する操作を行う
-	 *
-	 *
+	 * @param id 荷物ID
 	 */
 	public void reportDeliveryStart(int id) {
 		try{
@@ -214,6 +249,10 @@ public class RelayStation {
 		}
 	}
 
+	/**
+	 * 荷物リストのgetterメソッド
+	 * @return 荷物リスト
+	 */
 	public ArrayList<Luggage> getLuggageList(){
 		return luggageList;
 	}
