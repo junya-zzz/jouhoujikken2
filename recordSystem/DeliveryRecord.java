@@ -8,14 +8,14 @@ import java.text.SimpleDateFormat;
 public class DeliveryRecord implements Serializable{
 	
 	/**
-	 * @param deliveryID é…é”è¨˜éŒ²ID
-	 * @param luggageã€€è·ç‰©
-	 * @param receiptTimeã€€è·ç‰©é ã‹ã‚Šæ™‚é–“
-	 * @param shiptimeã€€è·ç‰©ç™ºé€é–‹å§‹æ™‚é–“
-	 * @param arrivalTimeã€€ä¸­ç¶™æ‰€åˆ°ç€æ™‚é–“
-	 * @param startTimeã€€é…é”é–‹å§‹æ™‚é–“
-	 * @param receiveTimeã€€å—ã‘å–ã‚Šå®Œäº†æ™‚é–“
-	 * @param finishTimeã€€é…é”å®Œäº†æ™‚é–“
+	 * @param deliveryID ”z’B‹L˜^ID
+	 * @param luggage@‰×•¨
+	 * @param receiptTime@‰×•¨—a‚©‚èŠÔ
+	 * @param shiptime@‰×•¨”­‘—ŠJnŠÔ
+	 * @param arrivalTime@’†ŒpŠ“’…ŠÔ
+	 * @param startTime@”z’BŠJnŠÔ
+	 * @param receiveTime@ó‚¯æ‚èŠ®—¹ŠÔ
+	 * @param finishTime@”z’BŠ®—¹ŠÔ
 	 */
 	private Integer deliveryID;
 	
@@ -117,25 +117,25 @@ public class DeliveryRecord implements Serializable{
 	@Override
 	public String toString() {
 		String separator = System.getProperty("line.separator");
-		return "ã€é…é”è¨˜éŒ²ID : " + deliveryID + "ã€‘" + separator + "[è·ç‰©å†…å®¹]------------------" + separator
-				+ luggage  +"[é…é”æƒ…å ±]------------------" + separator
-				+ "è·ç‰©çŠ¶æ…‹ã€€: " + luggageCondition + separator + "å—å–æ™‚é–“ã€€: "
-				+ showDate(receiptTime) + separator + "ç™ºé€æ™‚é–“ã€€: "
-				+ showDate(shipTime) + separator + "ä¸­ç¶™æ‰€åˆ°ç€æ™‚é–“ã€€: " + showDate(arrivalTime) + separator + "é…é”é–‹å§‹æ™‚é–“ã€€: "
-				+ showDate(startTime) + separator + "å—ã‘å–ã‚Šå®Œäº†æ™‚é–“ã€€: " + showDate(receiveTime) + separator + "é…é”å®Œäº†æ™‚é–“ã€€: "
+		return "y”z’B‹L˜^ID : " + deliveryID + "z" + separator + "[‰×•¨“à—e]------------------" + separator
+				+ luggage  +"[”z’Bî•ñ]------------------" + separator
+				+ "‰×•¨ó‘Ô@: " + luggageCondition + separator + "óæŠÔ@: "
+				+ showDate(receiptTime) + separator + "”­‘—ŠÔ@: "
+				+ showDate(shipTime) + separator + "’†ŒpŠ“’…ŠÔ@: " + showDate(arrivalTime) + separator + "”z’BŠJnŠÔ@: "
+				+ showDate(startTime) + separator + "ó‚¯æ‚èŠ®—¹ŠÔ@: " + showDate(receiveTime) + separator + "”z’BŠ®—¹ŠÔ@: "
 				+ showDate(finishTime) +  separator;
 	}
 	
 	/**
-	 *ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®Dateã‹ã‚‰ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒ‡å®šã—ã¦è¡¨ç¤ºã™ã‚‹
+	 *ƒtƒB[ƒ‹ƒh‚ÌDate‚©‚çƒtƒH[ƒ}ƒbƒg‚ğw’è‚µ‚Ä•\¦‚·‚é
 	 * 
 	 * @param date
 	 * @return
 	 */
 	String showDate(Date date){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy'å¹´'MM'æœˆ'dd'æ—¥'E'æ›œæ—¥'k'æ™‚'mm'åˆ†'ss'ç§’'");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy'”N'MM'Œ'dd'“ú'E'—j“ú'k''mm'•ª'ss'•b'");
 		String result = "";
-		if(date==null)result = "æœªå®Œäº†";
+		if(date==null)result = "–¢Š®—¹";
 		else result += sdf.format(date);
 		return result;	
 	}

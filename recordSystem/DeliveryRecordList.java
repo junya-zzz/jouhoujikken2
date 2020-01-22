@@ -8,22 +8,22 @@ public class DeliveryRecordList {
 	//private ArrayList<DeliveryRecord> DeliveryRecordList= new ArrayList<>();
 	HashMap<Integer, DeliveryRecord> deliveryRecordMap = new HashMap<Integer, DeliveryRecord>();
 	/**
-	   * é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+	   * ”z’B‹L˜^ƒŠƒXƒg‚É’Ç‰Á‚·‚é
 	   *
-	   * æ‰‹é †
-		 * ãƒ¡ã‚½ãƒƒãƒ‰ã«å¯¾å¿œã™ã‚‹æ“ä½œã‚’è¡Œã† 
+	   * è‡
+		 * ƒƒ\ƒbƒh‚É‘Î‰‚·‚é‘€ì‚ğs‚¤ 
 		 */
 	public void addDeliveryRecord(DeliveryRecord deliveryRecord) {
 		deliveryRecordMap.put(deliveryRecord.getDeliveryID(),deliveryRecord);
 	}
 
 	/**
- 	 * å—ã‘å–ã£ãŸæ™‚é–“ã®ç¨®é¡ã‹ã‚‰æ›´æ–°ã™ã¹ãé…é”è¨˜éŒ²ã®æ™‚é–“é …ç›®ã‚’ä¸€æ„ã«æ±ºå®šã§ãã‚‹ã€‚ä¾‹ãˆã°ã€å—ã‘å–ã£ãŸæ™‚é–“ã®ç¨®é¡ãŒã€Œé…é”å®Œäº†æ™‚é–“ã€ãªã‚‰ã€é…é”è¨˜éŒ²ã«ãŠã‘ã‚‹é…é”å®Œäº†æ™‚é–“ã‚’æ›´æ–°ã™ã‚‹ã€‚
+ 	 * ó‚¯æ‚Á‚½ŠÔ‚Ìí—Ş‚©‚çXV‚·‚×‚«”z’B‹L˜^‚ÌŠÔ€–Ú‚ğˆêˆÓ‚ÉŒˆ’è‚Å‚«‚éB—á‚¦‚ÎAó‚¯æ‚Á‚½ŠÔ‚Ìí—Ş‚ªu”z’BŠ®—¹ŠÔv‚È‚çA”z’B‹L˜^‚É‚¨‚¯‚é”z’BŠ®—¹ŠÔ‚ğXV‚·‚éB
    *
-   * æ‰‹é †
-   * è·ç‰©IDã‚’ä½¿ã„ã€ãƒªã‚¹ãƒˆã‹ã‚‰é…é”è¨˜éŒ²ã‚’æ¢ã™
-	 * æ™‚é–“ã®ç¨®é¡ã«å¿œã˜ã¦ã€æ™‚é–“ã‚’æ›´æ–°ã™ã‚‹
-	 * æ™‚é–“ã®ç¨®é¡ã«å¿œã˜ã¦è·ç‰©çŠ¶æ…‹ã‚‚å¤‰æ›´ã™ã‚‹
+   * è‡
+   * ‰×•¨ID‚ğg‚¢AƒŠƒXƒg‚©‚ç”z’B‹L˜^‚ğ’T‚·
+	 * ŠÔ‚Ìí—Ş‚É‰‚¶‚ÄAŠÔ‚ğXV‚·‚é
+	 * ŠÔ‚Ìí—Ş‚É‰‚¶‚Ä‰×•¨ó‘Ô‚à•ÏX‚·‚é
 	 */
 	public void updateDeliveryRecord(int luggageID, LuggageCondition luggagecondition, Date time) {
 		
@@ -55,9 +55,9 @@ public class DeliveryRecordList {
 	}
 	
 	/**
-	 * é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆ.é…é”è¨˜éŒ²ã®è·ç‰©ã‚’å¤‰æ›´ã™ã‚‹
-	 * @param luggageID è·ç‰©ID
-	 * @param lugã€€è·ç‰©
+	 * ”z’B‹L˜^ƒŠƒXƒg.”z’B‹L˜^‚Ì‰×•¨‚ğ•ÏX‚·‚é
+	 * @param luggageID ‰×•¨ID
+	 * @param lug@‰×•¨
 	 */
 	public void fixDeliveryRecord(int luggageID, Luggage lug){
 		 deliveryRecordMap.get(luggageID).setLuggage(lug);
@@ -69,11 +69,11 @@ public class DeliveryRecordList {
 
 	@Override
 	public String toString() {
-		String result = "â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n";
+		String result = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
 		for (DeliveryRecord dr : deliveryRecordMap.values()) {
-			result += dr+"â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n";
+			result += dr+"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n";
 		}
-		return "é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã€€\n " + result;
+		return "”z’B‹L˜^ƒŠƒXƒg@\n " + result;
 	}
 	
 	

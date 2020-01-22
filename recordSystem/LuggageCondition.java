@@ -5,7 +5,7 @@ public enum LuggageCondition {
 	
 
 	/**
-	 * æœªç™ºé€
+	 * –¢”­‘—
 	 */
 	unshipped,
 
@@ -14,32 +14,32 @@ public enum LuggageCondition {
 	waitDelivering,
 
 	/**
-	 * é…é”ä¸­
+	 * ”z’B’†
 	 */
 	delivering,
 
 	/**
-	 * é…é”æ¸ˆã¿
+	 * ”z’BÏ‚İ
 	 */
 	delivered,
 
 	/**
-	 * é…é”å®Œäº†æ¸ˆã¿ï¼ˆé…é”ãƒ­ãƒœãƒƒãƒˆå¸°å®…ï¼‰
+	 * ”z’BŠ®—¹Ï‚İi”z’Bƒƒ{ƒbƒg‹A‘îj
 	 */
 	finished,
 
 	/**
-	 * å®›å…ˆé–“é•ã„
+	 * ˆ¶æŠÔˆá‚¢
 	 */
 	wrongAddress,
 
 	/**
-	 * ä¸­ç¶™æ‰€ä¸åœ¨
+	 * ’†ŒpŠ•sİ
 	 */
 	relay_absence,
 	
 	/**
-	 * å—å–äººä¸åœ¨
+	 * óæl•sİ
 	 */
 	receive_absence
 }

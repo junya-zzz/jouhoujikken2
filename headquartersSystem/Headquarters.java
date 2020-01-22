@@ -20,12 +20,12 @@ public class Headquarters{
 	public static final int SEND_FIXEDLUG = 5;
 
 	/**
-	 * é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆ
+	 * ”z’B‹L˜^ƒŠƒXƒg
 	 * 
 	 */
 	private DeliveryRecordList DeliveryRecordList = new DeliveryRecordList();
 	/**
-	 * è·ç‰©æƒ…å ±ã‚’ä¿®æ­£ã•ã‚ŒãŸè·ç‰©ãƒªã‚¹ãƒˆ
+	 * ‰×•¨î•ñ‚ğC³‚³‚ê‚½‰×•¨ƒŠƒXƒg
 	 */
 	private ArrayDeque<Luggage> fixedLugList = new ArrayDeque<>();
 
@@ -34,7 +34,7 @@ public class Headquarters{
 		h.systemExe();
 	}
 	/**
-	 * æœ¬éƒ¨ã‚·ã‚¹ãƒ†ãƒ ã‚’å®Ÿè¡Œã™ã‚‹
+	 * –{•”ƒVƒXƒeƒ€‚ğÀs‚·‚é
 	 */
 
 	public void systemExe() {
@@ -66,12 +66,12 @@ public class Headquarters{
 					sendLuggageInfomation(sig);
 
 
-				}else if (methodFlag == UPDATE_FIXEDLUGLIST){//å®›å…ˆé–“é•ã„ä¿®æ­£ã€€å—ä»˜æ‰€-æœ¬éƒ¨
+				}else if (methodFlag == UPDATE_FIXEDLUGLIST){//ˆ¶æŠÔˆá‚¢C³@ó•tŠ-–{•”
 					Luggage fixedLug = (Luggage)sig.getSig();
 					fixedLugList.add(fixedLug);
 					DeliveryRecordList.fixDeliveryRecord(fixedLug.getLuggageID(),fixedLug);
 
-				}else if(methodFlag == SEND_FIXEDLUG){//å®›å…ˆé–“é•ã„ä¿®æ­£ã€€ä¸­ç¶™æ‰€-æœ¬éƒ¨
+				}else if(methodFlag == SEND_FIXEDLUG){//ˆ¶æŠÔˆá‚¢C³@’†ŒpŠ-–{•”
 					if(fixedLugList.isEmpty())sig.sendSig(0);
 					else sig.sendSig(fixedLugList.size());
 
@@ -88,17 +88,17 @@ public class Headquarters{
 	}
 
 	/**
-	 * é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã‚’å¼•æ•°ã‚’å…ƒã«æ›´æ–°ã™ã‚‹
-	 * @param luggageID è·ç‰©ID
-	 * @param luggageconditionã€€è·ç‰©çŠ¶æ…‹
-	 * @param timeã€€è¨˜éŒ²æ™‚é–“
+	 * ”z’B‹L˜^ƒŠƒXƒg‚ğˆø”‚ğŒ³‚ÉXV‚·‚é
+	 * @param luggageID ‰×•¨ID
+	 * @param luggagecondition@‰×•¨ó‘Ô
+	 * @param time@‹L˜^ŠÔ
 	 */
 	public void updateDeliveryRecord(int luggageID, LuggageCondition luggagecondition, Date time) {
 		DeliveryRecordList.updateDeliveryRecord(luggageID, luggagecondition, time);
 	}
 
 	/**
-	 * é…é”è¨˜éŒ²ãƒªã‚¹ãƒˆã«é…é”è¨˜éŒ²ã‚’è¿½åŠ ã™ã‚‹
+	 * ”z’B‹L˜^ƒŠƒXƒg‚É”z’B‹L˜^‚ğ’Ç‰Á‚·‚é
 	 * @param deliveryrecord
 	 */
 	public void addDeliveryRecord(DeliveryRecord deliveryrecord) {
@@ -115,7 +115,7 @@ public class Headquarters{
 		DeliveryRecordList = deliveryRecordList;
 	}
 	/**
-	 * é…é”è¨˜éŒ²ã‚’é€ä¿¡ã—ã¾ã™
+	 * ”z’B‹L˜^‚ğ‘—M‚µ‚Ü‚·
 	 * @param sig
 	 */
 	private void sendLuggageInfomation(PCSignal sig) {

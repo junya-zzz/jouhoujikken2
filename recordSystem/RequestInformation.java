@@ -5,22 +5,22 @@ import java.io.Serializable;
 public class RequestInformation implements Serializable{
 
 	/**
-	 * ä¾é ¼äººå
+	 * ˆË—Šl–¼
 	 */
 	private String clientName;
 
 	/**
-	 * å—å–äººå
+	 * óæl–¼
 	 */
 	private String receiverName;
 
 	/**
-	 * ä¾é ¼äººé›»è©±ç•ªå·
+	 * ˆË—Šl“d˜b”Ô†
 	 */
 	private String clientPhoneNum;
 
 	/**
-	 * å—å–äººä½æ‰€
+	 * óælZŠ
 	 */
 	private int receiverAddress;
 	
@@ -78,9 +78,9 @@ public class RequestInformation implements Serializable{
 	@Override
 	public String toString() {
 		String separator = System.getProperty("line.separator");
-		return "ä¾é ¼äººåã€€ï¼šã€€" + clientName + separator
-				+ "å—å–äººåã€€ï¼šã€€" + receiverName + separator + "ä¾é ¼äººé›»è©±ç•ªå·ã€€ï¼šã€€"
-				+ clientPhoneNum + separator + "å—å–äººå®…ä½æ‰€ã€€ï¼šã€€" + receiverAddress + separator;
+		return "ˆË—Šl–¼@F@" + clientName + separator
+				+ "óæl–¼@F@" + receiverName + separator + "ˆË—Šl“d˜b”Ô†@F@"
+				+ clientPhoneNum + separator + "óæl‘îZŠ@F@" + receiverAddress + separator;
 	}
 	
 	
