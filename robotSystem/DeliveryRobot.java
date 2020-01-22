@@ -21,6 +21,26 @@ import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
 import lejos.utility.Stopwatch;
+
+/**
+ * 配達担当ロボットクラス
+ * <PRE>
+ * 以下の9つのメソッドを持つ
+ * </PRE>
+ * <OL>
+ * <LI>public static void main(String[] args) throws IOException
+ * <LI>private static void changeDeliveryResult(LuggageCondition result)
+ * <LI>private static void relayStationToWaiting() throws IOException
+ * <LI>private static void receiverToRelayStation()
+ * <LI>private static void waitingToRelayStation() throws IOException
+ * <LI>relayStationToReceiver() throws IOException
+ * <LI>public static boolean getLug()
+ * <LI>public static void sendLug()
+ * <LI>public static void sendDeliveryRecord() throws IOException
+ * </OL>
+ * @author bp17115
+ *
+ */
 public class DeliveryRobot extends Robot {
 
 	/**
@@ -35,7 +55,11 @@ public class DeliveryRobot extends Robot {
 	//受け取り時間を得るために中継所から受取人宅までの時間を計り、配達開始時間に足して、受け取り時間を作る
 
 //public static int ID=8;
-
+/**
+ * main文
+ * @param args
+ * @throws IOException
+ */
 	public static void main(String[] args) throws IOException{
 		initSensors();
 
@@ -57,13 +81,16 @@ public class DeliveryRobot extends Robot {
 
 	}//main
 
-
+/**
+ * 配達結果を変更するメソッド
+ * @param result 配達結果
+ */
 	private static void changeDeliveryResult(LuggageCondition result) {
 		deliveryResult=result;
 	}
 
 	/**
-	 * 中継所から待機所まで行く
+	 * 中継所から待機所まで行くメソッド
 	 */
 	private static void relayStationToWaiting() throws IOException{
 		lineTrace(1200,LEFT,200); 
@@ -74,7 +101,7 @@ public class DeliveryRobot extends Robot {
 	}//relayStationToWaiting
 
 	/**
-	 * 受取人宅から中継所まで行く
+	 * 受取人宅から中継所まで行くメソッド
 	 */
 	private static void receiverToRelayStation(){
 
@@ -147,7 +174,7 @@ public class DeliveryRobot extends Robot {
 	}//receiverToRelayStation
 
 	/**
-	 * 待機所から中継所に行く
+	 * 待機所から中継所に行くメソッド
 	 */
 	private static void waitingToRelayStation() throws IOException{
 		lineTrace(2150,LEFT,300); 
@@ -163,7 +190,7 @@ public class DeliveryRobot extends Robot {
 	}//waitingToRelayStation
 
 	/**
-	 * 中継所から受取人宅まで行く
+	 * 中継所から受取人宅まで行くメソッド
 	 */
 	private static void relayStationToReceiver() throws IOException{
 		long start=0;
@@ -231,7 +258,8 @@ public class DeliveryRobot extends Robot {
 	}
 
 	/**
-	 * 中継所から荷物を受け取る
+	 * 中継所から荷物を受け取るメソッド
+	 *@return boolean 荷物があるかどうか
 	 */
 	public static boolean getLug(){
 		EV3Signal sig=new EV3Signal();
@@ -268,7 +296,7 @@ public class DeliveryRobot extends Robot {
 	}//getLug
 
 	/**
-	 * 受取人宅に荷物を送る
+	 * 受取人宅に荷物を送るメソッド
 	 */
 	public static void sendLug(){
 		long start=0;
@@ -320,7 +348,7 @@ public class DeliveryRobot extends Robot {
 	}//sendLug
 
 	/**
-	 * 中継所に配達結果を報告する
+	 * 中継所に配達結果を報告するメソッド
 	 * @throws IOException 
 	 */
 	public static void sendDeliveryRecord() throws IOException{
