@@ -22,7 +22,7 @@ import signal.*;
  *  <LI> void sendLugtoDeliveryRobot()
  *  <LI> void reportDeliveryResult(LuggageCondition result, int lug_id, Date fin_time)
  *  <LI> void reportDeliveryStart(int id)
- *  <LI> ArrayList<Luggage> getLuggageList()
+ *  <LI> ArrayList&lt;Luggage&gt;getLuggageList()
  * </OL>
  * @author bp17027 Keita Kaneko
  * @version 1.0

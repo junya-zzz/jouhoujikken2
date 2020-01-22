@@ -15,7 +15,7 @@ import lejos.utility.Stopwatch;
 import recordSystem.Luggage;
 
 /**
- * ロボットの共通の動作を定義するクラス 最初にinitSensors()を呼び出す必要がある
+ * ロボットの共通の動作を定義するクラス。最初にinitSensors()を呼び出す必要がある
  * @author bp17048
  */
 public class Robot {

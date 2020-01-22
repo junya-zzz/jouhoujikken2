@@ -30,8 +30,8 @@ public class Receiver {
 	/**
 	 * 受取人宅のインスタンスを生成するコンストラクタ
 	 * 受取人名と受取人住所を与えて受取人宅コンストラクタをつくる。
-	 * @param 受取人名
-	 * @param 受取人住所
+	 * @param name 受取人名
+	 * @param ad 受取人住所
 	 */
 	public Receiver(String name,Integer ad){ 
 		receiverName = name; 

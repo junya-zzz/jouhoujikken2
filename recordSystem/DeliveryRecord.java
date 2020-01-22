@@ -7,30 +7,45 @@ import java.text.SimpleDateFormat;
 
 public class DeliveryRecord implements Serializable{
 	
+	
 	/**
-	 * @param deliveryID 配達記録ID
-	 * @param luggage　荷物
-	 * @param receiptTime　荷物預かり時間
-	 * @param shiptime　荷物発送開始時間
-	 * @param arrivalTime　中継所到着時間
-	 * @param startTime　配達開始時間
-	 * @param receiveTime　受け取り完了時間
-	 * @param finishTime　配達完了時間
+	 * 配達記録ID
 	 */
 	private Integer deliveryID;
 	
+	/**
+	 * 荷物
+	 */
 	private Luggage luggage;
 	
+	/**
+	 * 荷物預かり時間
+	 */
 	private Date receiptTime;
 	
+	/**
+	 * 荷物発送開始時間
+	 */
 	private Date shipTime;
 
+	/**
+	 * 中継所到着時間
+	 */
 	private Date arrivalTime;
 
+	/**
+	 * 配達開始時間
+	 */
 	private Date startTime;
 	
+	/**
+	 * 受け取り完了時間
+	 */
 	private Date receiveTime;
 
+	/**
+	 * 配達完了時間
+	 */
 	private Date finishTime;
 	
 	public DeliveryRecord(Integer deliveryID, Luggage luggage) {
@@ -127,7 +142,7 @@ public class DeliveryRecord implements Serializable{
 	}
 	
 	/**
-	 *フィールドのDateからフォーマットを指定して表示する
+	 *フィールドのDateからフォーマットを指定して文字列を返す
 	 * 
 	 * @param date
 	 * @return
