@@ -2,17 +2,39 @@ package recordSystem;
 
 import java.io.Serializable;
 
+/** ‰×•¨ƒNƒ‰ƒX
+ * 
+ * @author bp17102,bp17108
+ *<OL>
+ *<LI>public Integer getLuggageID()
+ *<LI>public void setLuggageID(Integer luggageID)
+ *<LI>public String getLuggageName()
+ *<LI>public void setLuggageName(String luggageName)
+ *<LI>public RequestInformation getRequestInformation()
+ *<LI>public void setRequestInformation(RequestInformation requestInformation)
+ *<LI>public String toString()
+ *</OL>
+ */
 public class Luggage implements Serializable{
 
 	/**
-	 * è·ç‰©ID
+	 * ‰×•¨ID
 	 */
 	private Integer luggageID;
-	
+	/**
+	 * ‰×•¨–¼
+	 */
 	private String luggageName;
-
+	/**
+	 * ˆË—Šî•ñ
+	 */
 	private RequestInformation requestInformation;
-	
+	/**
+	 * ‰×•¨‚h‚c‚Æ‰×•¨–¼‚ÆˆË—Šî•ñ‚ğ‚à‚Á‚½‰×•¨î•ñ‚Ìƒƒ\ƒbƒh
+	 * @param luggageID@‰×•¨‚h‚c
+	 * @param luggageName@‰×•¨–¼
+	 * @param requestInformation ˆË—Šî•ñ
+	 */
 	public Luggage(Integer luggageID, String luggageName,
 			RequestInformation requestInformation) {
 		super();
@@ -20,7 +42,9 @@ public class Luggage implements Serializable{
 		this.luggageName = luggageName;
 		this.requestInformation = requestInformation;
 	}
-	
+	/**
+	 * ‰×•¨‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 */
 	public Luggage(){
 		super();
 		this.luggageID = 1;
@@ -28,38 +52,57 @@ public class Luggage implements Serializable{
 		this.requestInformation = new RequestInformation();
 		
 	}
-
+/**
+ * ‰×•¨ID‚ğ“üè‚·‚éƒƒ\ƒbƒh
+ * @return luggageID ‰×•¨ID
+ */
 	public Integer getLuggageID() {
 		return luggageID;
 	}
-
+/**
+ * ID‚ğİ’è‚·‚éƒƒ\ƒbƒh
+ * @param luggageID ‰×•¨ID
+ */
 	public void setLuggageID(Integer luggageID) {
 		this.luggageID = luggageID;
 	}
 
 	
-	
+	/**
+	 * ‰×•¨–¼‚ğ“üè‚·‚éƒƒ\ƒbƒh
+	 * @return luggageName ‰×•¨–¼
+	 */
 	public String getLuggageName() {
 		return luggageName;
 	}
-
+/**
+ * ‰×•¨–¼‚ğİ’è‚·‚éƒƒ\ƒbƒh
+ * @param luggageName@‰×•¨–¼
+ */
 	public void setLuggageName(String luggageName) {
 		this.luggageName = luggageName;
 	}
-
+/**
+ * ˆË—Šî•ñ‚ğ“üè‚·‚éƒƒ\ƒbƒh
+ * @return requestInformation ˆË—Šî•ñ
+ */
 	public RequestInformation getRequestInformation() {
 		return requestInformation;
 	}
-
+/**
+ * ˆË—Šî•ñ‚ğİ’è‚·‚éƒƒ\ƒbƒh
+ * @param requestInformation ˆË—Šî•ñ
+ */
 	public void setRequestInformation(RequestInformation requestInformation) {
 		this.requestInformation = requestInformation;
 	}
 
 	@Override
+	
 	public String toString() {
 		String separator = System.getProperty("line.separator");
-		return "è·ç‰©IDã€€ï¼šã€€" + luggageID + separator + "è·ç‰©åã€€ï¼šã€€ "
-				+ luggageName + separator + "[é¡§å®¢æƒ…å ±]------------------" + separator + requestInformation;
+		return "‰×•¨ID" + luggageID + separator + "‰×•¨–¼"
+				+ luggageName + separator + "[ŒÚ‹qî•ñ]------------------" + separator + requestInformation;
 	}
 	
 	
