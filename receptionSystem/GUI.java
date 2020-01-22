@@ -19,14 +19,12 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-/** GUIクラス
- * <PRE>
- * 依頼情報を入力するクラス
- * </PRE>
- * 
- * @author
- * @version 1.0
+
+/**
+ * 依頼情報を入力するGUIのクラス
+ * @author bp17048
  */
+
 class GUI extends JFrame{
 
 	JTextField text1;
@@ -41,10 +39,11 @@ class GUI extends JFrame{
 
 	RequestInformation requestInformation = null;
 	Reception reception;
+
 	/**
 	 * GUIクラスのインスタンスを生成するコンストラクタ
 	 * @param title ウィンドウのタイトル
-	 * @param r 宅配受付所
+	 * @param r 宅配受付所のインスタンス
 	 */
 	GUI(String title, Reception r){
 		reception = r;
@@ -119,6 +118,11 @@ class GUI extends JFrame{
 		contentPane.add(resultLabel);
 	}
 	
+	/**
+	 * ラジオボタンを押した時に呼び出される
+	 * @author bp17048
+	 *
+	 */
 	class RadioActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -127,6 +131,11 @@ class GUI extends JFrame{
 		}
 	}
 
+	/**
+	 * 荷物依頼のボタンを押した時に呼び出される
+	 * @author bp17048
+	 *
+	 */
 	class RequestLuggage implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -158,6 +167,11 @@ class GUI extends JFrame{
 		}
 	}
 	
+	/**
+	 * 荷物追跡のボタンを押した時に呼び出される
+	 * @author bp17048
+	 *
+	 */
 	class TrackLuggage implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {

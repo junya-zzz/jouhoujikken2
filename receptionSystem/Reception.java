@@ -47,10 +47,6 @@ public class Reception extends Thread{
 	//private DeliveryRecordList deliList;
 	//private ArrayDeque<DeliveryRecord>; = new ArrayDeque<DeliveryRecord>();
 	/**
-	 * バウンダリ
-	 */
-	private Boundary boundary;
-	/**
 	 * 荷物ID
 	 */
 	private int idNum=0;
@@ -103,8 +99,6 @@ public class Reception extends Thread{
 	 */
 	public Reception(){
 		this.lugList = new ArrayList<Luggage>();
-		//this.deliList = new DeliveryRecordList();
-		this.boundary = new Boundary();
 		this.signal = new PCSignal();
 	}
 
@@ -117,21 +111,12 @@ public class Reception extends Thread{
 	public void sendReceiptTime(DeliveryRecord d) {
 		try {
 			signal.openSig(Port.HEAD);
-			/**配達記録リストからサーチ**/
 			signal.sendSig(0);
 			signal.sendSig(d); 
-
-
-
-			/**************/
-			//signal.sendSig(deliveryRecord);
 			signal.closeSig();
-
 		}catch(Exception e) {
-			//例外処理
-			//
-			//
-
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -144,22 +129,14 @@ public class Reception extends Thread{
 	public void sendShipTime(Luggage lug) {
 		try {
 			signal.openSig(Port.HEAD);
-			/**配達記録リストからサーチ**/
 			signal.sendSig(1);
 			signal.sendSig(lug.getLuggageID()); 
 			signal.sendSig(LuggageCondition.shipping); 
 			signal.sendSig(new Date()); 
-
-
-			/**************/
-			//signal.sendSig(deliveryRecord);
 			signal.closeSig();
-
 		}catch(Exception e) {
-			//例外処理
-			//
-			//
-
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -194,7 +171,6 @@ public class Reception extends Thread{
 	/**
 	 * 荷物を収集担当ロボットに渡す
 	 * @param sig PCSignal
-	 * 
 	 */
 	public void sendLug(PCSignal sig) {
 		try {
@@ -206,8 +182,6 @@ public class Reception extends Thread{
 					sendLug = this.lugList.remove(0);  //荷物リストから先頭の要素を取り出して送る
 					System.out.println("send lug:" + sendLug);
 					sig.sendSig(sendLug);
-					/******渡した荷物に対応する配達記録に発送時間を追記**/
-					//deliList.updateDeliveryRecord(sendLug.getLuggageID(), LuggageCondition.delivering, new Date());
 				} else {
 					System.out.println("no lug.");
 					sig.sendSig(false);
@@ -215,7 +189,7 @@ public class Reception extends Thread{
 			}
 			sig.closeSig();
 			if (sendLug != null) {
-				sendShipTime(sendLug/*new DeliveryRecord(sendLug.getLuggageID(), sendLug)*/);
+				sendShipTime(sendLug);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -228,15 +202,11 @@ public class Reception extends Thread{
 	 * 荷物を依頼人から受け取る
 	 * @param requestInformation 依頼情報
 	 * @param luggageName　荷物の名前
-	 * 
 	 */
 	public Luggage getLug(RequestInformation requestInformation, String luggageName) {
 		int id = setLuggageIDNum();
 		Luggage lug = new Luggage(id,luggageName, requestInformation);                      /****ID,Amount追加****/
 		lugList.add(lug);   //荷物リストに追加
-		//DeliveryRecord deliveryRecord = new DeliveryRecord(id, lug); //荷物の配達記録生成
-		//deliveryRecord.setReceiveTime(new Date()); //配達記録に受付時間を追加
-		//deliList.addDeliveryRecord(deliveryRecord); //配達記録リストに追加
 		sendReceiptTime(new DeliveryRecord(lug.getLuggageID(),lug));
 		return lug;
 	}
@@ -244,10 +214,8 @@ public class Reception extends Thread{
 	/**
 	 * 荷物の状態を本部に問い合わせて取得し、表示する
 	 * @param id 荷物ID
-	 * 
 	 */
 	public DeliveryRecord luggageTracking(int id) {
-		// int id;
 		DeliveryRecord dr = null;
 		try {
 			signal.openSig(Port.HEAD);
